@@ -29,10 +29,8 @@ public class Zombie extends GameObject {
 	
 	public void eat(Eatable target){
 		float eatFactor = mIsSlowed ? 1.0f : 2.0f;
-		if (mElapsedFrame % (mEatInterval * eatFactor)== 0)
-		{
-			target.Ate(mAttackPower);
-			Log.d("EAT", mPosition.toString());
+		if (mElapsedFrame % (mEatInterval * eatFactor)== 0){
+			target.ate(mAttackPower);
 		}
 	}
 	

@@ -3,7 +3,6 @@ package chaoslab.PVZ.Plants;
 import chaoslab.PVZ.GameObject;
 import chaoslab.PVZ.Particle;
 import chaoslab.PVZ.Zombies.Zombie;
-import android.graphics.Bitmap;
 /**
  * 
  * @author Liu.zhenxing
@@ -18,7 +17,7 @@ abstract public class Plant extends GameObject implements Eatable{
 		//do nothing as default
 	}
 	
-	public void Ate(int harmPoint){
+	public void ate(int harmPoint){
 		mHealthPoint -= harmPoint;
 		if (mHealthPoint <= 0){
 			mHealthPoint = 0;

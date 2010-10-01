@@ -1,14 +1,13 @@
 package chaoslab.PVZ.Plants;
 
-import android.util.Log;
 import chaoslab.PVZ.Position;
 
 public class PlantCells {
-	public	final Position ORIGIN = new Position(0, 80);
-	public  final int MAX_COL_NUM 	= 6;
-	public  final int MAX_ROW_NUM	= 5;
-	public  final int CELL_WIDTH 	= 80;
-	public	final int CELL_HEIGHT 	= 100;
+	public static final Position ORIGIN = new Position(0, 80);
+	public static final int MAX_COL_NUM 	= 6;
+	public static final int MAX_ROW_NUM		= 5;
+	public static final int CELL_WIDTH 		= 80;
+	public static final int CELL_HEIGHT 	= 100;
 	private Plant mPlants[][];
 	
 	public PlantCells(){

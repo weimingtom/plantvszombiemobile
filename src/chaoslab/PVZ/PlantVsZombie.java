@@ -3,10 +3,6 @@ package chaoslab.PVZ;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Gallery;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class PlantVsZombie extends Activity {
     /** A handle to the View in which the game is running. */

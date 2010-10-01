@@ -1,5 +1,12 @@
 package chaoslab.PVZ;
-
+/**
+ * Used to describe object's position
+ * Note that it is not based on the screen coordinate system,
+ * but on the background bitmap.When objects drawn to the screen, 
+ * they are scaled, so are their positions.
+ * @author Liu.zhenxing
+ *
+ */
 public class Position {
 	public float x;
 	public float y;
