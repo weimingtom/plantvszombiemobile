@@ -14,6 +14,9 @@ public class ZombieFactory {
 					BitmapFactory.decodeResource(res, R.drawable.zombie_head)),
 			new Particle(new Position(32, 32), 
 					BitmapFactory.decodeResource(res, R.drawable.zombie_body)),	
+			new Particle(new Position(40, 48),
+					BitmapFactory.decodeResource(res, R.drawable.zombie_outerleg_lower))
+				
 		};
 		return new Zombie("normal Zombie", particles, 100);
 	}

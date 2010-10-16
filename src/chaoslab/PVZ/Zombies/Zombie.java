@@ -22,6 +22,7 @@ public class Zombie extends GameObject {
 		mWidth 	= 80;
 		mHeight = 100;
  	}
+	
 	public void move(){
 		float moveFactor = mIsSlowed ? 1.0f : 0.5f;
 		mPosition.x += mMoveDirection * mMoveSpeed * moveFactor;
@@ -38,4 +39,5 @@ public class Zombie extends GameObject {
 	public void update(){
 		super.update();
 	}
+	
 }

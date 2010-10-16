@@ -5,6 +5,8 @@
  */
 package chaoslab.PVZ;
 
+import chaoslab.PVZ.Plants.SunFlower;
+/*
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
+*/
 import java.util.ArrayList;
 
 import chaoslab.PVZ.Plants.Plant;
@@ -25,10 +28,14 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -36,12 +43,16 @@ import android.view.SurfaceView;
  * View of Plant VS Zombie.Help zombies to EAT all plants!!
  */
 public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Callback{
+	
 	class PlantVsZombieThread extends Thread{
 		  /*
          * State-tracking constants
          */
 		public static final int STATE_RUNNING = 1;
 		public static final int STATE_PAUSED  = 2;
+		
+    	/** equals to the last column of the plant cell*/
+     	public static final int STRIP_COLUMN = 6;
 		/*
          * Member (state) fields
          */
@@ -49,6 +60,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         /** The drawable to use as the background of the animation canvas */
         private Bitmap mBackgroundImage;
         private Bitmap mBowlingStripeImage;
+        private Bitmap mSeedBarImage;
         /**
          * Current height of the surface/canvas.
          * 
@@ -64,9 +76,11 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         private int mCanvasWidth = 1;
         /** Handle to the surface manager object we interact with */
         private SurfaceHolder mSurfaceHolder;
-        /** Message handler used by thread to interact with TextView */
-        private Handler mHandler;
-   
+        /** Handle to the icon of the selected seed's icon in seed bank*/
+    	private GameObject mSelectedSeedObject 	= null;
+    	/**	Handle to the selected seed*/
+    	private SeedCard mSelectedSeedCard	= null;
+    	private ArrayList<SeedCard> mSeedCards;
 		/** current stage */
         /*private int mStage = 1;*/
 		//private Context mContext;
@@ -81,7 +95,6 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
                 Handler handler) {
         	 // get handles to some important objects
             mSurfaceHolder = surfaceHolder;
-            mHandler = handler;
             mContext = context;
             mState	 = STATE_RUNNING;
             //Set Images
@@ -90,13 +103,15 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             		BitmapFactory.decodeResource(res, R.drawable.background), 
             		200, 0, 800, 600);
             mBowlingStripeImage = BitmapFactory.decodeResource(res, R.drawable.bowlingstripe);
+            mSeedBarImage		= BitmapFactory.decodeResource(res, R.drawable.seedbar);
             mPlants = new PlantCells();
             mZombies = new ArrayList<Zombie>();
           //  BitmapFactory.decodeResource(res, R.drawable.seedbar);
             Zombie zombie = ZombieFactory.createNormalZombie(res);
-            zombie.SetPosition(500, (int)(PlantCells.ORIGIN.y + 2 * PlantCells.CELL_HEIGHT - zombie.getHeight()));
+            zombie.setPosition(500, (int)(PlantCells.ORIGIN.y + 2 * PlantCells.CELL_HEIGHT - zombie.getHeight()));
             mZombies.add(zombie);
             InitPlants(res);
+            InitSeedCards(res);
         }
         
         /**
@@ -145,10 +160,21 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 			*/
 			
         	for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i)
-        		for (int j = 0; j < PlantCells.MAX_COL_NUM; ++j)
-        			mPlants.setPlant(i, j, PlantFactory.createBrain(res));
+        		for (int j = 0; j < PlantCells.MAX_COL_NUM; ++j){
+        			Plant sunFlower = PlantFactory.createSunFlower(res);
+        			((SunFlower)sunFlower).setView(PlantVsZombieView.this);
+        			mPlants.setPlant(i, j, sunFlower);//PlantFactory.createBrain(res));
+        		}
         }
         
+        public void InitSeedCards(Resources res){
+        	mSeedCards 			= new ArrayList<SeedCard>();
+        	Bitmap seedpacket 	= BitmapFactory.decodeResource(res, R.drawable.seedpacket_larger);
+        	mSeedCards.add(new SeedCard(new Particle(new Position(70, 10),
+        			Bitmap.createScaledBitmap(seedpacket, (int)(seedpacket.getWidth() * 0.5),
+        					(int)(seedpacket.getHeight() * 0.5), true)), 
+        			ZombieFactory.createNormalZombie(res)));
+        }
         @Override
         public void run(){
         	while (mRun){
@@ -158,7 +184,8 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
                     synchronized (mSurfaceHolder) {
                         if (mState == STATE_RUNNING)
                         	update();
-                        doDraw(c);
+                        if (c != null)
+                        	doDraw(c);
                         
                     }
                 } finally {
@@ -172,36 +199,46 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         	}
         }
         /**
-         * Draws the plants, zombies, and background to the provided
+         * Draws the plants, zombies, etc. to the provided
          * Canvas.
          */
         public void doDraw(Canvas canvas){
         	// Draw the background image. Operations on the Canvas accumulate
             // so this is like clearing the screen.
-        	
-            canvas.drawBitmap(mBackgroundImage, 0, 0, null);
-            canvas.drawBitmap(mBowlingStripeImage, 250, 32, null);
-            for (int i = 0; i < mZombies.size(); ++i){
-            	mZombies.get(i).doDraw(canvas, mScaleX, mScaleY);
+
+            canvas.drawBitmap(mBackgroundImage, null, new Rect(0, 0, mCanvasWidth, mCanvasHeight), null);
+            canvas.drawBitmap(mBowlingStripeImage, PlantCells.CELL_WIDTH * STRIP_COLUMN * mScaleX, 32, null);
+            //Draw SeedBar
+            Matrix matrix = new Matrix();
+        	matrix.setScale(mScaleX, mScaleY);
+            canvas.drawBitmap(mSeedBarImage, matrix, null);
+            canvas.drawText(Integer.toString(mSunshines), 20 * mScaleX, 80 * mScaleY, new Paint());
+            for (int i = 0; i < mSeedCards.size(); ++i){
+            	mSeedCards.get(i).doDraw(canvas, mScaleX, mScaleY, null);
             }
-           
-            for (int i = 0; i < mPlants.MAX_ROW_NUM; ++i)
-            {
-            	for (int j = 0; j < mPlants.MAX_COL_NUM; ++j){
+            /** NOTE THAT HERE MAY OCCUR A SYNCHRONIZE ERROR: mSelectedObject may be set
+             * to null in onTouchEvent method just before doDraw(). So here I temperately 
+             * put new Paint outside of the if section to avoid this error.
+             * Maybe here should add a synchronize*/
+        	Paint paint = new Paint();
+        	paint.setAlpha(127);
+            if (mSelectedSeedObject != null){
+            	mSelectedSeedObject.doDraw(canvas, mScaleX, mScaleY, paint);
+            }
+            //Draw Plants and Zombies
+            for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i){
+            	for (int j = 0; j < PlantCells.MAX_COL_NUM; ++j){
             		Plant plant = mPlants.getPlant(i, j);
             		if (plant != null && plant.isAlive())
-            			plant.doDraw(canvas, mScaleX, mScaleY);
+            			plant.doDraw(canvas, mScaleX, mScaleY, null);
             	}
             }
-           
-           
+            
+            for (int i = 0; i < mZombies.size(); ++i){
+            	mZombies.get(i).doDraw(canvas, mScaleX, mScaleY, null);
+            }
         }
-        /**
-         * Draw status bar.Shows current sunshines,available zombie list.
-         */
-        public void drawStatusBar(){
-        	//canvas.drawBitmap()
-        }
+
         /**
          * Check collision(assume that both a and b are rectangular area)
          * @param GameObject a
@@ -247,11 +284,66 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 		        		zombie.move();
 		        	zombie.update();
 	        	}else{
+	        		mZombies.remove(zombie);
 	        		zombie = null;
-	        	}
-	        	
+	        	}	        	
         	}
-        	
+        }
+        /**
+         * Deal with touch event.
+         * DO REMEMBER THAT, the event's coordinate is not the real size
+         * IT MUST BE DIVIDED BY the scale factor
+         * @param event
+         */
+        public void onTouchEvent(MotionEvent event){
+        	switch (event.getAction()){
+    		case MotionEvent.ACTION_MOVE:
+    			if (mSelectedSeedObject != null)
+    				mSelectedSeedObject.setPosition((int)(event.getX() / mScaleX), (int)(event.getY() / mScaleY));
+    			break;
+    		case MotionEvent.ACTION_DOWN:
+    			if (mSelectedSeedCard != null || mSelectedSeedObject != null){
+    				mSelectedSeedCard 	= null;
+    				mSelectedSeedObject = null;
+    			}else{
+    				//check whether select a new seed card
+    				boolean isSelected = false;
+    				for (int i = 0; i < mSeedCards.size() && !isSelected; ++i){
+    					if (mSeedCards.get(i).isSelected(event.getX() / mScaleX, event.getY() / mScaleY)
+    							&& mSeedCards.get(i).getCost() < mSunshines){
+    						mSelectedSeedCard 	= mSeedCards.get(i);
+    						mSelectedSeedObject = mSelectedSeedCard.getObject();
+							isSelected 			= true;
+    					}
+    				}
+    			}
+    			break;
+    		case MotionEvent.ACTION_UP:
+    			if (mSelectedSeedObject != null){
+    				try {
+    					Position position = mSelectedSeedObject.getPosition();
+    					int col = (int)((position.x - PlantCells.ORIGIN.x) / PlantCells.CELL_WIDTH);
+    					int row = (int)((position.y - PlantCells.ORIGIN.y) / PlantCells.CELL_HEIGHT);
+    					if (col >= STRIP_COLUMN){
+    						if (mSunshines >= mSelectedSeedCard.getCost())
+    						{
+    							mSunshines -=  mSelectedSeedCard.getCost();
+		    					Zombie zombie = (Zombie)mSelectedSeedObject.clone();
+		    					zombie.setPosition(PlantCells.ORIGIN.x + col * PlantCells.CELL_WIDTH, 
+		    							PlantCells.ORIGIN.y + row * PlantCells.CELL_HEIGHT);
+		    					mZombies.add(zombie);
+    						}
+    					}
+						mSelectedSeedObject = null;
+						mSelectedSeedCard 	= null;
+    					
+					} catch (CloneNotSupportedException e) {
+						e.printStackTrace();
+					}
+				}	
+    				
+    			break;
+    		}
         }
         
         /* Callback invoked when the surface dimensions change. */
@@ -265,8 +357,8 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
                 mScaleY	= height * 1.0f / mBackgroundImage.getHeight();
                
                 // don't forget to resize the background image
-                mBackgroundImage = Bitmap.createScaledBitmap(
-                        mBackgroundImage, width, height, true);
+            //    mBackgroundImage = Bitmap.createScaledBitmap(
+              //          mBackgroundImage, width, height, true);
             }
         }
 
@@ -281,12 +373,15 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 			
 		}
 	}
-	
+	public static final int MAX_SUN_SHINE = 9999;
+	public static final int MIN_SUN_SHINE = 0;
 	/** Handle to the application context, used to e.g. fetch Drawables. */
 	private Context mContext;
 	private PlantVsZombieThread thread;
     /** Current sunshine number*/
 	private int mSunshines = 150;
+	
+	
 	public PlantVsZombieView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		SurfaceHolder holder = getHolder();
@@ -297,10 +392,19 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
                 
             }
         });
-
+       
         setFocusable(true); // make sure we get key events
 	}
-
+	
+	@Override
+	/**
+	 * Drag one seed from the seed bank to 
+	 * the pointed place to generate a new plant/zombie 
+	 */
+	public boolean onTouchEvent(MotionEvent event){
+		thread.onTouchEvent(event);
+		return true;
+	}
     /**
      * Standard window-focus override. Notice focus lost so we can pause on
      * focus lost. e.g. user switches to take a call.
@@ -312,13 +416,11 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, 
 			int width, int height) {
-		// TODO Auto-generated method stub
 		thread.setSurfaceSize(width, height);
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		// TODO Auto-generated method stub
 		thread.setRunning(true);
         thread.start();
 	}
@@ -345,11 +447,11 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 
 	public void addSunshines(int delta) {
 		mSunshines += delta;
-    	if (mSunshines > 9999)
-    		mSunshines = 9999;
+    	if (mSunshines > MAX_SUN_SHINE)
+    		mSunshines = MAX_SUN_SHINE;
     	else 
-    		if (mSunshines < 0)
-    			mSunshines = 0;
+    		if (mSunshines < MIN_SUN_SHINE)
+    			mSunshines = MIN_SUN_SHINE;
 	}
 
 }

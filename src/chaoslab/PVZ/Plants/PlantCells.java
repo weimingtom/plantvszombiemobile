@@ -15,7 +15,7 @@ public class PlantCells {
 	}
 	
 	public void setPlant(int row, int col, Plant plant){
-		plant.SetPosition((int)ORIGIN.x + col * CELL_WIDTH, (int)ORIGIN.y + row * CELL_HEIGHT + CELL_HEIGHT - plant.getHeight());
+		plant.setPosition((int)ORIGIN.x + col * CELL_WIDTH, (int)ORIGIN.y + row * CELL_HEIGHT + CELL_HEIGHT - plant.getHeight());
 		mPlants[row][col] = plant;
 	}
 	

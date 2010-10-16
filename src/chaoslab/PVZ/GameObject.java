@@ -4,8 +4,9 @@ package chaoslab.PVZ;
  */
 import chaoslab.PVZ.Particle;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
-abstract public class GameObject {
+abstract public class GameObject implements Cloneable{
 
 	public static final int MAX_POSITION_X = 800;
 	public static final int MAX_POSITION_Y = 600;
@@ -36,7 +37,7 @@ abstract public class GameObject {
 		mPosition		= new Position(0, 0);
 	}
 	
-	public void SetPosition(int posX, int posY){
+	public void setPosition(float posX, float posY){
 		mPosition.x = posX;
 		mPosition.y = posY;
 	}
@@ -76,9 +77,9 @@ abstract public class GameObject {
 		mIsAlive = false;
 	}
 	
-	public void doDraw(Canvas canvas, float scaleX, float scaleY){
+	public void doDraw(Canvas canvas, float scaleX, float scaleY, Paint paint){
 		for (int i = 0; i < mParticles.length; ++i){
-			mParticles[i].doDraw(canvas, this, scaleX, scaleY);
+			mParticles[i].doDraw(canvas, this, scaleX, scaleY, paint);
 		}
 	}
 	
@@ -96,6 +97,15 @@ abstract public class GameObject {
 			return false;
 		else
 			return true;
+	}
+	@Override
+	public Object clone() throws CloneNotSupportedException{
+		GameObject object = (GameObject)super.clone();
+		for (int i = 0 ; i < mParticles.length; ++i){
+			object.mParticles[i] = (Particle)this.mParticles[i].clone();
+		}
+		object.mPosition = (Position)this.mPosition.clone();
+		return object;
 	}
 
 }

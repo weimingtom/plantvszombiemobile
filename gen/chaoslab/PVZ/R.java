@@ -17,10 +17,24 @@ public final class R {
         public static final int icon=0x7f020003;
         public static final int seedbar=0x7f020004;
         public static final int seedpacket_larger=0x7f020005;
-        public static final int zombie_arm=0x7f020006;
-        public static final int zombie_body=0x7f020007;
-        public static final int zombie_head=0x7f020008;
-        public static final int zombie_jaw=0x7f020009;
+        public static final int sunflower=0x7f020006;
+        public static final int sunflower_head=0x7f020007;
+        public static final int zombie_arm=0x7f020008;
+        public static final int zombie_body=0x7f020009;
+        public static final int zombie_head=0x7f02000a;
+        public static final int zombie_innerleg_foot=0x7f02000b;
+        public static final int zombie_innerleg_lower=0x7f02000c;
+        public static final int zombie_innerleg_upper=0x7f02000d;
+        public static final int zombie_jaw=0x7f02000e;
+        public static final int zombie_neck=0x7f02000f;
+        public static final int zombie_outerarm_hand=0x7f020010;
+        public static final int zombie_outerarm_hand2=0x7f020011;
+        public static final int zombie_outerarm_lower=0x7f020012;
+        public static final int zombie_outerarm_upper=0x7f020013;
+        public static final int zombie_outerarm_upper2=0x7f020014;
+        public static final int zombie_outerleg_foot=0x7f020015;
+        public static final int zombie_outerleg_lower=0x7f020016;
+        public static final int zombie_outerleg_upper=0x7f020017;
     }
     public static final class id {
         public static final int PVZView=0x7f050000;

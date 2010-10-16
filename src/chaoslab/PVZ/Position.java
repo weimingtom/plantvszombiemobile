@@ -7,7 +7,7 @@ package chaoslab.PVZ;
  * @author Liu.zhenxing
  *
  */
-public class Position {
+public class Position implements Cloneable{
 	public float x;
 	public float y;
 	public Position(float x, float y){
@@ -27,5 +27,12 @@ public class Position {
 	
 	public String toString(){
 		return "(" + this.x + " ," + this.y + " )";
+	}
+	@Override
+	public Object clone() throws CloneNotSupportedException{
+		Position position = (Position)super.clone();
+		position.x  	  = this.x;
+		position.y 		  = this.y;
+		return position;
 	}
 }

@@ -10,9 +10,7 @@ public class PlantFactory {
 	public static Plant createSunFlower(Resources res){
 		Particle particles[] = {
 				new Particle(new Position(0, 0), 
-						BitmapFactory.decodeResource(res, R.drawable.zombie_head)),
-				new Particle(new Position(32, 40), 
-						BitmapFactory.decodeResource(res, R.drawable.zombie_body)),	
+						BitmapFactory.decodeResource(res, R.drawable.sunflower_head)),
 			};
 		return new SunFlower("SUNFLOWER", particles, 50);
 	}
