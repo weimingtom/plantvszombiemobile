@@ -413,19 +413,19 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         if (!hasWindowFocus) thread.pause();
     }
-	@Override
+	
 	public void surfaceChanged(SurfaceHolder holder, int format, 
 			int width, int height) {
 		thread.setSurfaceSize(width, height);
 	}
 
-	@Override
+	
 	public void surfaceCreated(SurfaceHolder holder) {
 		thread.setRunning(true);
         thread.start();
 	}
 
-	@Override
+	
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// we have to tell thread to shut down & wait for it to finish, or else
         // it might touch the Surface after we return and explode
