@@ -6,20 +6,12 @@
 package chaoslab.PVZ;
 
 import chaoslab.PVZ.Plants.SunFlower;
-/*
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
-*/
 import java.util.ArrayList;
 
 import chaoslab.PVZ.Plants.Plant;
 import chaoslab.PVZ.Plants.PlantCells;
 import chaoslab.PVZ.Plants.PlantFactory;
+import chaoslab.PVZ.ProjectileObjects.ProjectileObject;
 import chaoslab.PVZ.Zombies.Zombie;
 import chaoslab.PVZ.Zombies.ZombieFactory;
 
@@ -34,7 +26,6 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -45,7 +36,7 @@ import android.view.SurfaceView;
 public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Callback{
 	
 	class PlantVsZombieThread extends Thread{
-		  /*
+		 /*
          * State-tracking constants
          */
 		public static final int STATE_RUNNING = 1;
@@ -88,6 +79,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         private boolean mRun = false;
         private PlantCells mPlants;
 		private ArrayList<Zombie> mZombies;
+		private ArrayList<ProjectileObject> mProjectileObjects;
 		private float mScaleX = 1.0f;
 		private float mScaleY = 1.0f;
         
@@ -112,58 +104,21 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             mZombies.add(zombie);
             InitPlants(res);
             InitSeedCards(res);
+            mProjectileObjects = new ArrayList<ProjectileObject>();
         }
         
         /**
          * Initialize plants according to mStage
          */
         public void InitPlants(Resources res){
-        	//Initialize brains
-        	/*
-        	try {
-    			ObjectOutputStream out = new ObjectOutputStream (
-    					new FileOutputStream("stg1.map"));
-    			for (int i = 0; 
-    				i < PlantCells.MAX_ROW_NUM * (PlantCells.MAX_COL_NUM - 1); ++i){
-    				out.writeObject(PlantFactory.createBrain(res));
-    			}
-    		} catch (FileNotFoundException e) {
-    			
-    			Log.d("TEST", "FILENOTFOUND");
-    			e.printStackTrace();
-    		} catch (IOException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		} 
-        	//read from file stg1.map
-        	try {
-				ObjectInputStream in = new ObjectInputStream(
-						new FileInputStream(".\\stg1.map"));
-				for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i)
-				{
-					mPlants.setPlant(i, 0, PlantFactory.createBrain(res));
-	        		for (int j = 1; j < PlantCells.MAX_COL_NUM; ++j)
-	        			mPlants.setPlant(i, j, (Plant)in.readObject());
-				}
-			} catch (StreamCorruptedException e) {
-				
-				e.printStackTrace();
-			} catch (FileNotFoundException e) {
-				
-				e.printStackTrace();
-			} catch (IOException e) {
-				
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} 
-			*/
-			
         	for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i)
         		for (int j = 0; j < PlantCells.MAX_COL_NUM; ++j){
-        			Plant sunFlower = PlantFactory.createSunFlower(res);
-        			((SunFlower)sunFlower).setView(PlantVsZombieView.this);
-        			mPlants.setPlant(i, j, sunFlower);//PlantFactory.createBrain(res));
+        			Plant plant = PlantFactory.createPea(res);
+        			plant.setView(PlantVsZombieView.this);
+        			mPlants.setPlant(i, j, plant);
+        			/*Plant pea = PlantFactory.createPea(res);
+        			pea.setView(PlantVsZombieView.this);*/
+        			
         		}
         }
         
@@ -205,7 +160,6 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         public void doDraw(Canvas canvas){
         	// Draw the background image. Operations on the Canvas accumulate
             // so this is like clearing the screen.
-
             canvas.drawBitmap(mBackgroundImage, null, new Rect(0, 0, mCanvasWidth, mCanvasHeight), null);
             canvas.drawBitmap(mBowlingStripeImage, PlantCells.CELL_WIDTH * STRIP_COLUMN * mScaleX, 32, null);
             //Draw SeedBar
@@ -228,7 +182,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             //Draw Plants and Zombies
             for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i){
             	for (int j = 0; j < PlantCells.MAX_COL_NUM; ++j){
-            		Plant plant = mPlants.getPlant(i, j);
+            		GameObject plant = mPlants.getPlant(i, j);
             		if (plant != null && plant.isAlive())
             			plant.doDraw(canvas, mScaleX, mScaleY, null);
             	}
@@ -236,6 +190,10 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             
             for (int i = 0; i < mZombies.size(); ++i){
             	mZombies.get(i).doDraw(canvas, mScaleX, mScaleY, null);
+            }
+            
+            for (int i = 0; i < mProjectileObjects.size(); ++i){
+            	mProjectileObjects.get(i).doDraw(canvas, mScaleX, mScaleY, null);
             }
         }
 
@@ -257,6 +215,14 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         	return true;
         }
         
+        public void addProjectileObject(ProjectileObject object){
+        	mProjectileObjects.add(object);
+        }
+        
+        public void addZombie(Zombie zombie){
+        	mZombies.add(zombie);
+        }
+        
         /**
          * Update all valid Objects,including zombies and plants
          */
@@ -265,10 +231,13 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         	for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i){
         		for (int j = 0; j < PlantCells.MAX_COL_NUM; ++j){
         			Plant plant = mPlants.getPlant(i, j);
-        			if (plant != null && !plant.isAlive())
-        				plant = null;
-        			else
+        			if (plant != null && plant.isAlive()){
         				plant.update();
+        				plant.attack(mZombies);
+        			}
+        			else{
+        				plant = null;
+        			}
         		}
         	}
         	//update zombies 
@@ -287,6 +256,36 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 	        		mZombies.remove(zombie);
 	        		zombie = null;
 	        	}	        	
+        	}
+        	
+        	//update projectile objects
+        	/**
+        	 * NOTE THAT:Here we should check each zombie and plant to make sure 
+        	 * that each hit message will be sent to
+        	 * the projectileObject,though single check can save time. 
+        	 */
+        	
+        	for (int i = 0; i < mProjectileObjects.size(); ++i){
+        		ProjectileObject po = mProjectileObjects.get(i);
+        		if (po.isAlive()){
+	        		po.update();
+	        		for (int j = 0; j < mZombies.size(); ++j){
+	        			Zombie zombie = mZombies.get(j);
+	        			if (zombie.isAlive() && isCollise(zombie, po)){
+	        				po.onHit(zombie);
+	        			}
+	        		}
+	        		
+	        		for (int j = 0; j < PlantCells.MAX_COL_NUM * PlantCells.MAX_ROW_NUM; ++j){
+	        			Plant plant = mPlants.getPlant(po.getPosition());
+	        			if (plant != null && plant.isAlive() && isCollise(plant, po)){
+	        				po.onHit(plant);
+	        			}
+	        		}
+        		}else{
+        			mProjectileObjects.remove(po);
+        			po = null;
+        		}
         	}
         }
         /**
@@ -413,19 +412,19 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         if (!hasWindowFocus) thread.pause();
     }
-	
+	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, 
 			int width, int height) {
 		thread.setSurfaceSize(width, height);
 	}
 
-	
+	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		thread.setRunning(true);
         thread.start();
 	}
 
-	
+	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// we have to tell thread to shut down & wait for it to finish, or else
         // it might touch the Surface after we return and explode
@@ -452,6 +451,10 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
     	else 
     		if (mSunshines < MIN_SUN_SHINE)
     			mSunshines = MIN_SUN_SHINE;
+	}
+	
+	public void addProjectileObject(ProjectileObject object){
+		thread.addProjectileObject(object);
 	}
 
 }

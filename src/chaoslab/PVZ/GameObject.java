@@ -3,6 +3,7 @@ package chaoslab.PVZ;
  * Base class of Plants and Zombies
  */
 import chaoslab.PVZ.Particle;
+import chaoslab.PVZ.GameConstants;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
@@ -22,6 +23,9 @@ abstract public class GameObject implements Cloneable{
 	/** Actual size of this object*/
 	protected int		mWidth 	= 0;
 	protected int		mHeight = 0;
+	protected PlantVsZombieView mView;
+	/** Indicate this object stands by which side(Plant or Zombie or neither?)*/
+	protected	  int		mStand	= GameConstants.STAND_NONE;
 	
 	public GameObject(String name, Particle particles[], int cost){
 		setName(name);
@@ -35,6 +39,8 @@ abstract public class GameObject implements Cloneable{
 		mElapsedFrame	= 0;
 		mIsAlive		= true;
 		mPosition		= new Position(0, 0);
+		mView			= null;
+		
 	}
 	
 	public void setPosition(float posX, float posY){
@@ -58,6 +64,15 @@ abstract public class GameObject implements Cloneable{
 		return mName;
 	}
 	
+	public void addHealthPoint(int delta){
+		if (mIsAlive){
+			mHealthPoint += delta;
+			if (mHealthPoint < 0){
+				onDie();
+			}
+		}
+	}
+	
 	public int getHealthPoint(){
 		return mHealthPoint;
 	}
@@ -70,6 +85,9 @@ abstract public class GameObject implements Cloneable{
 		return mHeight;
 	}
 	
+	public int getStand(){
+		return mStand;
+	}
 	/**
 	 * Do something when die,like play sound ,set status,etc
 	 */
@@ -106,6 +124,10 @@ abstract public class GameObject implements Cloneable{
 		}
 		object.mPosition = (Position)this.mPosition.clone();
 		return object;
+	}
+
+	public void setView(PlantVsZombieView view) {
+		mView = view;
 	}
 
 }

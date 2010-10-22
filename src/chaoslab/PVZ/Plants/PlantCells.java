@@ -19,11 +19,18 @@ public class PlantCells {
 		mPlants[row][col] = plant;
 	}
 	
-	public Plant[] getRow(int row){
+	/*public Plant[] getRow(int row){
 		if (row >=0 && row < MAX_ROW_NUM)
 			return mPlants[row];
 		else 
 			return null;
+	}*/
+	public static int getRow(final Position position){
+		return (int)((position.y - ORIGIN.y ) / CELL_HEIGHT);
+	}
+	
+	public static int getCol(final Position position){
+		return (int)((position.x - ORIGIN.x) / CELL_WIDTH);
 	}
 	
 	public Plant getPlant(int row, int col){

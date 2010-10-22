@@ -1,5 +1,8 @@
 package chaoslab.PVZ.Plants;
 
+import java.util.ArrayList;
+
+import chaoslab.PVZ.GameConstants;
 import chaoslab.PVZ.GameObject;
 import chaoslab.PVZ.Particle;
 import chaoslab.PVZ.Zombies.Zombie;
@@ -10,12 +13,11 @@ import chaoslab.PVZ.Zombies.Zombie;
  */
 abstract public class Plant extends GameObject implements Eatable{
 	public Plant(String name, Particle particles[], int cost) {
-		super(name, particles, cost);	
+		super(name, particles, cost);
+		mStand = GameConstants.STAND_PLANT;
 	}
 	
-	public void Attack(Zombie target){
-		//do nothing as default
-	}
+	public abstract void attack(ArrayList<Zombie> zombies);
 	
 	public void ate(int harmPoint){
 		mHealthPoint -= harmPoint;
