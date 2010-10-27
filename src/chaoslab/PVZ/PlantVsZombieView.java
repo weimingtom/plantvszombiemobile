@@ -123,11 +123,36 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         
         public void InitSeedCards(Resources res){
         	mSeedCards 			= new ArrayList<SeedCard>();
-        	Bitmap seedpacket 	= BitmapFactory.decodeResource(res, R.drawable.seedpacket_larger);
+        	Bitmap seedpacket1 	= BitmapFactory.decodeResource(res, R.drawable.zombie_head);
         	mSeedCards.add(new SeedCard(new Particle(new Position(70, 10),
-        			Bitmap.createScaledBitmap(seedpacket, (int)(seedpacket.getWidth() * 0.5),
-        					(int)(seedpacket.getHeight() * 0.5), true)), 
+        			Bitmap.createScaledBitmap(seedpacket1, (int)(seedpacket1.getWidth() * 0.5),
+        					(int)(seedpacket1.getHeight() * 0.5), true)), 
         			ZombieFactory.createNormalZombie(res)));
+        	Bitmap seedpacket2 	= BitmapFactory.decodeResource(res, R.drawable.zombie_bungi_head);
+        	mSeedCards.add(new SeedCard(new Particle(new Position(2*70, 10),
+        			Bitmap.createScaledBitmap(seedpacket2, (int)(seedpacket2.getWidth() * 0.5),
+        					(int)(seedpacket2.getHeight() * 0.5), true)), 
+        			ZombieFactory.createBungeeZombie(res)));
+        	Bitmap seedpacket3 	= BitmapFactory.decodeResource(res, R.drawable.zombie_football_helmet2);
+        	mSeedCards.add(new SeedCard(new Particle(new Position(3*70, 10),
+        			Bitmap.createScaledBitmap(seedpacket3, (int)(seedpacket3.getWidth() * 0.5),
+        					(int)(seedpacket3.getHeight() * 0.5), true)), 
+        			ZombieFactory.createSoccerZombie(res)));
+        	Bitmap seedpacket4 	= BitmapFactory.decodeResource(res, R.drawable.zombiepolevaulterhead);
+        	mSeedCards.add(new SeedCard(new Particle(new Position(4*70, 10),
+        			Bitmap.createScaledBitmap(seedpacket4, (int)(seedpacket4.getWidth() * 0.5),
+        					(int)(seedpacket4.getHeight() * 0.5), true)), 
+        			ZombieFactory.createPoleVaultZombie(res)));
+        	Bitmap seedpacket5 	= BitmapFactory.decodeResource(res, R.drawable.zombieimphead);
+        	mSeedCards.add(new SeedCard(new Particle(new Position(5*70, 10),
+        			Bitmap.createScaledBitmap(seedpacket5, (int)(seedpacket5.getWidth() * 0.5),
+        					(int)(seedpacket5.getHeight() * 0.5), true)), 
+        			ZombieFactory.createMiniZombie(res)));
+        	Bitmap seedpacket6 	= BitmapFactory.decodeResource(res, R.drawable.zombie_cone1);
+        	mSeedCards.add(new SeedCard(new Particle(new Position(6*70, 10),
+        			Bitmap.createScaledBitmap(seedpacket6, (int)(seedpacket6.getWidth() * 0.5),
+        					(int)(seedpacket6.getHeight() * 0.5), true)), 
+        			ZombieFactory.createRoadBlockZombie(res)));
         }
         @Override
         public void run(){
@@ -411,19 +436,16 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         if (!hasWindowFocus) thread.pause();
     }
-	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, 
 			int width, int height) {
 		thread.setSurfaceSize(width, height);
 	}
 
-	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		thread.setRunning(true);
         thread.start();
 	}
 
-	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// we have to tell thread to shut down & wait for it to finish, or else
         // it might touch the Surface after we return and explode

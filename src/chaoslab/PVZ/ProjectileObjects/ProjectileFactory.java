@@ -12,7 +12,7 @@ public class ProjectileFactory {
 	public static ProjectileObject createProjectilePea(Resources res){
 		Particle particles[] = {
 				new Particle(new Position(0, 0), 
-						BitmapFactory.decodeResource(res, R.drawable.projectilepea)),
+						BitmapFactory.decodeResource(res, 0x7f020017/*R.drawable.projectilepea*/)),
 			};
 		
 		ProjectilePea projectilePea = new ProjectilePea("PROJECTILE_PEA", particles);

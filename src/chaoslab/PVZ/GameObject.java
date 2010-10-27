@@ -119,9 +119,9 @@ abstract public class GameObject implements Cloneable{
 	@Override
 	public Object clone() throws CloneNotSupportedException{
 		GameObject object = (GameObject)super.clone();
-		for (int i = 0 ; i < mParticles.length; ++i){
+		/*for (int i = 0 ; i < mParticles.length; ++i){
 			object.mParticles[i] = (Particle)this.mParticles[i].clone();
-		}
+		}*/
 		object.mPosition = (Position)this.mPosition.clone();
 		return object;
 	}

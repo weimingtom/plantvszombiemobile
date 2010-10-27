@@ -31,5 +31,11 @@ abstract public class Plant extends GameObject implements Eatable{
 			this.onDie();
 		}
 	}
+	public boolean isDefCreature(){
+		return false;
+	}
+	public boolean isProtected(){
+		return false;
+	}
 }
 
