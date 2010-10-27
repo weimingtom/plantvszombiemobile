@@ -4,6 +4,7 @@ import chaoslab.PVZ.Particle;
 import chaoslab.PVZ.Position;
 import chaoslab.PVZ.R;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 public class PlantFactory {
@@ -15,7 +16,7 @@ public class PlantFactory {
 		return new SunFlower("SUNFLOWER", particles, 50);
 	}
 	
-	public static Plant createPea(Resources res){
+	public static Plant createPeaShooter(Resources res){
 		/*
 		Particle particles[] = {
 				new Particle(new Position(0, 0), 
@@ -25,9 +26,26 @@ public class PlantFactory {
 			};*/
 		Particle particles[] = {
 				new Particle(new Position(0, 0), 
-						BitmapFactory.decodeResource(res, R.drawable.sunflower_head)),
+						BitmapFactory.decodeResource(res, R.drawable.peashooter_01)),
 			};
 		return new PeaShooter("PEASHOOTER", particles, 50);
+	}
+	
+	public static Plant createWavingPeaShooter(Resources res){
+		Bitmap bitmaps[] = {
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_01),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_02),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_03),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_04),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_05),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_06),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_07),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_08),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_09),
+			};
+		WavingPeaShooter shooter = new WavingPeaShooter("WavingPeaShooter", null, 50);
+		shooter.setWaveBitmaps(bitmaps);
+		return shooter;
 	}
 	
 	public static Plant createBrain(Resources res){

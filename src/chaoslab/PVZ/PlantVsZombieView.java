@@ -5,7 +5,6 @@
  */
 package chaoslab.PVZ;
 
-import chaoslab.PVZ.Plants.SunFlower;
 import java.util.ArrayList;
 
 import chaoslab.PVZ.Plants.Plant;
@@ -113,7 +112,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         public void InitPlants(Resources res){
         	for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i)
         		for (int j = 0; j < PlantCells.MAX_COL_NUM; ++j){
-        			Plant plant = PlantFactory.createPea(res);
+        			Plant plant = PlantFactory.createWavingPeaShooter(res);
         			plant.setView(PlantVsZombieView.this);
         			mPlants.setPlant(i, j, plant);
         			/*Plant pea = PlantFactory.createPea(res);
