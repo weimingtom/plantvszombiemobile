@@ -3,6 +3,7 @@ package chaoslab.PVZ.Zombies;
 import chaoslab.PVZ.Particle;
 import chaoslab.PVZ.Position;
 import chaoslab.PVZ.R;
+import chaoslab.PVZ.Plants.Plant;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
@@ -20,34 +21,34 @@ public class ZombieFactory {
 		for(int i=0;i<10;++i){
 			bitmap[i] = BitmapFactory.decodeResource(res, R.drawable.zombie_football_helmet2);
 		}
-		return new Zombie("soccer Zombie", null,bitmap, 100);
+		return new SoccerZombie("soccer Zombie", null,bitmap, 100);
 	}
 	public static Zombie createBungeeZombie(Resources res){
 		Bitmap bitmap[] = new Bitmap[10];
 		for(int i=0;i<10;++i){
 			bitmap[i] = BitmapFactory.decodeResource(res, R.drawable.zombie_bungi_head);
 		}
-		return new Zombie("soccer Zombie", null,bitmap, 100);
+		return new BungeeZombie("bungee Zombie", null,bitmap, 100);
 	}
 	public static Zombie createMiniZombie(Resources res){
 		Bitmap bitmap[] = new Bitmap[10];
 		for(int i=0;i<10;++i){
 			bitmap[i] = BitmapFactory.decodeResource(res, R.drawable.zombieimphead);
 		}
-		return new Zombie("soccer Zombie", null,bitmap, 100);
+		return new MiniZombie("mini Zombie", null,bitmap, 100);
 	}
 	public static Zombie createPoleVaultZombie(Resources res){
 		Bitmap bitmap[] = new Bitmap[10];
 		for(int i=0;i<10;++i){
 			bitmap[i] = BitmapFactory.decodeResource(res, R.drawable.zombiepolevaulterhead);
 		}
-		return new Zombie("soccer Zombie", null,bitmap, 100);
+		return new PoleJumpZombie("pole Zombie", null,bitmap, 100);
 	}
 	public static Zombie createRoadBlockZombie(Resources res){
 		Bitmap bitmap[] = new Bitmap[10];
 		for(int i=0;i<10;++i){
 			bitmap[i] = BitmapFactory.decodeResource(res, R.drawable.zombie_cone1);
 		}
-		return new Zombie("soccer Zombie", null,bitmap, 100);
+		return new RoadBlockZombie("cone Zombie", null,bitmap, 100);
 	}
 }

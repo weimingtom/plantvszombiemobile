@@ -127,32 +127,32 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         	mSeedCards.add(new SeedCard(new Particle(new Position(70, 10),
         			Bitmap.createScaledBitmap(seedpacket1, (int)(seedpacket1.getWidth() * 0.5),
         					(int)(seedpacket1.getHeight() * 0.5), true)), 
-        			ZombieFactory.createNormalZombie(res)));
+        			ZombieFactory.createNormalZombie(res),res));
         	Bitmap seedpacket2 	= BitmapFactory.decodeResource(res, R.drawable.zombie_bungi_head);
-        	mSeedCards.add(new SeedCard(new Particle(new Position(2*70, 10),
+        	mSeedCards.add(new SeedCard(new Particle(new Position(50 + 70, 10),
         			Bitmap.createScaledBitmap(seedpacket2, (int)(seedpacket2.getWidth() * 0.5),
         					(int)(seedpacket2.getHeight() * 0.5), true)), 
-        			ZombieFactory.createBungeeZombie(res)));
+        			ZombieFactory.createBungeeZombie(res),res));
         	Bitmap seedpacket3 	= BitmapFactory.decodeResource(res, R.drawable.zombie_football_helmet2);
-        	mSeedCards.add(new SeedCard(new Particle(new Position(3*70, 10),
+        	mSeedCards.add(new SeedCard(new Particle(new Position(2*50 + 70, 10),
         			Bitmap.createScaledBitmap(seedpacket3, (int)(seedpacket3.getWidth() * 0.5),
         					(int)(seedpacket3.getHeight() * 0.5), true)), 
-        			ZombieFactory.createSoccerZombie(res)));
+        			ZombieFactory.createSoccerZombie(res),res));
         	Bitmap seedpacket4 	= BitmapFactory.decodeResource(res, R.drawable.zombiepolevaulterhead);
-        	mSeedCards.add(new SeedCard(new Particle(new Position(4*70, 10),
+        	mSeedCards.add(new SeedCard(new Particle(new Position(3*50 + 70, 10),
         			Bitmap.createScaledBitmap(seedpacket4, (int)(seedpacket4.getWidth() * 0.5),
         					(int)(seedpacket4.getHeight() * 0.5), true)), 
-        			ZombieFactory.createPoleVaultZombie(res)));
+        			ZombieFactory.createPoleVaultZombie(res),res));
         	Bitmap seedpacket5 	= BitmapFactory.decodeResource(res, R.drawable.zombieimphead);
-        	mSeedCards.add(new SeedCard(new Particle(new Position(5*70, 10),
+        	mSeedCards.add(new SeedCard(new Particle(new Position(4*50 + 70, 10),
         			Bitmap.createScaledBitmap(seedpacket5, (int)(seedpacket5.getWidth() * 0.5),
         					(int)(seedpacket5.getHeight() * 0.5), true)), 
-        			ZombieFactory.createMiniZombie(res)));
+        			ZombieFactory.createMiniZombie(res),res));
         	Bitmap seedpacket6 	= BitmapFactory.decodeResource(res, R.drawable.zombie_cone1);
-        	mSeedCards.add(new SeedCard(new Particle(new Position(6*70, 10),
+        	mSeedCards.add(new SeedCard(new Particle(new Position(5*50 + 70, 10),
         			Bitmap.createScaledBitmap(seedpacket6, (int)(seedpacket6.getWidth() * 0.5),
         					(int)(seedpacket6.getHeight() * 0.5), true)), 
-        			ZombieFactory.createRoadBlockZombie(res)));
+        			ZombieFactory.createRoadBlockZombie(res),res));
         }
         @Override
         public void run(){
@@ -347,7 +347,8 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
     					Position position = mSelectedSeedObject.getPosition();
     					int col = (int)((position.x - PlantCells.ORIGIN.x) / PlantCells.CELL_WIDTH);
     					int row = (int)((position.y - PlantCells.ORIGIN.y) / PlantCells.CELL_HEIGHT);
-    					if (col >= STRIP_COLUMN){
+    					Zombie newZombie = (Zombie)mSelectedSeedObject;
+						if (col >= STRIP_COLUMN && !newZombie.directAttatck()){
     						if (mSunshines >= mSelectedSeedCard.getCost())
     						{
     							mSunshines -=  mSelectedSeedCard.getCost();
@@ -356,6 +357,16 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 		    							PlantCells.ORIGIN.y + row * PlantCells.CELL_HEIGHT);
 		    					mZombies.add(zombie);
     						}
+    					}else if(newZombie.directAttatck() && col < STRIP_COLUMN )
+    					{ //for bungee zombies and ones like this
+    						if (mSunshines >= mSelectedSeedCard.getCost())
+    						{
+    							Zombie zombie = (Zombie)mSelectedSeedObject.clone();
+    							zombie.setPosition(PlantCells.ORIGIN.x + col * PlantCells.CELL_WIDTH,-30);
+    							zombie.seek(mPlants.getPlant(row,col));
+    							mZombies.add(zombie);
+    						}
+    						
     					}
 						mSelectedSeedObject = null;
 						mSelectedSeedCard 	= null;
@@ -402,7 +413,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 	private Context mContext;
 	private PlantVsZombieThread thread;
     /** Current sunshine number*/
-	private int mSunshines = 150;
+	private int mSunshines = 1500;
 	
 	
 	public PlantVsZombieView(Context context, AttributeSet attrs) {

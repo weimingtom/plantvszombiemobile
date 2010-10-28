@@ -3,6 +3,7 @@ package chaoslab.PVZ;
  * Each game object is composed by several particles when drawn
  * This class encapsulates doDraw() operation 
  */
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -11,6 +12,7 @@ import android.graphics.Rect;
 public class Particle implements Cloneable{
 	private Position mPosition;	//relative position to its owner
 	private Bitmap	mBitmap;
+	protected Resources mRes;
 	public Particle(Position position, Bitmap bitmap){
 		this.mPosition = position;
 		this.mBitmap   = bitmap;

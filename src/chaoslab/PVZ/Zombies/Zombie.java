@@ -50,9 +50,12 @@ public class Zombie extends GameObject{
 		mBitmap = bitmap;
 		mMaxBitmap = 10;
 		mStatus = GameConstants.ZOMBIE_MOVE;
-		mEventFrame = 0;
+		mEventFrame = MIN_MOVE;;
  	}
 	public boolean isDefCreature(){
+		return false;
+	}
+	public boolean directAttatck(){
 		return false;
 	}
 	public void move(){
@@ -60,7 +63,10 @@ public class Zombie extends GameObject{
 		mPosition.x += mMoveDirection * mMoveSpeed * moveFactor;
 		mStatus = GameConstants.ZOMBIE_MOVE;
 	}
-	
+	public void seek(Plant target){
+		mStatus = GameConstants.ZOMBIE_SEEK;
+		mTarget = target;
+	}
 	public void eat(Plant target){
 		mTarget = target;
 		mEventFrame = MIN_EAT;
@@ -68,7 +74,13 @@ public class Zombie extends GameObject{
 		mEatFrmCnt = 0;
 	}
 	public void eating(){
-		mTarget.ate(mAttackPower);
+		if(mTarget.isAlive()){
+			mTarget.ate(mAttackPower);
+		}else{
+			mTarget.onDie();
+			mStatus = GameConstants.ZOMBIE_MOVE;
+			mEventFrame = MIN_MOVE;
+		}
 	}
 	@Override
 	public void doDraw(Canvas canvas, float scaleX, float scaleY, Paint paint){
@@ -87,8 +99,8 @@ public class Zombie extends GameObject{
 		//update bitmap frame
 		++mEventFrame; 
 		if(MAX_ATTACKED == mEventFrame){
-			mEventFrame = mPreviousFrame;
-			mStatus = GameConstants.ZOMBIE_MOVE;
+			//mEventFrame = mPreviousFrame;
+			//mStatus = GameConstants.ZOMBIE_MOVE;
 		}else if(MAX_EAT == mEventFrame){
 			mEventFrame = MIN_EAT;
 		}else if(MAX_MOVE == mEventFrame){
@@ -111,10 +123,10 @@ public class Zombie extends GameObject{
 			mEventFrame = MIN_MOVE;
 			break;
 		case GameConstants.ZOMBIE_ATTACK:
-			mEventFrame = MIN_ATTACKED;
+			mEventFrame = MIN_EAT;
 			break;
 		case GameConstants.ZOMBIE_ATTACKED:
-			mEventFrame = MIN_EAT;
+			//mEventFrame = MIN_ATTACKED;
 			break;
 		default:
 			break;
@@ -124,11 +136,17 @@ public class Zombie extends GameObject{
 	{
 		//how to process the slowed status?
 		//more switch or a picture mask?
-		mStatus = GameConstants.ZOMBIE_ATTACKED;
+		//mStatus = GameConstants.ZOMBIE_ATTACKED;
 		mHealthPoint -= harmPoint;
+		//mEventFrame = MIN_ATTACKED;
 		if(0 >= mHealthPoint){
 			mHealthPoint =0;
 			this.onDie();
+		}
+	}
+	public void addHealthPoint(int delta){
+		if (mIsAlive){
+			attacked(-1*delta);
 		}
 	}
 }
