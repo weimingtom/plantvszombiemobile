@@ -1,19 +1,25 @@
 package chaoslab.PVZ.Zombies;
 
-import chaoslab.PVZ.Particle;
-import chaoslab.PVZ.Position;
 import chaoslab.PVZ.R;
-import chaoslab.PVZ.Plants.Plant;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
 
 public class ZombieFactory {
 	public static Zombie createNormalZombie(Resources res){
-		Bitmap bitmap[] = new Bitmap[10];
-		for(int i=0;i<10;++i){
-			bitmap[i] = BitmapFactory.decodeResource(res, R.drawable.zombie_head);
-		}
+		Bitmap bitmap[] = new Bitmap[12];
+		bitmap[0] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_00);
+		bitmap[1] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_01);
+		bitmap[2] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_02);
+		bitmap[3] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_03);
+		bitmap[4] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_04);
+		bitmap[5] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_05);
+		bitmap[6] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_06);
+		bitmap[7] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_07);
+		bitmap[8] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_08);
+		bitmap[9] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_09);
+		bitmap[10] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_10);
+		bitmap[11] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_11);
 		return new Zombie("normal Zombie", null,bitmap, 100);
 	}
 	public static Zombie createSoccerZombie(Resources res){

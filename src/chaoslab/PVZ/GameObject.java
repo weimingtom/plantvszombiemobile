@@ -14,7 +14,7 @@ abstract public class GameObject implements Cloneable{
 	
 	protected String 	mName;
 	protected int		mCost;
-	protected int 		mHealthPoint;
+	protected int 		mHealthPoint = 50;
 	protected int		mElapsedFrame;
 	protected boolean	mIsAlive;
 	protected Position	mPosition;

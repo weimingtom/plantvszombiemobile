@@ -57,7 +57,6 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
          * @see #setSurfaceSize
          */
         private int mCanvasHeight = 1;
-
         /**
          * Current width of the surface/canvas.
          * 
@@ -156,7 +155,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         }
         @Override
         public void run(){
-        	while (mRun){
+        	while (mRun ){
         		Canvas c = null;
         		try {
                     c = mSurfaceHolder.lockCanvas(null);
@@ -269,12 +268,12 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         		Zombie zombie = mZombies.get(i);
         		//check zombie's position to select proper action.
 	        	if (zombie != null && zombie.isAlive() && zombie.isInScreen(mCanvasWidth, mCanvasHeight)){
-		        	Plant targetPlant = mPlants.getPlant(zombie.getPosition());
+	        		Plant targetPlant = mPlants.getPlant(zombie.getPosition());
 		        	if (targetPlant != null && targetPlant.isAlive() 
 		        			&& isCollise(targetPlant, zombie))
 		        		zombie.eat(targetPlant);
-		        	else
-		        		zombie.move();
+		        	//else
+		        		//zombie.move();
 		        	zombie.update();
 	        	}else{
 	        		mZombies.remove(zombie);
@@ -374,8 +373,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 					} catch (CloneNotSupportedException e) {
 						e.printStackTrace();
 					}
-				}	
-    				
+				}
     			break;
     		}
         }
