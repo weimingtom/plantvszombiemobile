@@ -12,6 +12,7 @@ import chaoslab.PVZ.Zombies.Zombie;
 public class PeaShooter extends Plant {
 	protected int mAttackFrame	  = 0;
 	protected int mAttackInterval = 20;
+	protected int mFaceTo		  = 1; /** 1 indicates right while -1 indicates left*/
 	
 	public static final int PEA_SHOOTER_TYPE_NORMAL = 0;
 	public static final int PEA_SHOOTER_TYPE_SNOW	= 1;
@@ -34,7 +35,8 @@ public class PeaShooter extends Plant {
 		for (int i = 0; i < zombies.size() && !isAttacked; ++i){
 			Position zombiePosition = zombies.get(i).getPosition();
 			if (mAttackFrame >= mAttackInterval && 
-					PlantCells.getRow(zombiePosition) == PlantCells.getRow(mPosition)){
+					PlantCells.getRow(zombiePosition) == PlantCells.getRow(mPosition)
+					&& (zombiePosition.x - mPosition.x) * mFaceTo > 0){
 				isAttacked = true;
 				mAttackFrame = 0;
 				

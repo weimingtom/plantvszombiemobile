@@ -192,7 +192,6 @@ public class Zombie extends GameObject implements Harmable{
 	 * maybe we need do some process when zombie is attacked
 	 * in the near future
 	 */
-	@Override
 	public void onHarmed( int harmPoint )
 	{
 		//how to process the slowed status?
