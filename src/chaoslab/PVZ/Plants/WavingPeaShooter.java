@@ -50,5 +50,12 @@ public class WavingPeaShooter extends PeaShooter {
 			}
 		}
 	}
-	
+	public Bitmap getBitmap(){
+		if(mWaveBitmaps != null)
+		{
+			return mWaveBitmaps[0];
+		}else{
+			return null;
+		}
+	}
 }

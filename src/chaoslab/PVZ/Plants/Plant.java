@@ -6,6 +6,7 @@ import chaoslab.PVZ.GameObject;
 import chaoslab.PVZ.Harmable;
 import chaoslab.PVZ.Particle;
 import chaoslab.PVZ.Zombies.Zombie;
+import android.graphics.Bitmap;
 /**
  * 
  * @author Liu.zhenxing
@@ -24,7 +25,9 @@ abstract public class Plant extends GameObject implements Harmable{
 	}
 	
 	public abstract void attack(ArrayList<Zombie> zombies);
-	
+	public Bitmap getBitmap(){
+		return null;
+	}
 	public void onHarmed(int harmPoint){
 		mHealthPoint -= harmPoint;
 		if (mHealthPoint <= 0){

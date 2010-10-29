@@ -7,7 +7,7 @@ import android.graphics.BitmapFactory;
 
 public class ProjectileFactory {
 	public static final int POWER_PEA 		= 5;
-	public static final double SPEED_PEA 	= 10.0;
+	public static final double SPEED_PEA 	= 30.0;
 	public static ProjectileObject createProjectilePea(Resources res){
 		/*Particle particles[] = {
 				new Particle(new Position(0, 0), 
