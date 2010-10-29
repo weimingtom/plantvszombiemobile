@@ -28,7 +28,7 @@ public class PlantFactory {
 				new Particle(new Position(0, 0), 
 						BitmapFactory.decodeResource(res, R.drawable.peashooter_01)),
 			};
-		return new PeaShooter("PEASHOOTER", particles, 50);
+		return new PeaShooter("PEASHOOTER", particles, 50, PeaShooter.PEA_SHOOTER_TYPE_NORMAL);
 	}
 	
 	public static Plant createWavingPeaShooter(Resources res){
@@ -43,17 +43,31 @@ public class PlantFactory {
 				BitmapFactory.decodeResource(res, R.drawable.peashooter_08),
 				BitmapFactory.decodeResource(res, R.drawable.peashooter_09),
 			};
-		WavingPeaShooter shooter = new WavingPeaShooter("WavingPeaShooter", null, 50);
+		WavingPeaShooter shooter = new WavingPeaShooter("WavingPeaShooter", null, 50, PeaShooter.PEA_SHOOTER_TYPE_NORMAL);
 		shooter.setWaveBitmaps(bitmaps);
 		return shooter;
 	}
 	
-	public static Plant createBrain(Resources res){
-		Particle particles[] = {
-				new Particle(new Position(0, 0), 
-						BitmapFactory.decodeResource(res, R.drawable.brain)),	
+	public static Plant createSnowPeaShooter(Resources res){
+		Bitmap bitmaps[] = {
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_01),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_02),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_03),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_04),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_05),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_06),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_07),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_08),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_09),
 			};
-		return new Brain(particles, 0);
+		WavingPeaShooter shooter = new WavingPeaShooter("WavingPeaShooter", null, 50, PeaShooter.PEA_SHOOTER_TYPE_SNOW);
+		shooter.setWaveBitmaps(bitmaps);
+		return shooter;
+	}
+	
+	
+	public static Plant createBrain(Resources res){
+		return new Brain(BitmapFactory.decodeResource(res, R.drawable.brain), 0);
 	}
 	
 }

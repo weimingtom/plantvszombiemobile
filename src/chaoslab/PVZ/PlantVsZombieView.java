@@ -6,6 +6,7 @@
 package chaoslab.PVZ;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import chaoslab.PVZ.Plants.Plant;
 import chaoslab.PVZ.Plants.PlantCells;
@@ -25,6 +26,7 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -96,7 +98,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             mSeedBarImage		= BitmapFactory.decodeResource(res, R.drawable.seedbar);
             mPlants = new PlantCells();
             mZombies = new ArrayList<Zombie>();
-          //  BitmapFactory.decodeResource(res, R.drawable.seedbar);
+            BitmapFactory.decodeResource(res, R.drawable.seedbar);
             Zombie zombie = ZombieFactory.createNormalZombie(res);
             zombie.setPosition(500, (int)(PlantCells.ORIGIN.y + 2 * PlantCells.CELL_HEIGHT - zombie.getHeight()));
             mZombies.add(zombie);
@@ -111,7 +113,12 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         public void InitPlants(Resources res){
         	for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i)
         		for (int j = 0; j < PlantCells.MAX_COL_NUM; ++j){
-        			Plant plant = PlantFactory.createWavingPeaShooter(res);
+        			Plant plant = null;
+        			if (j == 0){
+        				plant = PlantFactory.createBrain(res);
+        			}else{
+        				plant = PlantFactory.createSnowPeaShooter(res);//createSnowPeaShooter(res);
+        			}
         			plant.setView(PlantVsZombieView.this);
         			mPlants.setPlant(i, j, plant);
         			/*Plant pea = PlantFactory.createPea(res);
@@ -122,36 +129,31 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         
         public void InitSeedCards(Resources res){
         	mSeedCards 			= new ArrayList<SeedCard>();
-        	Bitmap seedpacket1 	= BitmapFactory.decodeResource(res, R.drawable.zombie_head);
-        	mSeedCards.add(new SeedCard(new Particle(new Position(70, 10),
-        			Bitmap.createScaledBitmap(seedpacket1, (int)(seedpacket1.getWidth() * 0.5),
-        					(int)(seedpacket1.getHeight() * 0.5), true)), 
-        			ZombieFactory.createNormalZombie(res),res));
-        	Bitmap seedpacket2 	= BitmapFactory.decodeResource(res, R.drawable.zombie_bungi_head);
-        	mSeedCards.add(new SeedCard(new Particle(new Position(50 + 70, 10),
-        			Bitmap.createScaledBitmap(seedpacket2, (int)(seedpacket2.getWidth() * 0.5),
-        					(int)(seedpacket2.getHeight() * 0.5), true)), 
-        			ZombieFactory.createBungeeZombie(res),res));
-        	Bitmap seedpacket3 	= BitmapFactory.decodeResource(res, R.drawable.zombie_football_helmet2);
-        	mSeedCards.add(new SeedCard(new Particle(new Position(2*50 + 70, 10),
-        			Bitmap.createScaledBitmap(seedpacket3, (int)(seedpacket3.getWidth() * 0.5),
-        					(int)(seedpacket3.getHeight() * 0.5), true)), 
-        			ZombieFactory.createSoccerZombie(res),res));
-        	Bitmap seedpacket4 	= BitmapFactory.decodeResource(res, R.drawable.zombiepolevaulterhead);
-        	mSeedCards.add(new SeedCard(new Particle(new Position(3*50 + 70, 10),
-        			Bitmap.createScaledBitmap(seedpacket4, (int)(seedpacket4.getWidth() * 0.5),
-        					(int)(seedpacket4.getHeight() * 0.5), true)), 
-        			ZombieFactory.createPoleVaultZombie(res),res));
-        	Bitmap seedpacket5 	= BitmapFactory.decodeResource(res, R.drawable.zombieimphead);
-        	mSeedCards.add(new SeedCard(new Particle(new Position(4*50 + 70, 10),
-        			Bitmap.createScaledBitmap(seedpacket5, (int)(seedpacket5.getWidth() * 0.5),
-        					(int)(seedpacket5.getHeight() * 0.5), true)), 
-        			ZombieFactory.createMiniZombie(res),res));
-        	Bitmap seedpacket6 	= BitmapFactory.decodeResource(res, R.drawable.zombie_cone1);
-        	mSeedCards.add(new SeedCard(new Particle(new Position(5*50 + 70, 10),
-        			Bitmap.createScaledBitmap(seedpacket6, (int)(seedpacket6.getWidth() * 0.5),
-        					(int)(seedpacket6.getHeight() * 0.5), true)), 
-        			ZombieFactory.createRoadBlockZombie(res),res));
+        	Bitmap bkgBitmap	= BitmapFactory.decodeResource(res, R.drawable.seedpacket_larger);
+        	Bitmap seedPackets[] = {
+        			BitmapFactory.decodeResource(res, R.drawable.zombie_head),
+        			BitmapFactory.decodeResource(res, R.drawable.zombie_bungi_head),
+        			BitmapFactory.decodeResource(res, R.drawable.zombie_football_helmet2),
+        			BitmapFactory.decodeResource(res, R.drawable.zombiepolevaulterhead),
+        			BitmapFactory.decodeResource(res, R.drawable.zombieimphead),
+        			BitmapFactory.decodeResource(res, R.drawable.zombie_cone1),
+        	};
+        	Zombie seedZombies[] = {
+        			ZombieFactory.createNormalZombie(res),
+        			ZombieFactory.createBungeeZombie(res),
+        			ZombieFactory.createSoccerZombie(res),
+        			ZombieFactory.createPoleVaultZombie(res),
+        			ZombieFactory.createRoadBlockZombie(res),
+        			ZombieFactory.createRoadBlockZombie(res),
+        	};
+        	Position startPosition = new Position(70, 10);
+        	for (int i = 0; i < seedPackets.length; ++i){
+        		Bitmap seedPacket =  seedPackets[i];
+        		mSeedCards.add(new SeedCard(startPosition, seedZombies[i], bkgBitmap, 
+        				Bitmap.createScaledBitmap(seedPacket, (int)(seedPacket.getWidth() * 0.5),
+            					(int)(seedPacket.getHeight() * 0.5), true)));
+        		startPosition.x += SeedCard.SEED_CARD_WIDTH;
+        	}
         }
         @Override
         public void run(){
@@ -159,12 +161,13 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         		Canvas c = null;
         		try {
                     c = mSurfaceHolder.lockCanvas(null);
+                   
                     synchronized (mSurfaceHolder) {
                         if (mState == STATE_RUNNING)
                         	update();
                         if (c != null)
                         	doDraw(c);
-                        
+                       
                     }
                 } finally {
                     // do this in a finally so that if an exception is thrown
@@ -183,16 +186,23 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         public void doDraw(Canvas canvas){
         	// Draw the background image. Operations on the Canvas accumulate
             // so this is like clearing the screen.
+        	Date now = new Date();
+            Log.d("TIME", now.getTime() + "");
             canvas.drawBitmap(mBackgroundImage, null, new Rect(0, 0, mCanvasWidth, mCanvasHeight), null);
             canvas.drawBitmap(mBowlingStripeImage, PlantCells.CELL_WIDTH * STRIP_COLUMN * mScaleX, 32, null);
+            now = new Date();
+          //  Log.d("AFTER BACKGROUND", now.getTime() + "");
             //Draw SeedBar
             Matrix matrix = new Matrix();
         	matrix.setScale(mScaleX, mScaleY);
             canvas.drawBitmap(mSeedBarImage, matrix, null);
             canvas.drawText(Integer.toString(mSunshines), 20 * mScaleX, 80 * mScaleY, new Paint());
+            
             for (int i = 0; i < mSeedCards.size(); ++i){
             	mSeedCards.get(i).doDraw(canvas, mScaleX, mScaleY, null);
             }
+            now = new Date();
+        //    Log.d("AFTER Seed Card", now.getTime() + "");
             /** NOTE THAT HERE MAY OCCUR A SYNCHRONIZE ERROR: mSelectedObject may be set
              * to null in onTouchEvent method just before doDraw(). So here I temperately 
              * put new Paint outside of the if section to avoid this error.
@@ -210,11 +220,13 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             			plant.doDraw(canvas, mScaleX, mScaleY, null);
             	}
             }
-            
+            now = new Date();
+            Log.d("AFTER PLANT", now.getTime() + "");
             for (int i = 0; i < mZombies.size(); ++i){
             	mZombies.get(i).doDraw(canvas, mScaleX, mScaleY, null);
             }
-            
+            now = new Date();
+            Log.d("AFTER Zombie", now.getTime() + "");
             for (int i = 0; i < mProjectileObjects.size(); ++i){
             	mProjectileObjects.get(i).doDraw(canvas, mScaleX, mScaleY, null);
             }
@@ -356,10 +368,8 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 		    							PlantCells.ORIGIN.y + row * PlantCells.CELL_HEIGHT);
 		    					mZombies.add(zombie);
     						}
-    					}else if(newZombie.directAttatck() && col < STRIP_COLUMN )
-    					{ //for bungee zombies and ones like this
-    						if (mSunshines >= mSelectedSeedCard.getCost())
-    						{
+    					}else if( newZombie.directAttatck() && col < STRIP_COLUMN ) { //for bungee zombies and ones like this
+    						if (mSunshines >= mSelectedSeedCard.getCost()){
     							Zombie zombie = (Zombie)mSelectedSeedObject.clone();
     							zombie.setPosition(PlantCells.ORIGIN.x + col * PlantCells.CELL_WIDTH,-30);
     							zombie.seek(mPlants.getPlant(row,col));
@@ -387,10 +397,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
                 
                 mScaleX = width * 1.0f / mBackgroundImage.getWidth();
                 mScaleY	= height * 1.0f / mBackgroundImage.getHeight();
-               
-                // don't forget to resize the background image
-            //    mBackgroundImage = Bitmap.createScaledBitmap(
-              //          mBackgroundImage, width, height, true);
+           
             }
         }
 

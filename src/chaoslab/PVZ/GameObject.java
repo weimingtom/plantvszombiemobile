@@ -4,8 +4,10 @@ package chaoslab.PVZ;
  */
 import chaoslab.PVZ.Particle;
 import chaoslab.PVZ.GameConstants;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 abstract public class GameObject implements Cloneable{
 
@@ -19,7 +21,8 @@ abstract public class GameObject implements Cloneable{
 	protected boolean	mIsAlive;
 	protected Position	mPosition;
 	/** TODO: change this to ArrayList to support animation*/
-	protected Particle  mParticles[];		
+	protected Particle  mParticles[];
+	protected Bitmap    mCurBitmap;
 	/** Actual size of this object*/
 	protected int		mWidth 	= 0;
 	protected int		mHeight = 0;
@@ -96,9 +99,17 @@ abstract public class GameObject implements Cloneable{
 	}
 	
 	public void doDraw(Canvas canvas, float scaleX, float scaleY, Paint paint){
+		/*
 		for (int i = 0; i < mParticles.length; ++i){
 			mParticles[i].doDraw(canvas, this, scaleX, scaleY, paint);
-		}
+		}*/
+		if (mCurBitmap == null)
+			return;
+		canvas.drawBitmap(mCurBitmap, null, 
+				new Rect((int)(mPosition.x * scaleX), (int)(mPosition.y * scaleY),
+						(int)((mPosition.x + mCurBitmap.getWidth()) * scaleX),
+						(int)((mPosition.y + mCurBitmap.getHeight()) * scaleY)), paint);
+	
 	}
 	
 	public void update(){

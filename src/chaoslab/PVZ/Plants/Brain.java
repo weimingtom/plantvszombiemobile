@@ -2,15 +2,16 @@ package chaoslab.PVZ.Plants;
 
 import java.util.ArrayList;
 
-import chaoslab.PVZ.Particle;
+import android.graphics.Bitmap;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class Brain extends Plant {
 
-	public Brain(Particle[] particles, int cost) {
-		super("BRAIN", particles, cost);
+	public Brain(Bitmap bitmap, int cost) {
+		super("BRAIN", null, cost);
+		mCurBitmap	 = bitmap;
 		mHealthPoint = 100;
-		mWidth 		 = 32;
+		mWidth 		 = 60;
 		mHeight		 = 32;
 	}
 

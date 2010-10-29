@@ -24,7 +24,7 @@ public class RoadBlockZombie extends Zombie{
 		mHasItem = false;
 	}
 	@Override
-	public void attacked( int harmPoint ){
+	public void onHarmed( int harmPoint ){
 		if(mHasItem){
 			mItemHealth -= harmPoint;
 		}else{

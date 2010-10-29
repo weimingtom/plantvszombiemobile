@@ -10,12 +10,20 @@ import chaoslab.PVZ.Position;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class PeaShooter extends Plant {
-	protected int mAttackFrame 	 = 60;
-	protected int mAttackInterval = 60;
-	public PeaShooter(String name, Particle[] particles, int cost) {
+	protected int mAttackFrame	  = 0;
+	protected int mAttackInterval = 20;
+	
+	public static final int PEA_SHOOTER_TYPE_NORMAL = 0;
+	public static final int PEA_SHOOTER_TYPE_SNOW	= 1;
+	protected int mType = PEA_SHOOTER_TYPE_NORMAL;
+	
+	public PeaShooter(String name, Particle[] particles, int cost, int type) {
 		super(name, particles, cost);
+		mType 	= type;
 		mWidth 	= 80;
 		mHeight = 80;
+		mHealthPoint = 100;
+		mAttackFrame = mAttackInterval;
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -32,6 +40,9 @@ public class PeaShooter extends Plant {
 				
 				if (mView != null){
 					ProjectilePea projectilePea = (ProjectilePea)ProjectileFactory.createProjectilePea(mView.getResources());
+					if (mType == PEA_SHOOTER_TYPE_SNOW){
+						projectilePea.setType(ProjectilePea.PEA_TYPE_SNOW);
+					}
 					projectilePea.setPosition(mPosition.x + mWidth, mPosition.y);
 					if (zombiePosition.x > mPosition.x){
 						projectilePea.setMoveAngle(0);

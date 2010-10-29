@@ -2,9 +2,6 @@ package chaoslab.PVZ.Plants;
 
 import chaoslab.PVZ.Particle;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
 
 public class WavingPeaShooter extends PeaShooter {
 
@@ -16,10 +13,9 @@ public class WavingPeaShooter extends PeaShooter {
 	protected Bitmap[] 	mWaveBitmaps;
 	protected Bitmap[]	mAttackBitmaps;
 	protected Bitmap[]	mSpecialActionBitmaps;
-	protected Bitmap 	mCurrentBitmap;
 	
-	public WavingPeaShooter(String name, Particle[] particles, int cost) {
-		super(name, particles, cost);
+	public WavingPeaShooter(String name, Particle[] particles, int cost, int type) {
+		super(name, particles, cost, type);
 		
 	}
 	
@@ -45,23 +41,14 @@ public class WavingPeaShooter extends PeaShooter {
 			}
 		}
 		if (mState == Plant.PLANT_STATE_WAVE){
-			mCurrentBitmap = mWaveBitmaps[curWaveImgNum];
+			mCurBitmap = mWaveBitmaps[curWaveImgNum];
 		}else {
 			if (mState == Plant.PLANT_STATE_ATTACK){
-				mCurrentBitmap = mAttackBitmaps[curAttackImgNum];
+				mCurBitmap = mAttackBitmaps[curAttackImgNum];
 			}else{
-				mCurrentBitmap = mWaveBitmaps[curWaveImgNum];
+				mCurBitmap = mWaveBitmaps[curWaveImgNum];
 			}
 		}
 	}
 	
-	@Override
-	public void doDraw(Canvas canvas, float scaleX, float scaleY, Paint paint){
-		if (mCurrentBitmap == null)
-			return;
-		canvas.drawBitmap(mCurrentBitmap, null, 
-				new Rect((int)(mPosition.x * scaleX), (int)(mPosition.y * scaleY),
-						(int)((mPosition.x + mCurrentBitmap.getWidth()) * scaleX),
-						(int)((mPosition.y + mCurrentBitmap.getHeight()) * scaleY)), paint);
-	}
 }

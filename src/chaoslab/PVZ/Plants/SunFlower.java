@@ -15,8 +15,8 @@ public class SunFlower extends Plant{
 	}
 	
 	@Override
-	public void ate(int harmPoint){
-		super.ate(harmPoint);
+	public void onHarmed(int harmPoint){
+		super.onHarmed(harmPoint);
 		if (mView != null){
 			mView.addSunshines(50);
 		}

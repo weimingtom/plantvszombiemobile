@@ -5,12 +5,14 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Bitmap;
+import android.util.Log;
 import chaoslab.PVZ.GameConstants;
 import chaoslab.PVZ.GameObject;
+import chaoslab.PVZ.Harmable;
 import chaoslab.PVZ.Particle;
 import chaoslab.PVZ.Plants.Plant;
 
-public class Zombie extends GameObject{
+public class Zombie extends GameObject implements Harmable{
 	/**@{
 	 * keep the bitmap indices of each action
 	 */
@@ -23,7 +25,7 @@ public class Zombie extends GameObject{
 	/**@}*/
 	
 	protected int 		mEventFrame		= 0; 
-	protected int 		mEatInterval 	= 30; //eat once per 30 frames as default
+	protected int 		mEatInterval 	= 10; //eat once per 10 frames as default
 	protected float 	mMoveSpeed		= 5.0f;   //per frame
 	protected boolean 	mIsSlowed 		= false;
 	protected int		mAttackPower	= 25;
@@ -37,6 +39,7 @@ public class Zombie extends GameObject{
 	protected Bitmap	mBitmap[];  
 	protected int       mMaxBitmap = 12;
 	protected int 		mEatFrmCnt = 0;
+	protected int       mSlowFrmCnt = 0;
 	 
 	//protected Bitmap	;
 	/**
@@ -87,7 +90,7 @@ public class Zombie extends GameObject{
 	 */
 	public void eating(){
 		if(mTarget.isAlive()){
-			mTarget.ate(mAttackPower);
+			mTarget.onHarmed(mAttackPower);
 		}else{
 			mTarget.onDie();
 			mStatus = GameConstants.ZOMBIE_MOVE;
@@ -117,11 +120,20 @@ public class Zombie extends GameObject{
 	}
 	@Override
 	public void update(){
+		super.update();
 		//update status
 		if(mPreStatus != mStatus){
 			updateStatus();
 			mPreStatus = mStatus;
 		}
+		if (mIsSlowed){
+			mSlowFrmCnt --;
+			if (mSlowFrmCnt <= 0){
+				mIsSlowed 	= false;
+				mSlowFrmCnt = 0;
+			}
+		}
+
 		//do action
 		switch(mStatus){
 		case GameConstants.ZOMBIE_MOVE:
@@ -134,7 +146,8 @@ public class Zombie extends GameObject{
 			if(MAX_EAT == mEventFrame){
 				mEventFrame = MIN_EAT - 1;
 			}
-			if(mEatFrmCnt%mEatInterval == 0 || !mTarget.isAlive()){
+			int attackFactor = mIsSlowed ? 2 : 1;
+			if(mEatFrmCnt % ( mEatInterval * attackFactor)== 0 || !mTarget.isAlive()){
 				eating();
 			}
 			mEatFrmCnt ++;
@@ -149,7 +162,7 @@ public class Zombie extends GameObject{
 			break;
 		}
 		++mEventFrame; 
-		super.update();
+		
 		
 	}
 	/*
@@ -179,7 +192,8 @@ public class Zombie extends GameObject{
 	 * maybe we need do some process when zombie is attacked
 	 * in the near future
 	 */
-	public void attacked( int harmPoint )
+	@Override
+	public void onHarmed( int harmPoint )
 	{
 		//how to process the slowed status?
 		//more switch or a picture mask?
@@ -198,7 +212,14 @@ public class Zombie extends GameObject{
 	 */
 	public void addHealthPoint(int delta){
 		if (mIsAlive){
-			attacked(-1*delta);
+			onHarmed(-1*delta);
 		}
 	}
+	
+	public void onSlowed(int duration){
+		mSlowFrmCnt = duration;
+		mIsSlowed   = true;
+		Log.d("ZOMBIE", "SLOWED");
+	}
+
 }
