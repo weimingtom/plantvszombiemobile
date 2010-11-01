@@ -40,10 +40,11 @@ public class BungeeZombie extends Zombie{
 		}else if(mStatus == GameConstants.ZOMBIE_FROZON){
 			freeze();
 		}else{
-			
+			backward();
 		}
 	}
 	public void seeking(){
+		mIsInvincible = true;
 		if(mTarget == null){
 			mStatus = GameConstants.ZOMBIE_BACKWARD;
 		}else if(mPosition.y < mTarget.getPosition().y - 20){
@@ -63,6 +64,7 @@ public class BungeeZombie extends Zombie{
 		return true;
 	}
 	public void transport(){
+		mIsInvincible = true;
 		if(mTarget == null){
 			mTarget.onDie();
 			mStatus = GameConstants.ZOMBIE_BACKWARD;
@@ -73,6 +75,7 @@ public class BungeeZombie extends Zombie{
 		}
 	}
 	public void freeze(){
+		mIsInvincible = false;
 		if(!mTarget.isAlive()){
 			mStatus = GameConstants.ZOMBIE_BACKWARD;
 			mTarget.onDie();
@@ -85,6 +88,7 @@ public class BungeeZombie extends Zombie{
 		mEatFrmCnt ++;
 	}
 	public void backward(){
+		mIsInvincible = true;
 		if(mPosition.y >= 0){
 			mPosition.y -= 50;
 		}else{

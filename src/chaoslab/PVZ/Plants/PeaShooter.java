@@ -34,7 +34,7 @@ public class PeaShooter extends Plant {
 		boolean isAttacked = false;
 		for (int i = 0; i < zombies.size() && !isAttacked; ++i){
 			Position zombiePosition = zombies.get(i).getPosition();
-			if (mAttackFrame >= mAttackInterval && 
+			if (!zombies.get(i).isInvincible() && mAttackFrame >= mAttackInterval && 
 					PlantCells.getRow(zombiePosition) == PlantCells.getRow(mPosition)
 					&& (zombiePosition.x - mPosition.x) * mFaceTo > 0){
 				isAttacked = true;

@@ -40,6 +40,8 @@ public class Zombie extends GameObject implements Harmable{
 	protected int       mMaxBitmap = 12;
 	protected int 		mEatFrmCnt = 0;
 	protected int       mSlowFrmCnt = 0;
+	/** indicate whether zombie can be hit*/
+	protected boolean	mIsInvincible = false;
 	 
 	//protected Bitmap	;
 	/**
@@ -220,5 +222,8 @@ public class Zombie extends GameObject implements Harmable{
 		mIsSlowed   = true;
 		Log.d("ZOMBIE", "SLOWED");
 	}
-
+	
+	public boolean isInvincible(){
+		return mIsInvincible;
+	}
 }

@@ -143,7 +143,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         			ZombieFactory.createBungeeZombie(res),
         			ZombieFactory.createSoccerZombie(res),
         			ZombieFactory.createPoleVaultZombie(res),
-        			ZombieFactory.createRoadBlockZombie(res),
+        			ZombieFactory.createMiniZombie(res),
         			ZombieFactory.createRoadBlockZombie(res),
         	};
         	Position startPosition = new Position(70, 10);
