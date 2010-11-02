@@ -71,13 +71,6 @@
       <y="616"/>
    </type>
    <type>
-      <name="=PlantVsZombieMobile/src<chaoslab.PVZ.Plants{Eatable.java[Eatable"/>
-      <height="-1"/>
-      <width="-1"/>
-      <x="429"/>
-      <y="387"/>
-   </type>
-   <type>
       <name="=PlantVsZombieMobile/src<chaoslab.PVZ.ProjectileObjects{ProjectileObject.java[ProjectileObject"/>
       <height="-1"/>
       <width="-1"/>
@@ -107,82 +100,22 @@
    </type>
    <relationship>
       <class="edu.buffalo.cse.green.relationship.generalization.GeneralizationPart"/>
-      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ.Plants{SunFlower.java[SunFlower"/>
-      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ.Plants{Plant.java[Plant"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
-      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ{PlantVsZombieView.java[PlantVsZombieView[PlantVsZombieThread"/>
-      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ{Particle.java[Particle"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.composition.CompositionPart"/>
-      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ{PlantVsZombieView.java[PlantVsZombieView[PlantVsZombieThread"/>
-      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ.Plants{PlantCells.java[PlantCells"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.generalization.GeneralizationPart"/>
-      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ.Plants{Brain.java[Brain"/>
-      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ.Plants{Plant.java[Plant"/>
-      <bendpoints>
-         <bendpoint>
-            <x="686"/>
-            <y="602"/>
-         </bendpoint>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
-      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ{PlantVsZombieView.java[PlantVsZombieView[PlantVsZombieThread"/>
-      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ{Position.java[Position"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.composition.CompositionPart"/>
-      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ{PlantVsZombieView.java[PlantVsZombieView"/>
-      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ{PlantVsZombieView.java[PlantVsZombieView[PlantVsZombieThread"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.generalization.GeneralizationPart"/>
-      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ.ProjectileObjects{ProjectileObject.java[ProjectileObject"/>
-      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ{GameObject.java[GameObject"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.generalization.GeneralizationPart"/>
-      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ.Plants{Plant.java[Plant"/>
-      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ{GameObject.java[GameObject"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.generalization.GeneralizationPart"/>
       <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ.ProjectileObjects{ProjectilePea.java[ProjectilePea"/>
       <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ.ProjectileObjects{ProjectileObject.java[ProjectileObject"/>
       <bendpoints>
       </bendpoints>
    </relationship>
    <relationship>
-      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
-      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ{SeedCard.java[SeedCard"/>
-      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ{GameObject.java[GameObject"/>
+      <class="edu.buffalo.cse.green.relationship.generalization.GeneralizationPart"/>
+      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ.Plants{SunFlower.java[SunFlower"/>
+      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ.Plants{Plant.java[Plant"/>
       <bendpoints>
       </bendpoints>
    </relationship>
    <relationship>
-      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
-      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ.Plants{Plant.java[Plant"/>
-      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ.Plants{Eatable.java[Eatable"/>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
+      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ{PlantVsZombieView.java[PlantVsZombieView[PlantVsZombieThread"/>
+      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ{Position.java[Position"/>
       <bendpoints>
       </bendpoints>
    </relationship>
@@ -194,9 +127,16 @@
       </bendpoints>
    </relationship>
    <relationship>
-      <class="edu.buffalo.cse.green.relationship.composition.CompositionPart"/>
-      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ{GameObject.java[GameObject"/>
+      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
+      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ{Particle.java[Particle"/>
       <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ{Position.java[Position"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
+      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ{SeedCard.java[SeedCard"/>
+      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ{GameObject.java[GameObject"/>
       <bendpoints>
       </bendpoints>
    </relationship>
@@ -215,17 +155,56 @@
       </bendpoints>
    </relationship>
    <relationship>
-      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
-      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ{Particle.java[Particle"/>
+      <class="edu.buffalo.cse.green.relationship.composition.CompositionPart"/>
+      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ{SeedCard.java[SeedCard"/>
       <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ{Position.java[Position"/>
       <bendpoints>
       </bendpoints>
    </relationship>
    <relationship>
-      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
-      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ{SeedCard.java[SeedCard"/>
-      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ{Particle.java[Particle"/>
+      <class="edu.buffalo.cse.green.relationship.composition.CompositionPart"/>
+      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ{PlantVsZombieView.java[PlantVsZombieView[PlantVsZombieThread"/>
+      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ.Plants{PlantCells.java[PlantCells"/>
       <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.generalization.GeneralizationPart"/>
+      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ.Plants{Plant.java[Plant"/>
+      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ{GameObject.java[GameObject"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.composition.CompositionPart"/>
+      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ{GameObject.java[GameObject"/>
+      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ{Position.java[Position"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.generalization.GeneralizationPart"/>
+      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ.ProjectileObjects{ProjectileObject.java[ProjectileObject"/>
+      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ{GameObject.java[GameObject"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.composition.CompositionPart"/>
+      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ{PlantVsZombieView.java[PlantVsZombieView"/>
+      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ{PlantVsZombieView.java[PlantVsZombieView[PlantVsZombieThread"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.generalization.GeneralizationPart"/>
+      <sourceType="=PlantVsZombieMobile/src<chaoslab.PVZ.Plants{Brain.java[Brain"/>
+      <targetType="=PlantVsZombieMobile/src<chaoslab.PVZ.Plants{Plant.java[Plant"/>
+      <bendpoints>
+         <bendpoint>
+            <x="686"/>
+            <y="602"/>
+         </bendpoint>
       </bendpoints>
    </relationship>
 </uml>

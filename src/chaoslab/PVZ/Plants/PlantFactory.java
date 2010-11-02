@@ -65,6 +65,14 @@ public class PlantFactory {
 		return shooter;
 	}
 	
+	public static Plant createChomper(Resources res){
+		Bitmap bitmaps[] = {
+				BitmapFactory.decodeResource(res, R.drawable.chomper_topjaw),
+		};
+		Chomper chomper = new Chomper("CHOMPER", null, 100);
+		chomper.setWaveBitmaps(bitmaps);
+		return chomper;
+	}
 	
 	public static Plant createBrain(Resources res){
 		return new Brain(BitmapFactory.decodeResource(res, R.drawable.brain), 0);

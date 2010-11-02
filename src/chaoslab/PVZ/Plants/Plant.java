@@ -14,11 +14,15 @@ import android.graphics.Bitmap;
  */
 abstract public class Plant extends GameObject implements Harmable{
 	public static final int PLANT_STATE_WAVE 			= 0;
-	public static final int PLANT_STATE_ATTACK 			= 0;
-	public static final int PLANT_STATE_SPECIAL_ACTION	= 0;
-	
+	public static final int PLANT_STATE_ATTACK 			= 1;
+	public static final int PLANT_STATE_SPECIAL_ACTION	= 2;
 
-	protected static final int WAVE_INTERVAL = 1;
+	protected int	curWaveImgNum 			= 0;
+	protected int 	curAttackImgNum			= 0;
+	protected Bitmap[] 	mWaveBitmaps;
+	protected Bitmap[]	mAttackBitmaps;
+
+	protected static final int WAVE_INTERVAL = 2;
 	public Plant(String name, Particle particles[], int cost) {
 		super(name, particles, cost);
 		mStand = GameConstants.STAND_PLANT;
@@ -35,6 +39,15 @@ abstract public class Plant extends GameObject implements Harmable{
 			this.onDie();
 		}
 	}
+	
+	public void setWaveBitmaps(Bitmap[] bitmaps){
+		mWaveBitmaps = bitmaps;
+	}
+	
+	public void setAttackBitmaps(Bitmap[] bitmaps){
+		mAttackBitmaps = bitmaps;
+	}
+	
 	public boolean isDefCreature(){
 		return false;
 	}

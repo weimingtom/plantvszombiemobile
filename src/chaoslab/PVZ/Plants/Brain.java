@@ -12,7 +12,7 @@ public class Brain extends Plant {
 		mCurBitmap	 = bitmap;
 		mHealthPoint = 100;
 		mWidth 		 = 60;
-		mHeight		 = 32;
+		mHeight		 = 80;
 	}
 
 	@Override

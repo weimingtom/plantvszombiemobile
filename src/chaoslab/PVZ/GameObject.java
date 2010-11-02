@@ -51,8 +51,17 @@ abstract public class GameObject implements Cloneable{
 		mPosition.y = posY;
 	}
 	
+	public void setCenterPosition(float posX, float posY){
+		mPosition.x = posX - mWidth * 0.5f;
+		mPosition.y = posY - mHeight * 0.5f;
+	}
+	
 	public Position getPosition(){
 		return mPosition;
+	}
+	
+	public Position getCenterPosition(){
+		return new Position(mPosition.x + mWidth * 0.5f, mPosition.y + mHeight * 0.5f);
 	}
 	
 	public int getCost(){
@@ -139,6 +148,10 @@ abstract public class GameObject implements Cloneable{
 
 	public void setView(PlantVsZombieView view) {
 		mView = view;
+	}
+	
+	public Bitmap getBitmap(){
+		return mCurBitmap;
 	}
 
 }

@@ -226,4 +226,13 @@ public class Zombie extends GameObject implements Harmable{
 	public boolean isInvincible(){
 		return mIsInvincible;
 	}
+	
+	public void setInvincible(boolean isInvincible){
+		mIsInvincible = isInvincible;
+	}
+	
+	@Override
+	public Bitmap getBitmap(){
+		return mBitmap[0];
+	}
 }

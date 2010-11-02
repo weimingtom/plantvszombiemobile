@@ -117,7 +117,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         			if (j == 0){
         				plant = PlantFactory.createBrain(res);
         			}else{
-        				plant = PlantFactory.createSnowPeaShooter(res);//createSnowPeaShooter(res);
+        				plant = PlantFactory.createChomper(res);//createSnowPeaShooter(res);
         			}
         			plant.setView(PlantVsZombieView.this);
         			mPlants.setPlant(i, j, plant);
@@ -126,7 +126,11 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         			
         		}
         }
-        
+        /**
+         * InitSeedCards
+         * 
+         * @param res
+         */
         public void InitSeedCards(Resources res){
         	mSeedCards 			= new ArrayList<SeedCard>();
         	Bitmap bkgBitmap	= BitmapFactory.decodeResource(res, R.drawable.seedpacket_larger);
@@ -186,11 +190,11 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         public void doDraw(Canvas canvas){
         	// Draw the background image. Operations on the Canvas accumulate
             // so this is like clearing the screen.
-        	Date now = new Date();
-            Log.d("TIME", now.getTime() + "");
+        	//Date now = new Date();
+           // Log.d("TIME", now.getTime() + "");
             canvas.drawBitmap(mBackgroundImage, null, new Rect(0, 0, mCanvasWidth, mCanvasHeight), null);
             canvas.drawBitmap(mBowlingStripeImage, PlantCells.CELL_WIDTH * STRIP_COLUMN * mScaleX, 32, null);
-            now = new Date();
+          //  now = new Date();
           //  Log.d("AFTER BACKGROUND", now.getTime() + "");
             //Draw SeedBar
             Matrix matrix = new Matrix();
@@ -201,7 +205,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             for (int i = 0; i < mSeedCards.size(); ++i){
             	mSeedCards.get(i).doDraw(canvas, mScaleX, mScaleY, null);
             }
-            now = new Date();
+           // now = new Date();
         //    Log.d("AFTER Seed Card", now.getTime() + "");
             /** NOTE THAT HERE MAY OCCUR A SYNCHRONIZE ERROR: mSelectedObject may be set
              * to null in onTouchEvent method just before doDraw(). So here I temperately 
@@ -220,13 +224,13 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             			plant.doDraw(canvas, mScaleX, mScaleY, null);
             	}
             }
-            now = new Date();
-            Log.d("AFTER PLANT", now.getTime() + "");
+         //   now = new Date();
+         //   Log.d("AFTER PLANT", now.getTime() + "");
             for (int i = 0; i < mZombies.size(); ++i){
             	mZombies.get(i).doDraw(canvas, mScaleX, mScaleY, null);
             }
-            now = new Date();
-            Log.d("AFTER Zombie", now.getTime() + "");
+          //  now = new Date();
+          //  Log.d("AFTER Zombie", now.getTime() + "");
             for (int i = 0; i < mProjectileObjects.size(); ++i){
             	mProjectileObjects.get(i).doDraw(canvas, mScaleX, mScaleY, null);
             }
@@ -333,7 +337,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         	switch (event.getAction()){
     		case MotionEvent.ACTION_MOVE:
     			if (mSelectedSeedObject != null)
-    				mSelectedSeedObject.setPosition((int)(event.getX() / mScaleX), (int)(event.getY() / mScaleY));
+    				mSelectedSeedObject.setCenterPosition((int)(event.getX() / mScaleX), (int)(event.getY() / mScaleY));
     			break;
     		case MotionEvent.ACTION_DOWN:
     			if (mSelectedSeedCard != null || mSelectedSeedObject != null){
@@ -355,9 +359,14 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
     		case MotionEvent.ACTION_UP:
     			if (mSelectedSeedObject != null){
     				try {
-    					Position position = mSelectedSeedObject.getPosition();
+    					Position position = mSelectedSeedObject.getCenterPosition();
     					int col = (int)((position.x - PlantCells.ORIGIN.x) / PlantCells.CELL_WIDTH);
     					int row = (int)((position.y - PlantCells.ORIGIN.y) / PlantCells.CELL_HEIGHT);
+    					if (row > PlantCells.MAX_ROW_NUM)
+    						row = PlantCells.MAX_ROW_NUM;
+    					else
+    						if (row < 0)
+    							row = 0;
     					Zombie newZombie = (Zombie)mSelectedSeedObject;
 						if (col >= STRIP_COLUMN && !newZombie.directAttatck()){
     						if (mSunshines >= mSelectedSeedCard.getCost())
@@ -368,7 +377,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 		    							PlantCells.ORIGIN.y + row * PlantCells.CELL_HEIGHT);
 		    					mZombies.add(zombie);
     						}
-    					}else if( newZombie.directAttatck() && col < STRIP_COLUMN ) { //for bungee zombies and ones like this
+    					}else if( newZombie.directAttatck() && col < STRIP_COLUMN && col > 0) { //for bungee zombies and ones like this
     						if (mSunshines >= mSelectedSeedCard.getCost()){
     							Zombie zombie = (Zombie)mSelectedSeedObject.clone();
     							zombie.setPosition(PlantCells.ORIGIN.x + col * PlantCells.CELL_WIDTH,-30);
