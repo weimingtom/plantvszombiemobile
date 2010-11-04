@@ -9,11 +9,16 @@ import android.graphics.BitmapFactory;
 
 public class PlantFactory {
 	public static Plant createSunFlower(Resources res){
-		Particle particles[] = {
+		/*Particle particles[] = {
 				new Particle(new Position(0, 0), 
 						BitmapFactory.decodeResource(res, R.drawable.sunflower_head)),
-			};
-		return new SunFlower("SUNFLOWER", particles, 50);
+			};*/
+		Bitmap bitmaps[] = {
+				BitmapFactory.decodeResource(res, R.drawable.sunflower_head),
+		};
+		SunFlower sunFlower = new SunFlower("SUNFLOWER", null, 50);
+		sunFlower.setWaveBitmaps(bitmaps);
+		return sunFlower;
 	}
 	
 	public static Plant createPeaShooter(Resources res){
@@ -67,11 +72,20 @@ public class PlantFactory {
 	
 	public static Plant createChomper(Resources res){
 		Bitmap bitmaps[] = {
-				BitmapFactory.decodeResource(res, R.drawable.chomper_topjaw),
+			BitmapFactory.decodeResource(res, R.drawable.chomper_topjaw),
 		};
-		Chomper chomper = new Chomper("CHOMPER", null, 100);
+		Chomper chomper = new Chomper("CHOMPER", null, 150);
 		chomper.setWaveBitmaps(bitmaps);
 		return chomper;
+	}
+	
+	public static Plant createLeafBunch(Resources res){
+		Bitmap bitmaps[] = {
+			BitmapFactory.decodeResource(res, R.drawable.leafbunch1),	
+		};
+		LeafBunch leafBunch = new LeafBunch("LeafBunch", null, 100);
+		leafBunch.setWaveBitmaps(bitmaps);
+		return leafBunch;
 	}
 	
 	public static Plant createBrain(Resources res){

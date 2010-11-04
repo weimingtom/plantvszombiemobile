@@ -17,21 +17,17 @@ import chaoslab.PVZ.Position;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class Chomper extends Plant{
-
+/*
 	private static final int CHOMPER_STATE_NORMAL 		= 0;
-	private static final int CHOMPER_STATE_ATTACK 		= 1;
-	private static final int CHOMPER_STATE_DIGEST 		= 2;
+	private static final int CHOMPER_STATE_ATTACK 		= 1;*/
+	private static final int CHOMPER_STATE_DIGEST 		= PLANT_STATE_SPECIAL_ACTION;
 	private static final int CHOMPER_DIGEST_FRAME 		= 100;
-	
-	private int		mState	= CHOMPER_STATE_NORMAL;
-	private static final int ATTACK_FRAME = 10;
+	private static final int ATTACK_FRAME 				= 10;
 	private int     mDigestFrmCount   = 0;
-	private int		mAttackFrmCount	  = 0;
 	private Bitmap	mFoodBitmap;
 	public Chomper(String name, Particle[] particles, int cost) {
 		super(name, null, cost);
-		mWidth = 64;
-		mHeight = 80;
+		mAttackFrame = ATTACK_FRAME;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -39,20 +35,22 @@ public class Chomper extends Plant{
 	public void attack(ArrayList<Zombie> zombies) {
 		// TODO Auto-generated method stub
 		switch (mState){
-		case CHOMPER_STATE_NORMAL:
+		case PLANT_STATE_WAVE:
 			for (int i = 0; i < zombies.size(); ++i){
 				Position zombiePosition = zombies.get(i).getPosition();
 				if (!zombies.get(i).isInvincible() 
 						&& PlantCells.getRow(zombiePosition) == PlantCells.getRow(mPosition)
-						&& PlantCells.getCol(zombiePosition)	== PlantCells.getCol(mPosition)	
+						&& zombiePosition.x >= mPosition.x + mWidth 
+						&& zombiePosition.x <= mPosition.x + mWidth + PlantCells.CELL_WIDTH * 0.5f
+						//&& PlantCells.getCol(zombiePosition)	== PlantCells.getCol(mPosition)	
 						){
 					mFoodBitmap = Bitmap.createBitmap(zombies.get(i).getBitmap());
-					mState = CHOMPER_STATE_ATTACK;
+					mState = PLANT_STATE_ATTACK;
 					zombies.get(i).onDie();
 					break;
 				}
 			}
-		break;
+			break;
 		default:
 			break;
 		}
@@ -61,31 +59,21 @@ public class Chomper extends Plant{
 	public void update(){
 		super.update();
 		switch (mState){
-		case CHOMPER_STATE_NORMAL:
-			if (mWaveBitmaps != null){
-				if (mElapsedFrame % WAVE_INTERVAL == 0){
-					curWaveImgNum ++;
-					if (curWaveImgNum >= mWaveBitmaps.length){
-						curWaveImgNum = 0;
-					}
-				}
-				mCurBitmap = mWaveBitmaps[curWaveImgNum];
-			}
+		case PLANT_STATE_WAVE:
+			updateWaveBitmap();
 			break;
 		case CHOMPER_STATE_DIGEST:
 			mDigestFrmCount++;
 			if (mDigestFrmCount >= CHOMPER_DIGEST_FRAME){
 				mDigestFrmCount = 0;
-				mState = CHOMPER_STATE_NORMAL;
+				mState = PLANT_STATE_WAVE;
 				mFoodBitmap = null;
 			}
 			break;
-		case CHOMPER_STATE_ATTACK:
-			mAttackFrmCount++;
-			if (mAttackFrmCount > ATTACK_FRAME){
-				mAttackFrmCount = 0;
+		case PLANT_STATE_ATTACK:
+			updateAttackBitmap();
+			if (mAttackFrmCount == 0)
 				mState = CHOMPER_STATE_DIGEST;
-			}
 			break;
 		}
 	}

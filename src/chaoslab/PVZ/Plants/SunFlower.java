@@ -27,4 +27,9 @@ public class SunFlower extends Plant{
 		// do nothing
 		
 	}
+	
+	public void update(){
+		super.update();
+		updateWaveBitmap();
+	}
 }

@@ -7,7 +7,7 @@ public class PlantCells {
 	public static final int MAX_COL_NUM 	= 6;
 	public static final int MAX_ROW_NUM		= 5;
 	public static final int CELL_WIDTH 		= 80;
-	public static final int CELL_HEIGHT 	= 100;
+	public static final int CELL_HEIGHT 	= 95;
 	private Plant mPlants[][];
 	
 	public PlantCells(){
@@ -15,7 +15,7 @@ public class PlantCells {
 	}
 	
 	public void setPlant(int row, int col, Plant plant){
-		plant.setPosition((int)ORIGIN.x + col * CELL_WIDTH, (int)ORIGIN.y + row * CELL_HEIGHT + CELL_HEIGHT - plant.getHeight());
+		plant.setPosition((int)ORIGIN.x + col * CELL_WIDTH, (int)ORIGIN.y + row * CELL_HEIGHT + CELL_HEIGHT - plant.getWidth());
 		mPlants[row][col] = plant;
 	}
 	
@@ -35,8 +35,7 @@ public class PlantCells {
 	
 	public Plant getPlant(int row, int col){
 		
-		if (row >= 0 && row < MAX_ROW_NUM && col >= 0 && col < MAX_COL_NUM)
-		{
+		if (row >= 0 && row < MAX_ROW_NUM && col >= 0 && col < MAX_COL_NUM){
 			return mPlants[row][col];
 		}
 		else
@@ -59,6 +58,4 @@ public class PlantCells {
 			}
 		}
 	}
-	
-	
 }

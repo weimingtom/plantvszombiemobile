@@ -99,9 +99,10 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             mPlants = new PlantCells();
             mZombies = new ArrayList<Zombie>();
             BitmapFactory.decodeResource(res, R.drawable.seedbar);
-            Zombie zombie = ZombieFactory.createNormalZombie(res);
+          /*  Zombie zombie = ZombieFactory.createNormalZombie(res);
             zombie.setPosition(500, (int)(PlantCells.ORIGIN.y + 2 * PlantCells.CELL_HEIGHT - zombie.getHeight()));
             mZombies.add(zombie);
+            */
             InitPlants(res);
             InitSeedCards(res);
             mProjectileObjects = new ArrayList<ProjectileObject>();
@@ -114,11 +115,23 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         	for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i)
         		for (int j = 0; j < PlantCells.MAX_COL_NUM; ++j){
         			Plant plant = null;
-        			if (j == 0){
+        			switch (j){
+        			case 0:
         				plant = PlantFactory.createBrain(res);
-        			}else{
-        				plant = PlantFactory.createChomper(res);//createSnowPeaShooter(res);
+        				break;
+        			case 1:
+        				plant = PlantFactory.createSnowPeaShooter(res);
+        				break;
+        			case 2:
+        				plant = PlantFactory.createLeafBunch(res);
+        				break;
+        			case 4:
+        				plant = PlantFactory.createChomper(res);
+        				break;
+        			default:
+        				plant = PlantFactory.createSunFlower(res);
         			}
+        			
         			plant.setView(PlantVsZombieView.this);
         			mPlants.setPlant(i, j, plant);
         			/*Plant pea = PlantFactory.createPea(res);
@@ -207,15 +220,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             }
            // now = new Date();
         //    Log.d("AFTER Seed Card", now.getTime() + "");
-            /** NOTE THAT HERE MAY OCCUR A SYNCHRONIZE ERROR: mSelectedObject may be set
-             * to null in onTouchEvent method just before doDraw(). So here I temperately 
-             * put new Paint outside of the if section to avoid this error.
-             * Maybe here should add a synchronize*/
-        	Paint paint = new Paint();
-        	paint.setAlpha(127);
-            if (mSelectedSeedObject != null){
-            	mSelectedSeedObject.doDraw(canvas, mScaleX, mScaleY, paint);
-            }
+           
             //Draw Plants and Zombies
             for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i){
             	for (int j = 0; j < PlantCells.MAX_COL_NUM; ++j){
@@ -233,6 +238,16 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
           //  Log.d("AFTER Zombie", now.getTime() + "");
             for (int i = 0; i < mProjectileObjects.size(); ++i){
             	mProjectileObjects.get(i).doDraw(canvas, mScaleX, mScaleY, null);
+            }
+            
+            /** NOTE THAT HERE MAY OCCUR A SYNCHRONIZE ERROR: mSelectedObject may be set
+             * to null in onTouchEvent method just before doDraw(). So here I temperately 
+             * put new Paint outside of the if section to avoid this error.
+             * Maybe here should add a synchronize*/
+        	Paint paint = new Paint();
+        	paint.setAlpha(127);
+            if (mSelectedSeedObject != null){
+            	mSelectedSeedObject.doDraw(canvas, mScaleX, mScaleY, paint);
             }
         }
 
@@ -348,7 +363,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
     				boolean isSelected = false;
     				for (int i = 0; i < mSeedCards.size() && !isSelected; ++i){
     					if (mSeedCards.get(i).isSelected(event.getX() / mScaleX, event.getY() / mScaleY)
-    							&& mSeedCards.get(i).getCost() < mSunshines){
+    							&& mSeedCards.get(i).getCost() <= mSunshines){
     						mSelectedSeedCard 	= mSeedCards.get(i);
     						mSelectedSeedObject = mSelectedSeedCard.getObject();
 							isSelected 			= true;
@@ -379,6 +394,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
     						}
     					}else if( newZombie.directAttatck() && col < STRIP_COLUMN && col > 0) { //for bungee zombies and ones like this
     						if (mSunshines >= mSelectedSeedCard.getCost()){
+    							mSunshines -=  mSelectedSeedCard.getCost();
     							Zombie zombie = (Zombie)mSelectedSeedObject.clone();
     							zombie.setPosition(PlantCells.ORIGIN.x + col * PlantCells.CELL_WIDTH,-30);
     							zombie.seek(mPlants.getPlant(row,col));

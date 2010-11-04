@@ -235,4 +235,8 @@ public class Zombie extends GameObject implements Harmable{
 	public Bitmap getBitmap(){
 		return mBitmap[0];
 	}
+	
+	public int getStatus(){
+		return mStatus;
+	}
 }

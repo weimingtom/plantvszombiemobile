@@ -21,6 +21,7 @@ public class BungeeZombie extends Zombie{
 		MAX_MOVE = 9;
 		mMaxBitmap = 10;
 	}
+	
 	@Override
 	public void move(){
 		
@@ -33,13 +34,17 @@ public class BungeeZombie extends Zombie{
 	@Override
 	public void update(){
 		super.update();
-		if(mStatus == GameConstants.ZOMBIE_SEEK){
+		switch (mStatus){
+		case GameConstants.ZOMBIE_SEEK:
 			seeking();
-		}else if(mStatus == GameConstants.ZOMBIE_TRANSIT){
+			break;
+		case GameConstants.ZOMBIE_TRANSIT:
 			transport();
-		}else if(mStatus == GameConstants.ZOMBIE_FROZON){
+			break;
+		case GameConstants.ZOMBIE_FROZON:
 			freeze();
-		}else{
+			break;
+		default:
 			backward();
 		}
 	}
@@ -87,6 +92,7 @@ public class BungeeZombie extends Zombie{
 		}
 		mEatFrmCnt ++;
 	}
+	
 	public void backward(){
 		mIsInvincible = true;
 		if(mPosition.y >= 0){
@@ -105,5 +111,17 @@ public class BungeeZombie extends Zombie{
 							(int)((mPosition.y + 30 + capturePlant.getHeight()) * scaleY)), paint);
 		}
 		
+	}
+	/**
+	 * LeafBunch should call this method to check whether the target is in its protect
+	 * range.
+	 * @return
+	 */
+	public Plant getTarget(){
+		return mTarget;
+	}
+	
+	public void setStatus(int status){
+		mStatus = status;
 	}
 }
