@@ -92,4 +92,22 @@ public class PlantFactory {
 		return new Brain(BitmapFactory.decodeResource(res, R.drawable.brain), 0);
 	}
 	
+	public static Plant createTorchwood(Resources res){
+		Bitmap bitmaps[] = {
+			BitmapFactory.decodeResource(res, R.drawable.torchwood_body),	
+		};
+		Torchwood torchwood = new Torchwood("Torchwood", null, 150);
+		torchwood.setWaveBitmaps(bitmaps);
+		return torchwood;
+	}
+	
+	public static Plant createPotatoMine(Resources res){
+		Bitmap bitmaps[] = {
+				BitmapFactory.decodeResource(res, R.drawable.potatomine_body),	
+			};
+		PotatoMine potatoMine = new PotatoMine("PotatoMine", null, 25);
+		potatoMine.setWaveBitmaps(bitmaps);
+		return potatoMine;
+	}
+	
 }

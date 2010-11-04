@@ -153,5 +153,23 @@ abstract public class GameObject implements Cloneable{
 	public Bitmap getBitmap(){
 		return mCurBitmap;
 	}
+	
+	 /**
+     * Check collision(assume that both a and b are rectangular area)
+     * @param GameObject a
+     * @param GameObject b
+     * @return
+     */
+	public static boolean isCollise(GameObject a, GameObject b){
+      	if (a.getPosition().x >= b.getPosition().x + b.getWidth())
+      		return false;
+      	if (a.getPosition().x + a.getWidth() <= b.getPosition().x)
+      		return false;
+      	if (a.getPosition().y >= b.getPosition().y + b.getHeight())
+      		return false;
+      	if (a.getPosition().y + a.getHeight() <= b.getPosition().y)
+      		return false;
+      	return true;
+      }
 
 }

@@ -1,7 +1,6 @@
 package chaoslab.PVZ.Zombies;
 
 import android.graphics.Bitmap;
-import chaoslab.PVZ.GameConstants;
 import chaoslab.PVZ.Particle;
 
 public class RoadBlockZombie extends Zombie{
@@ -32,7 +31,17 @@ public class RoadBlockZombie extends Zombie{
 		}
 		//mStatus = GameConstants.ZOMBIE_ATTACKED;
 		if(0 >= mItemHealth){
+			mHealthPoint -= harmPoint + mItemHealth;
 			dropItem();
+			if (mHealthPoint <= 0){
+				mHealthPoint = 0;
+				onDie();
+			}
 		}
+	}
+	
+	@Override
+	public int getHealthPoint(){
+		return mHealthPoint + mItemHealth;
 	}
 }

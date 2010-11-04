@@ -4,16 +4,6 @@ import chaoslab.PVZ.Particle;
 import android.graphics.Bitmap;
 
 public class WavingPeaShooter extends PeaShooter {
-
-//	protected int mState 					= PLANT_STATE_WAVE;
-//	protected int curWaveImgNum 			= 0;
-//	protected int curAttackImgNum			= 0;
-//	protected int curSpecialActionImgNum 	= 0;
-	
-//	protected Bitmap[] 	mWaveBitmaps;
-//	protected Bitmap[]	mAttackBitmaps;
-//	protected Bitmap[]	mSpecialActionBitmaps;
-	
 	public WavingPeaShooter(String name, Particle[] particles, int cost, int type) {
 		super(name, particles, cost, type);
 		
@@ -44,6 +34,6 @@ public class WavingPeaShooter extends PeaShooter {
 				mCurBitmap = mWaveBitmaps[curWaveImgNum];
 			}
 		}
+		
 	}
-	
 }

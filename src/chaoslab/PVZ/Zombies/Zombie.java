@@ -42,6 +42,7 @@ public class Zombie extends GameObject implements Harmable{
 	protected int       mSlowFrmCnt = 0;
 	/** indicate whether zombie can be hit*/
 	protected boolean	mIsInvincible = false;
+	protected boolean	mIsCharred	=   false;
 	 
 	//protected Bitmap	;
 	/**
@@ -117,7 +118,7 @@ public class Zombie extends GameObject implements Harmable{
 	 * do this action when status stay in ZOMBIE_MOVE
 	 */
 	public void moving(){
-		float moveFactor = mIsSlowed ? 1.0f : 0.5f;
+		float moveFactor = mIsSlowed ? 0.5f : 1.0f;
 		mPosition.x += mMoveDirection * mMoveSpeed * moveFactor;
 	}
 	@Override
@@ -238,5 +239,13 @@ public class Zombie extends GameObject implements Harmable{
 	
 	public int getStatus(){
 		return mStatus;
+	}
+	
+	public void setIsCharred(boolean isCharred){
+		mIsCharred = isCharred;
+	}
+	@Override
+	public void onDie(){
+		super.onDie();
 	}
 }

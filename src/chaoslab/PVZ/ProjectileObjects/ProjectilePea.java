@@ -3,6 +3,7 @@ package chaoslab.PVZ.ProjectileObjects;
 import android.graphics.Bitmap;
 import chaoslab.PVZ.GameConstants;
 import chaoslab.PVZ.GameObject;
+import chaoslab.PVZ.Plants.Torchwood;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class ProjectilePea extends ProjectileObject {
@@ -35,6 +36,9 @@ public class ProjectilePea extends ProjectileObject {
 	
 	@Override
 	public void onHit(GameObject target) {
+		if (!mIsAlive){
+			return;
+		}
 		if (target.isAlive() && target.getStand() == GameConstants.STAND_ZOMBIE){
 			switch (mType){
 			case PEA_TYPE_NORMAL:
@@ -55,7 +59,18 @@ public class ProjectilePea extends ProjectileObject {
 			}
 			onDie();
 		}
-		//if (target.getClass() == )
+		if (target instanceof Torchwood ){
+			switch(mType){
+			case PEA_TYPE_NORMAL:
+				setType(PEA_TYPE_FIRE);
+				break;
+			case PEA_TYPE_SNOW:
+				setType(PEA_TYPE_NORMAL);
+				break;
+			default:
+				setType(PEA_TYPE_FIRE);
+			}
+		}
 	}
 
 }

@@ -6,7 +6,6 @@
 package chaoslab.PVZ;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import chaoslab.PVZ.Plants.Plant;
 import chaoslab.PVZ.Plants.PlantCells;
@@ -23,10 +22,10 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -123,19 +122,26 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         				plant = PlantFactory.createSnowPeaShooter(res);
         				break;
         			case 2:
-        				plant = PlantFactory.createLeafBunch(res);
+        				if ( i== 2){
+        					plant = PlantFactory.createLeafBunch(res);
+        				}else{
+        					plant = PlantFactory.createPotatoMine(res);
+        				}
         				break;
         			case 4:
-        				plant = PlantFactory.createChomper(res);
+        				if (i == 3){
+        					plant = PlantFactory.createTorchwood(res);
+        				}else{
+        					plant = PlantFactory.createChomper(res);
+        				}
         				break;
         			default:
         				plant = PlantFactory.createSunFlower(res);
         			}
-        			
-        			plant.setView(PlantVsZombieView.this);
-        			mPlants.setPlant(i, j, plant);
-        			/*Plant pea = PlantFactory.createPea(res);
-        			pea.setView(PlantVsZombieView.this);*/
+        			if (plant != null){
+	        			plant.setView(PlantVsZombieView.this);
+	        			mPlants.setPlant(i, j, plant);
+        			}
         			
         		}
         }
@@ -251,23 +257,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             }
         }
 
-        /**
-         * Check collision(assume that both a and b are rectangular area)
-         * @param GameObject a
-         * @param GameObject b
-         * @return
-         */
-        public boolean isCollise(GameObject a, GameObject b){
-        	if (a.getPosition().x > b.getPosition().x + b.getWidth())
-        		return false;
-        	if (a.getPosition().x + a.getWidth() < b.getPosition().x)
-        		return false;
-        	if (a.getPosition().y > b.getPosition().y + b.getHeight())
-        		return false;
-        	if (a.getPosition().y + a.getHeight() < b.getPosition().y)
-        		return false;
-        	return true;
-        }
+       
         
         public void addProjectileObject(ProjectileObject object){
         	mProjectileObjects.add(object);
@@ -301,7 +291,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 	        	if (zombie != null && zombie.isAlive() && zombie.isInScreen(mCanvasWidth, mCanvasHeight)){
 	        		Plant targetPlant = mPlants.getPlant(zombie.getPosition());
 		        	if (targetPlant != null && targetPlant.isAlive() 
-		        			&& isCollise(targetPlant, zombie))
+		        			&& GameObject.isCollise(targetPlant, zombie))
 		        		zombie.eat(targetPlant);
 		        	//else
 		        		//zombie.move();
@@ -325,14 +315,14 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 	        		po.update();
 	        		for (int j = 0; j < mZombies.size(); ++j){
 	        			Zombie zombie = mZombies.get(j);
-	        			if (zombie.isAlive() && isCollise(zombie, po)){
+	        			if (zombie.isAlive() && GameObject.isCollise(zombie, po)){
 	        				po.onHit(zombie);
 	        			}
 	        		}
 	        		
 	        		for (int j = 0; j < PlantCells.MAX_COL_NUM * PlantCells.MAX_ROW_NUM; ++j){
 	        			Plant plant = mPlants.getPlant(po.getPosition());
-	        			if (plant != null && plant.isAlive() && isCollise(plant, po)){
+	        			if (plant != null && plant.isAlive() && GameObject.isCollise(plant, po)){
 	        				po.onHit(plant);
 	        			}
 	        		}
@@ -436,6 +426,12 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 			mRun = isRunning;
 			
 		}
+
+		public void playAnimation(AnimationDrawable animation) {
+			// TODO Auto-generated method stub
+		//	animation.draw(mCanvas);
+			animation.start();
+		}
 	}
 	public static final int MAX_SUN_SHINE = 9999;
 	public static final int MIN_SUN_SHINE = 0;
@@ -517,6 +513,11 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 	
 	public void addProjectileObject(ProjectileObject object){
 		thread.addProjectileObject(object);
+	}
+	
+	public void addAnimation(int animationResourceId){
+		mContext.getResources().getAnimation(animationResourceId);
+		//thread.playAnimation(animation);
 	}
 
 }
