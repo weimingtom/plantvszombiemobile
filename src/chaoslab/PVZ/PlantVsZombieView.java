@@ -14,7 +14,9 @@ import chaoslab.PVZ.ProjectileObjects.ProjectileObject;
 import chaoslab.PVZ.Zombies.Zombie;
 import chaoslab.PVZ.Zombies.ZombieFactory;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +25,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -41,6 +44,8 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
          */
 		public static final int STATE_RUNNING = 1;
 		public static final int STATE_PAUSED  = 2;
+		public static final int STATE_WIN	  = 3;
+		public static final int STATE_LOSE	  = 4;
 		
     	/** equals to the last column of the plant cell*/
      	public static final int STRIP_COLUMN = 6;
@@ -48,6 +53,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
          * Member (state) fields
          */
 		private int mState;
+		private Handler mHandler;
         /** The drawable to use as the background of the animation canvas */
         private Bitmap mBackgroundImage;
         private Bitmap mBowlingStripeImage;
@@ -81,12 +87,13 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 		private ArrayList<ProjectileObject> mProjectileObjects;
 		private float mScaleX = 1.0f;
 		private float mScaleY = 1.0f;
-        
+        private int	  mCurBrainNum = 0;
         public PlantVsZombieThread(SurfaceHolder surfaceHolder, Context context,
                 Handler handler) {
         	 // get handles to some important objects
             mSurfaceHolder = surfaceHolder;
             mContext = context;
+            mHandler = handler;
             mState	 = STATE_RUNNING;
             //Set Images
             Resources res	 	= context.getResources();
@@ -95,16 +102,23 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             		200, 0, 800, 600);
             mBowlingStripeImage = BitmapFactory.decodeResource(res, R.drawable.bowlingstripe);
             mSeedBarImage		= BitmapFactory.decodeResource(res, R.drawable.seedbar);
-            mPlants = new PlantCells();
-            mZombies = new ArrayList<Zombie>();
-            BitmapFactory.decodeResource(res, R.drawable.seedbar);
+            init();
           /*  Zombie zombie = ZombieFactory.createNormalZombie(res);
             zombie.setPosition(500, (int)(PlantCells.ORIGIN.y + 2 * PlantCells.CELL_HEIGHT - zombie.getHeight()));
             mZombies.add(zombie);
             */
-            InitPlants(res);
-            InitSeedCards(res);
-            mProjectileObjects = new ArrayList<ProjectileObject>();
+           
+        }
+        
+        public void init(){
+        	 Resources res		= mContext.getResources();
+        	 mPlants 			= new PlantCells();
+             mZombies 			= new ArrayList<Zombie>();
+             mProjectileObjects = new ArrayList<ProjectileObject>();
+             
+             InitPlants(res);
+             InitSeedCards(res);
+             mState				= STATE_RUNNING;
         }
         
         /**
@@ -144,6 +158,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         			}
         			
         		}
+        	mCurBrainNum = 5;
         }
         /**
          * InitSeedCards
@@ -246,7 +261,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             	mProjectileObjects.get(i).doDraw(canvas, mScaleX, mScaleY, null);
             }
             
-            /** NOTE THAT HERE MAY OCCUR A SYNCHRONIZE ERROR: mSelectedObject may be set
+            /* NOTE THAT HERE MAY OCCUR A SYNCHRONIZE ERROR: mSelectedObject may be set
              * to null in onTouchEvent method just before doDraw(). So here I temperately 
              * put new Paint outside of the if section to avoid this error.
              * Maybe here should add a synchronize*/
@@ -255,6 +270,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             if (mSelectedSeedObject != null){
             	mSelectedSeedObject.doDraw(canvas, mScaleX, mScaleY, paint);
             }
+            
         }
 
        
@@ -271,6 +287,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
          * Update all valid Objects,including zombies and plants
          */
         public void update(){
+        	int ateBrainNum = 0;
         	//update plants
         	for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i){
         		for (int j = 0; j < PlantCells.MAX_COL_NUM; ++j){
@@ -281,6 +298,9 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         			}
         			else{
         				plant = null;
+        				if (j == 0){
+        					ateBrainNum ++;
+        				}
         			}
         		}
         	}
@@ -302,13 +322,11 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 	        	}	        	
         	}
         	
-        	//update projectile objects
-        	/**
-        	 * NOTE THAT:Here we should check each zombie and plant to make sure 
+        	/* update projectile objects
+             * NOTE THAT:Here we should check each zombie and plant to make sure 
         	 * that each hit message will be sent to
         	 * the projectileObject,though single check can save time. 
         	 */
-        	
         	for (int i = 0; i < mProjectileObjects.size(); ++i){
         		ProjectileObject po = mProjectileObjects.get(i);
         		if (po.isAlive()){
@@ -331,7 +349,30 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         			po = null;
         		}
         	}
+        	
+        	 /*
+             * check win or loose, and send message
+             */
+        	if (mCurBrainNum == ateBrainNum){
+        		 mState = STATE_WIN;
+        		 Message msg = mHandler.obtainMessage();
+                 Bundle b = new Bundle();
+                 b.putString("STATE_WIN", "" + STATE_WIN);
+                 msg.setData(b);
+                 mHandler.sendMessage(msg);
+
+        	} else{
+        		if (mSunshines < 50 && mZombies.size() == 0){
+        			mState = STATE_LOSE;
+        			Message msg = mHandler.obtainMessage();
+                    Bundle b = new Bundle();
+                    b.putString("STATE_LOSE", "" + STATE_LOSE);
+                    msg.setData(b);
+                    mHandler.sendMessage(msg);
+        		}
+            }
         }
+        
         /**
          * Deal with touch event.
          * DO REMEMBER THAT, the event's coordinate is not the real size
@@ -449,7 +490,31 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         thread = new PlantVsZombieThread(holder, context, new Handler() {
             @Override
             public void handleMessage(Message m) {
-                
+            	  if (m.getData().getString("STATE_LOSE") != null
+            			  || m.getData().getString("STATE_WIN") != null){
+            		String message = null;
+        			if (m.getData().getString("STATE_LOSE") != null){
+        				message = "You Failed!";
+        			}else{
+        				message = "Congratulations!You have eaten all Brains!";
+        			}
+            	  
+	            	  new AlertDialog.Builder(PlantVsZombieView.this.mContext)
+	                  .setMessage(message)
+	                  .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+	                      public void onClick(DialogInterface dialog, int whichButton) {
+	                          /* User clicked Yes so do some stuff */
+	                    	  thread.init();
+	                      }
+	                  })
+	                  .setNegativeButton("Leave", new DialogInterface.OnClickListener() {
+	                      public void onClick(DialogInterface dialog, int whichButton) {
+	                          /* User clicked No so do some stuff */
+	                    	  System.exit(0);
+	                      }
+	                  }).show();
+            	  }
+            
             }
         });
        
@@ -517,7 +582,6 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 	
 	public void addAnimation(int animationResourceId){
 		mContext.getResources().getAnimation(animationResourceId);
-		//thread.playAnimation(animation);
 	}
 
 }

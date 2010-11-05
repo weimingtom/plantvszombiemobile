@@ -12,14 +12,15 @@ public class PotatoMine extends Plant{
 	
 	public PotatoMine(String name, Particle[] particles, int cost) {
 		super(name, particles, cost);
-		// TODO Auto-generated constructor stub
+		mHeight = 40;
+		mWidth	= 40;
 	}
 
 	@Override
 	public void attack(ArrayList<Zombie> zombies) {
 		boolean isBombed = false;
 		for (int i = 0; i < zombies.size(); ++i){
-			if (GameObject.isCollise(this, zombies.get(i))){
+			if (GameObject.isCollise(this, zombies.get(i)) && !zombies.get(i).isInvincible()){
 				if (zombies.get(i).getHealthPoint() <= POTATO_MINE_POWER)
 					zombies.get(i).setIsCharred(true);
 				zombies.get(i).onHarmed(POTATO_MINE_POWER);

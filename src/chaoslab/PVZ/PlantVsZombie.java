@@ -1,6 +1,7 @@
 package chaoslab.PVZ;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 public class PlantVsZombie extends Activity {
@@ -17,5 +18,9 @@ public class PlantVsZombie extends Activity {
     public void onPause(){
     	super.onPause();
     	mView.getThread().pause();
+    }
+    @Override
+    public void onConfigurationChanged(Configuration config) {
+        super.onConfigurationChanged(config);
     }
 }

@@ -23,6 +23,8 @@ public class Chomper extends Plant{
 	private static final int CHOMPER_STATE_DIGEST 		= PLANT_STATE_SPECIAL_ACTION;
 	private static final int CHOMPER_DIGEST_FRAME 		= 100;
 	private static final int ATTACK_FRAME 				= 10;
+	
+	private static final float ATTACK_RANGE	=  PlantCells.CELL_WIDTH * 0.5f;
 	private int     mDigestFrmCount   = 0;
 	private Bitmap	mFoodBitmap;
 	public Chomper(String name, Particle[] particles, int cost) {
@@ -41,7 +43,7 @@ public class Chomper extends Plant{
 				if (!zombies.get(i).isInvincible() 
 						&& PlantCells.getRow(zombiePosition) == PlantCells.getRow(mPosition)
 						&& zombiePosition.x >= mPosition.x + mWidth 
-						&& zombiePosition.x <= mPosition.x + mWidth + PlantCells.CELL_WIDTH * 0.5f
+						&& zombiePosition.x <= mPosition.x + mWidth + ATTACK_RANGE
 						//&& PlantCells.getCol(zombiePosition)	== PlantCells.getCol(mPosition)	
 						){
 					mFoodBitmap = Bitmap.createBitmap(zombies.get(i).getBitmap());

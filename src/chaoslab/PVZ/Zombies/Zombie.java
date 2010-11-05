@@ -244,6 +244,7 @@ public class Zombie extends GameObject implements Harmable{
 	public void setIsCharred(boolean isCharred){
 		mIsCharred = isCharred;
 	}
+	
 	@Override
 	public void onDie(){
 		super.onDie();
