@@ -61,10 +61,10 @@ public class SoundManager {
 	 * 
 	 * @param resid:sound resource id
 	 * @param loop:whether loop play. 
-     *            -1 means loop forever, 
-	 * 			   0 means don't loop, 
-	 *             other values indicate the number of repeats, 
-	 *             e.g. a value of 1 plays the audio twice.
+     *				-1 means loop forever, 
+	 *				0 means don't loop, 
+	 *				other values indicate the number of repeats, 
+	 *				e.g. a value of 1 plays the audio twice.
 	 * 
 	 * @return a key is returned. The key can be used to stop play the corresponding stream.
 	 */
