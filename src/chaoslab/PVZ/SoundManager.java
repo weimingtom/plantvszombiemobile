@@ -7,16 +7,13 @@ import android.content.Context;
 /*
  * This class provide sound utility to other modules.
  * 
- * Problem : Embedded sound can only be played through  create(Context  context, int resid)  api.
- * It implies that you have to create a new media player each time you play sound. MediaPlayer
- * can't be reused to play embedded resources. 
- * 
  * */
 public class SoundManager {
 	
-	
-	private ArrayList<MediaPlayer> mediaPlayerList = new ArrayList<MediaPlayer>();
 	private static SoundManager instance = new SoundManager();
+	private SoundPool soundPool = null;
+	private Hashtable<Integer,Integer> soundIDResourceIDMap = new Hashtable<Integer,Integer>(20);
+	private Context context = null; 
 	
 	private SoundManager()
 	{
@@ -32,71 +29,106 @@ public class SoundManager {
 	}
 	
 	/**
-	 * Set the context, which is needed in creating MediaPlayer to play embedded sound resource.
+	 * Initialize the SoundManager.This method must be called before any sound is played.
 	 * 
-	 * @param context : the context
+	 * @param c: the context, which is needed in loading embedded sound resource.
+	 * 
 	 */
-	public void setContext(Context context)
+	public void Initialize(Context c)
 	{
-		
+		context = c;
+		soundPool = new SoundPool(5,AudioManager.STREAM_MUSIC,0);
 	}
+	
+	/**
+	 * Release all resources associated with SoundManager.
+	 * 
+	 */
+	public void Uninitialize()
+	{
+		Enumeration<Integer> keys = soundIDResourceIDMap.keys();
+		while(keys.hasMoreElements())
+		{
+			soundPool.unload(soundIDResourceIDMap.get(keys.nextElement()));
+		}
+		soundIDResourceIDMap.clear();
+		soundPool.release();
+	}
+	
 	
 	/**
 	 * Play the indicated sound.
 	 * 
 	 * @param resid:sound resource id
-	 * @param loop:whether loop play
+	 * @param loop:whether loop play. 
+     *            -1 means loop forever, 
+	 * 			   0 means don't loop, 
+	 *             other values indicate the number of repeats, 
+	 *             e.g. a value of 1 plays the audio twice.
 	 * 
-	 * @return a key is returned. The key can be used to stop play the corresponding sound.
+	 * @return a key is returned. The key can be used to stop play the corresponding stream.
 	 */
-	public String play(int resid, boolean loop)
+	public int play(int resID, int loop)
 	{
-		return null;
-	}
-	
-	/**
-	 * Stop play a specific sound.
-	 * 
-	 * @param key: indicates the sound that should be stopped. Key is returned by play(int resid, boolean loop)
-	 * 
-	 */
-	public void stopPlay(String key)
-	{
+		int soundID = 0;
+		if(soundIDResourceIDMap.containsKey(resID))
+		{
+			soundID = soundIDResourceIDMap.get(resID); 
+		}else{
+			//if load causes performance problem here, 
+			//this code can be moved to Initialize() section, 
+			//that's to pre-load all needed resources.
+			soundID = soundPool.load(context, resID, 1);
+			soundIDResourceIDMap.put(resID, soundID);
+		}
 		
+		return soundPool.play(soundID, 1.0f, 1.0f, 5, loop,1.0f);
 	}
 	
 	/**
-	 * Query whether the indicated sound is playing.
+	 * Stop play a specific stream.
 	 * 
-	 * @param key : the sound to query. Key is returned by play(int resid, boolean loop)
+	 * @param key: indicates the stream that should be stopped. 
+	 *             Key is returned by play(int resid, boolean loop)
+	 * 
 	 */
-	public boolean isPlaying(String key)
+	public void stop(int streamID)
 	{
-		return false;
-	}	
+		soundPool.stop(streamID);
+	}
+	
 	
 	/**
-	 * Stop play all sounds.
+	 * Stop play all streams.
 	 */
 	public void stopAll()
 	{
+		//It's a pity that SoundPool doesn't have a stopAll method.
+		//I'll find a better way to deal with this problem.
 		
+		//One method is to keep a stream id list, then stop them one by one.
+		//But this method has the disadvantage that the list will keep
+		//growing, and you have no way to know which stream has been stopped
+		//playing(stopped by user, or just completed playing).
+		
+		//The best solution is that SoundPool provides an interface to 
+		//query all active streams. But no such method is found.
 	}
 	
 	/**
-	 * Pause all currently playing sounds.
+	 * Pause all currently active streams.
 	 */
 	public void pauseAll()
 	{
-		
+		 soundPool.autoPause();
 	}
 	
 	/**
-	 * Resume all paused sounds.
+	 * Resume all streams paused by last pauseAll().
 	 */
 	public void resumeAll()
 	{
-		
+		soundPool.autoResume();
 	}
 	
 }
