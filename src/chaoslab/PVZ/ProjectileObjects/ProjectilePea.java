@@ -1,6 +1,7 @@
 package chaoslab.PVZ.ProjectileObjects;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 import chaoslab.PVZ.GameConstants;
 import chaoslab.PVZ.GameObject;
 import chaoslab.PVZ.Plants.Torchwood;
@@ -17,6 +18,7 @@ public class ProjectilePea extends ProjectileObject {
 	protected static final int mSlowDurationFrame = 180;
 	public ProjectilePea(String name, Bitmap[] bitmaps, int type) {
 		super(name, null);
+		mStand	= GameConstants.STAND_PLANT;
 		// TODO Auto-generated constructor stub
 		mWidth 	= 28;
 		mHeight = 28;
@@ -39,7 +41,7 @@ public class ProjectilePea extends ProjectileObject {
 		if (!mIsAlive){
 			return;
 		}
-		if (target.isAlive() && target.getStand() == GameConstants.STAND_ZOMBIE){
+		if (target.isAlive() && target.getStand() != mStand){
 			switch (mType){
 			case PEA_TYPE_NORMAL:
 				target.addHealthPoint(-1 * mPower);
@@ -59,7 +61,14 @@ public class ProjectilePea extends ProjectileObject {
 			}
 			onDie();
 		}
-		if (target instanceof Torchwood ){
+		
+		if (target instanceof Torchwood
+				&& mStand == target.getStand()
+				/*make sure this happens just on leaving the torchwood,
+				* or the pea may be change more than once when passing single torchwood.  
+				**/
+				&& mPosition.x + mMoveSpeedX > target.getPosition().x + target.getWidth()){
+			Log.d("HIT", "hit");
 			switch(mType){
 			case PEA_TYPE_NORMAL:
 				setType(PEA_TYPE_FIRE);

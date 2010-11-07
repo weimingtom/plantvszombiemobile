@@ -9,9 +9,6 @@ public class SunFlower extends Plant{
 	
 	public SunFlower(String name, Particle particles[], int cost) {
 		super(name, particles, cost);
-		mHealthPoint = 100;
-		mWidth 		 = 32;
-		mHeight		 = 80;
 	}
 	
 	@Override

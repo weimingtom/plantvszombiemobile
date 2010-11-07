@@ -14,7 +14,15 @@ public class PlantFactory {
 						BitmapFactory.decodeResource(res, R.drawable.sunflower_head)),
 			};*/
 		Bitmap bitmaps[] = {
-				BitmapFactory.decodeResource(res, R.drawable.sunflower_head),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower00),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower01),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower02),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower03),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower04),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower05),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower06),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower07),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower08),
 		};
 		SunFlower sunFlower = new SunFlower("SUNFLOWER", null, 50);
 		sunFlower.setWaveBitmaps(bitmaps);

@@ -1,6 +1,7 @@
 package chaoslab.PVZ;
 /**
- * Base class of Plants and Zombies
+ * GameObject
+ * Base class of Plants and Zombies.
  */
 import chaoslab.PVZ.Particle;
 import chaoslab.PVZ.GameConstants;

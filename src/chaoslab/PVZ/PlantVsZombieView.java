@@ -109,7 +109,10 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             */
            
         }
-        
+        /***
+         * initilize game state, when needs to restart, call this to restore 
+         * the initial state.
+         */
         public void init(){
         	 Resources res		= mContext.getResources();
         	 mPlants 			= new PlantCells();
@@ -122,7 +125,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         }
         
         /**
-         * Initialize plants according to mStage
+         * Initialize plants according to current stage.
          */
         public void InitPlants(Resources res){
         	for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i)
@@ -331,6 +334,11 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         		ProjectileObject po = mProjectileObjects.get(i);
         		if (po.isAlive()){
 	        		po.update();
+	        		Plant plant = mPlants.getPlant(po.getPosition());
+	        		if (plant != null && plant.isAlive() && GameObject.isCollise(plant, po)){
+	        			po.onHit(plant);
+	        		}
+	        		
 	        		for (int j = 0; j < mZombies.size(); ++j){
 	        			Zombie zombie = mZombies.get(j);
 	        			if (zombie.isAlive() && GameObject.isCollise(zombie, po)){
@@ -338,12 +346,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 	        			}
 	        		}
 	        		
-	        		for (int j = 0; j < PlantCells.MAX_COL_NUM * PlantCells.MAX_ROW_NUM; ++j){
-	        			Plant plant = mPlants.getPlant(po.getPosition());
-	        			if (plant != null && plant.isAlive() && GameObject.isCollise(plant, po)){
-	        				po.onHit(plant);
-	        			}
-	        		}
+	        		
         		}else{
         			mProjectileObjects.remove(po);
         			po = null;
@@ -408,8 +411,8 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
     					Position position = mSelectedSeedObject.getCenterPosition();
     					int col = (int)((position.x - PlantCells.ORIGIN.x) / PlantCells.CELL_WIDTH);
     					int row = (int)((position.y - PlantCells.ORIGIN.y) / PlantCells.CELL_HEIGHT);
-    					if (row > PlantCells.MAX_ROW_NUM)
-    						row = PlantCells.MAX_ROW_NUM;
+    					if (row >= PlantCells.MAX_ROW_NUM)
+    						row = PlantCells.MAX_ROW_NUM - 1;
     					else
     						if (row < 0)
     							row = 0;
