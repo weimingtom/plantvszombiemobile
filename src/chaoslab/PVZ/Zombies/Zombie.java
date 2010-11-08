@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Bitmap;
-import android.util.Log;
 import chaoslab.PVZ.GameConstants;
 import chaoslab.PVZ.GameObject;
 import chaoslab.PVZ.Harmable;
@@ -43,6 +42,8 @@ public class Zombie extends GameObject implements Harmable{
 	/** indicate whether zombie can be hit*/
 	protected boolean	mIsInvincible = false;
 	protected boolean	mIsCharred	=   false;
+	private int mCharredBitmapIndex = 0;
+	private Bitmap[] mCharredBitmap;
 	 
 	//protected Bitmap	;
 	/**
@@ -102,16 +103,20 @@ public class Zombie extends GameObject implements Harmable{
 	}
 	@Override
 	public void doDraw(Canvas canvas, float scaleX, float scaleY, Paint paint){
-		if(mEventFrame < 0 || mEventFrame >= mMaxBitmap){
-			canvas.drawBitmap(mBitmap[0], null, 
+		if (mStatus != GameConstants.ZOMBIE_CHARRED){
+			if(mEventFrame < 0 || mEventFrame >= mMaxBitmap){
+				canvas.drawBitmap(mBitmap[0], null, 
+						new Rect((int)(mPosition.x * scaleX), (int)(mPosition.y * scaleY),
+								(int)((mPosition.x + mBitmap[0].getWidth()) * scaleX),
+								(int)((mPosition.y + mBitmap[0].getHeight()) * scaleY)), paint);
+			}else if(mEventFrame < mMaxBitmap ){
+				canvas.drawBitmap(mBitmap[mEventFrame], null, 
 					new Rect((int)(mPosition.x * scaleX), (int)(mPosition.y * scaleY),
-							(int)((mPosition.x + mBitmap[0].getWidth()) * scaleX),
-							(int)((mPosition.y + mBitmap[0].getHeight()) * scaleY)), paint);
-		}else if(mEventFrame < mMaxBitmap ){
-			canvas.drawBitmap(mBitmap[mEventFrame], null, 
-				new Rect((int)(mPosition.x * scaleX), (int)(mPosition.y * scaleY),
-						(int)((mPosition.x + mBitmap[mEventFrame].getWidth()) * scaleX),
-						(int)((mPosition.y + mBitmap[mEventFrame].getHeight()) * scaleY)), paint);
+							(int)((mPosition.x + mBitmap[mEventFrame].getWidth()) * scaleX),
+							(int)((mPosition.y + mBitmap[mEventFrame].getHeight()) * scaleY)), paint);
+			}
+		}else{
+			super.doDraw(canvas, scaleX, scaleY, paint);
 		}
 	}
 	/*
@@ -159,6 +164,15 @@ public class Zombie extends GameObject implements Harmable{
 			if(MAX_ATTACKED == mEventFrame){
 				//mEventFrame = mPreviousFrame;
 				//mStatus = GameConstants.ZOMBIE_MOVE - 1;
+			}
+			break;
+		case GameConstants.ZOMBIE_CHARRED:
+			if (mCharredBitmap != null && mCharredBitmapIndex < mCharredBitmap.length){
+				mCurBitmap = mCharredBitmap[mCharredBitmapIndex];
+				mCharredBitmapIndex ++;
+			}else{
+				mCharredBitmapIndex = 0;
+				mIsAlive = false;
 			}
 			break;
 		default:
@@ -221,7 +235,6 @@ public class Zombie extends GameObject implements Harmable{
 	public void onSlowed(int duration){
 		mSlowFrmCnt = duration;
 		mIsSlowed   = true;
-		Log.d("ZOMBIE", "SLOWED");
 	}
 	
 	public boolean isInvincible(){
@@ -244,9 +257,18 @@ public class Zombie extends GameObject implements Harmable{
 	public void setIsCharred(boolean isCharred){
 		mIsCharred = isCharred;
 	}
-	
+	public void setCharredBitmap(Bitmap[] bitmaps){
+		mCharredBitmap = bitmaps;
+	}
 	@Override
 	public void onDie(){
-		super.onDie();
+		//super.onDie();
+		if (mIsCharred){
+			mStatus = GameConstants.ZOMBIE_CHARRED;
+			mIsInvincible = true;
+			mCharredBitmapIndex = 0;
+		}else{
+			super.onDie();
+		}
 	}
 }

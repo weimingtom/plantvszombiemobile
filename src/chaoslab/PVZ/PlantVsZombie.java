@@ -11,8 +11,11 @@ public class PlantVsZombie extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SoundManager.getInstance().Initialize(getApplicationContext());
+        SoundManager.getInstance().loadSound(R.raw.explosion);
         setContentView(R.layout.main);
         mView = (PlantVsZombieView) findViewById(R.id.PVZView);
+       
     }
     @Override
     public void onPause(){
@@ -22,5 +25,14 @@ public class PlantVsZombie extends Activity {
     @Override
     public void onConfigurationChanged(Configuration config) {
         super.onConfigurationChanged(config);
+       
     }
+    @Override
+    public void onDestroy(){
+    	SoundManager.getInstance().Uninitialize();
+    	mView.getThread().setRunning(false);
+    	super.onDestroy();
+    }
+    
+    
 }

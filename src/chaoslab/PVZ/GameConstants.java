@@ -17,7 +17,8 @@ public class GameConstants {
 	public static final int ZOMBIE_FROZON = 8;		//for zombies frozen by corn or bungee zombies
 	public static final int ZOMBIE_SEEK = 9;		//for bungee zombie	
 	public static final int ZOMBIE_TRANSIT = 10;	//fun bungee zombie
-	public static final int ZOMBIE_BACKWARD = 10;
+	public static final int ZOMBIE_BACKWARD = 11;
+	public static final int ZOMBIE_CHARRED	= 12;
 	/*
 	 * there are some other statuses so that I need another 10 number 
 	 * to keep as reserved field.

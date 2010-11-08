@@ -7,20 +7,36 @@ import android.graphics.Bitmap;
 
 public class ZombieFactory {
 	public static Zombie createNormalZombie(Resources res){
-		Bitmap bitmap[] = new Bitmap[12];
-		bitmap[0] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_00);
-		bitmap[1] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_01);
-		bitmap[2] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_02);
-		bitmap[3] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_03);
-		bitmap[4] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_04);
-		bitmap[5] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_05);
-		bitmap[6] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_06);
-		bitmap[7] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_07);
-		bitmap[8] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_08);
-		bitmap[9] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_09);
-		bitmap[10] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_10);
-		bitmap[11] = BitmapFactory.decodeResource(res, R.drawable.zb_normal_11);
-		return new Zombie("normal Zombie", null,bitmap, 100);
+		Bitmap bitmap[] = {
+				BitmapFactory.decodeResource(res, R.drawable.zb_normal_00),
+				BitmapFactory.decodeResource(res, R.drawable.zb_normal_01),
+				BitmapFactory.decodeResource(res, R.drawable.zb_normal_02),
+				BitmapFactory.decodeResource(res, R.drawable.zb_normal_03),
+				BitmapFactory.decodeResource(res, R.drawable.zb_normal_04),
+				BitmapFactory.decodeResource(res, R.drawable.zb_normal_05),
+				BitmapFactory.decodeResource(res, R.drawable.zb_normal_06),
+				BitmapFactory.decodeResource(res, R.drawable.zb_normal_07),
+				BitmapFactory.decodeResource(res, R.drawable.zb_normal_08),
+				BitmapFactory.decodeResource(res, R.drawable.zb_normal_09),
+				BitmapFactory.decodeResource(res, R.drawable.zb_normal_10),
+				BitmapFactory.decodeResource(res, R.drawable.zb_normal_11),
+		};
+		Bitmap charredBitmap[] = {
+				BitmapFactory.decodeResource(res, R.drawable.zombie_charred1),
+				BitmapFactory.decodeResource(res, R.drawable.zombie_charred2),
+				BitmapFactory.decodeResource(res, R.drawable.zombie_charred3),
+				BitmapFactory.decodeResource(res, R.drawable.zombie_charred4),
+				BitmapFactory.decodeResource(res, R.drawable.zombie_charred5),
+				BitmapFactory.decodeResource(res, R.drawable.zombie_charred6),
+				BitmapFactory.decodeResource(res, R.drawable.zombie_charred7),
+				BitmapFactory.decodeResource(res, R.drawable.zombie_charred8),
+				BitmapFactory.decodeResource(res, R.drawable.zombie_charred9),
+				BitmapFactory.decodeResource(res, R.drawable.zombie_charred10),
+				
+		};
+		Zombie zombie =  new Zombie("normal Zombie", null,bitmap, 100);
+		zombie.setCharredBitmap(charredBitmap);
+		return zombie;
 	}
 	public static Zombie createSoccerZombie(Resources res){
 		Bitmap bitmap[] = new Bitmap[10];

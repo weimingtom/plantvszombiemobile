@@ -6,7 +6,6 @@
 package chaoslab.PVZ;
 
 import java.util.ArrayList;
-
 import chaoslab.PVZ.Plants.Plant;
 import chaoslab.PVZ.Plants.PlantCells;
 import chaoslab.PVZ.Plants.PlantFactory;
@@ -122,6 +121,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
              InitPlants(res);
              InitSeedCards(res);
              mState				= STATE_RUNNING;
+             mSunshines			= 1500;
         }
         
         /**
@@ -149,12 +149,15 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         				if (i == 3){
         					plant = PlantFactory.createTorchwood(res);
         				}else{
+        					//plant = PlantFactory.createPotatoMine(res);
         					plant = PlantFactory.createChomper(res);
         				}
         				break;
         			default:
+        				//plant = PlantFactory.createPotatoMine(res);
         				plant = PlantFactory.createSunFlower(res);
         			}
+        			
         			if (plant != null){
 	        			plant.setView(PlantVsZombieView.this);
 	        			mPlants.setPlant(i, j, plant);
@@ -227,12 +230,9 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         public void doDraw(Canvas canvas){
         	// Draw the background image. Operations on the Canvas accumulate
             // so this is like clearing the screen.
-        	//Date now = new Date();
-           // Log.d("TIME", now.getTime() + "");
             canvas.drawBitmap(mBackgroundImage, null, new Rect(0, 0, mCanvasWidth, mCanvasHeight), null);
             canvas.drawBitmap(mBowlingStripeImage, PlantCells.CELL_WIDTH * STRIP_COLUMN * mScaleX, 32, null);
-          //  now = new Date();
-          //  Log.d("AFTER BACKGROUND", now.getTime() + "");
+            //Log.d("time", "AFTER BACKGROUND");
             //Draw SeedBar
             Matrix matrix = new Matrix();
         	matrix.setScale(mScaleX, mScaleY);
@@ -242,8 +242,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             for (int i = 0; i < mSeedCards.size(); ++i){
             	mSeedCards.get(i).doDraw(canvas, mScaleX, mScaleY, null);
             }
-           // now = new Date();
-        //    Log.d("AFTER Seed Card", now.getTime() + "");
+            //Log.d("time", "AFTER draw Seed Card");
            
             //Draw Plants and Zombies
             for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i){
@@ -253,13 +252,10 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             			plant.doDraw(canvas, mScaleX, mScaleY, null);
             	}
             }
-         //   now = new Date();
-         //   Log.d("AFTER PLANT", now.getTime() + "");
+           // Log.d("time", "AFTER draw ALL PLANT");
             for (int i = 0; i < mZombies.size(); ++i){
             	mZombies.get(i).doDraw(canvas, mScaleX, mScaleY, null);
             }
-          //  now = new Date();
-          //  Log.d("AFTER Zombie", now.getTime() + "");
             for (int i = 0; i < mProjectileObjects.size(); ++i){
             	mProjectileObjects.get(i).doDraw(canvas, mScaleX, mScaleY, null);
             }
@@ -324,7 +320,6 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 	        		zombie = null;
 	        	}	        	
         	}
-        	
         	/* update projectile objects
              * NOTE THAT:Here we should check each zombie and plant to make sure 
         	 * that each hit message will be sent to

@@ -60,8 +60,8 @@ abstract public class Plant extends GameObject implements Harmable{
 					curWaveImgNum = 0;
 				}
 			}
+			mCurBitmap = mWaveBitmaps[curWaveImgNum];
 		}
-		mCurBitmap = mWaveBitmaps[curWaveImgNum];
 	}
 	
 	public void updateAttackBitmap(){
@@ -108,6 +108,8 @@ abstract public class Plant extends GameObject implements Harmable{
 			return null;
 		}
 	}
+	
+	@Override
 	public void doDraw(Canvas canvas, float scaleX, float scaleY, Paint paint){
 		if (mCurBitmap == null)
 			return;
@@ -121,7 +123,7 @@ abstract public class Plant extends GameObject implements Harmable{
 				new Rect((int)(mPosition.x * scaleX), (int)((cellPosY + PlantCells.CELL_HEIGHT - height) * scaleY),
 						(int)((mPosition.x + width) * scaleX),
 						(int)((cellPosY + PlantCells.CELL_HEIGHT) * scaleY)), paint);
-	
+		
 	}
 }
 
