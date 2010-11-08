@@ -9,6 +9,8 @@ import chaoslab.PVZ.GameConstants;
 import chaoslab.PVZ.GameObject;
 import chaoslab.PVZ.Harmable;
 import chaoslab.PVZ.Particle;
+import chaoslab.PVZ.R;
+import chaoslab.PVZ.SoundManager;
 import chaoslab.PVZ.Plants.Plant;
 
 public class Zombie extends GameObject implements Harmable{
@@ -157,6 +159,7 @@ public class Zombie extends GameObject implements Harmable{
 			int attackFactor = mIsSlowed ? 2 : 1;
 			if(mEatFrmCnt % ( mEatInterval * attackFactor)== 0 || !mTarget.isAlive()){
 				eating();
+				SoundManager.getInstance().play(R.raw.chomp, 0);
 			}
 			mEatFrmCnt ++;
 			break;

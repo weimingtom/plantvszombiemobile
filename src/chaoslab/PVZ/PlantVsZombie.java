@@ -13,6 +13,7 @@ public class PlantVsZombie extends Activity {
         super.onCreate(savedInstanceState);
         SoundManager.getInstance().Initialize(getApplicationContext());
         SoundManager.getInstance().loadSound(R.raw.explosion);
+        SoundManager.getInstance().loadSound(R.raw.chomp);
         setContentView(R.layout.main);
         mView = (PlantVsZombieView) findViewById(R.id.PVZView);
        
