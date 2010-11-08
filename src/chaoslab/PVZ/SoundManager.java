@@ -41,6 +41,21 @@ public class SoundManager {
 	}
 	
 	/**
+	 * Preload sound resource. Sound resource must be loaded before being played.
+	 * 
+	 * @param resid : resource id
+	 * 
+	 */
+	public void loadSound(int resid)
+	{
+		if(!soundIDResourceIDMap.containsKey(resid))
+		{
+			int soundID = soundPool.load(context, resid, 1);
+			soundIDResourceIDMap.put(resid, soundID);
+		}
+	}
+	
+	/**
 	 * Release all resources associated with SoundManager.
 	 * 
 	 */
@@ -70,18 +85,8 @@ public class SoundManager {
 	 */
 	public int play(int resID, int loop)
 	{
-		int soundID = 0;
-		if(soundIDResourceIDMap.containsKey(resID))
-		{
-			soundID = soundIDResourceIDMap.get(resID); 
-		}else{
-			//if load causes performance problem here, 
-			//this code can be moved to Initialize() section, 
-			//that's to pre-load all needed resources.
-			soundID = soundPool.load(context, resID, 1);
-			soundIDResourceIDMap.put(resID, soundID);
-		}
-		
+		//if the resource is not preloaded, exception will thrown here.
+		int soundID = soundIDResourceIDMap.get(resID); 
 		return soundPool.play(soundID, 1.0f, 1.0f, 5, loop,1.0f);
 	}
 	
