@@ -1,12 +1,14 @@
 package chaoslab.PVZ;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
 public class PlantVsZombie extends Activity {
     /** A handle to the View in which the game is running. */
     private PlantVsZombieView mView;
+    private Intent mIntent = new Intent("chaoslab.PVZ.MUSIC");
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -16,7 +18,7 @@ public class PlantVsZombie extends Activity {
         SoundManager.getInstance().loadSound(R.raw.chomp);
         setContentView(R.layout.main);
         mView = (PlantVsZombieView) findViewById(R.id.PVZView);
-       
+        startService(mIntent);
     }
     @Override
     public void onPause(){
@@ -32,6 +34,7 @@ public class PlantVsZombie extends Activity {
     public void onDestroy(){
     	SoundManager.getInstance().Uninitialize();
     	mView.getThread().setRunning(false);
+    	stopService(mIntent);
     	super.onDestroy();
     }
     

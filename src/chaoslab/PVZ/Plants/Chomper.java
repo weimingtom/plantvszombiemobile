@@ -42,7 +42,7 @@ public class Chomper extends Plant{
 				Position zombiePosition = zombies.get(i).getPosition();
 				if (!zombies.get(i).isInvincible() 
 						&& PlantCells.getRow(zombiePosition) == PlantCells.getRow(mPosition)
-						&& zombiePosition.x >= mPosition.x + mWidth 
+						&& zombiePosition.x >= mPosition.x + mWidth * 0.5f
 						&& zombiePosition.x <= mPosition.x + mWidth + ATTACK_RANGE
 						//&& PlantCells.getCol(zombiePosition)	== PlantCells.getCol(mPosition)	
 						){

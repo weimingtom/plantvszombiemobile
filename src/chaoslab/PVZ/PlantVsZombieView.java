@@ -81,12 +81,14 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 		//private Context mContext;
 		/** Indicate whether the surface has been created & is ready to draw */
         private boolean mRun = false;
+        /** the thread holds several kinds of objects*/
         private PlantCells mPlants;
 		private ArrayList<Zombie> mZombies;
 		private ArrayList<ProjectileObject> mProjectileObjects;
-		private float mScaleX = 1.0f;
-		private float mScaleY = 1.0f;
-        private int	  mCurBrainNum = 0;
+		/** the scale ratio equals screen size divides by actual size*/
+		private float mScaleX 		= 1.0f;
+		private float mScaleY 		= 1.0f;
+        private int	  mCurBrainNum 	= 0;
         public PlantVsZombieThread(SurfaceHolder surfaceHolder, Context context,
                 Handler handler) {
         	 // get handles to some important objects
@@ -122,6 +124,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
              InitSeedCards(res);
              mState				= STATE_RUNNING;
              mSunshines			= 1500;
+             
         }
         
         /**
@@ -237,10 +240,17 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             Matrix matrix = new Matrix();
         	matrix.setScale(mScaleX, mScaleY);
             canvas.drawBitmap(mSeedBarImage, matrix, null);
-            canvas.drawText(Integer.toString(mSunshines), 20 * mScaleX, 80 * mScaleY, new Paint());
-            
+            //Draw current sunshines and costs
+            Paint textPaint = new Paint();
+            textPaint.setTextAlign(Paint.Align.CENTER);
+            canvas.drawText(Integer.toString(mSunshines), 40 * mScaleX, 80 * mScaleY, textPaint);
+            textPaint.setTextSize(10);
             for (int i = 0; i < mSeedCards.size(); ++i){
             	mSeedCards.get(i).doDraw(canvas, mScaleX, mScaleY, null);
+            	canvas.drawText(Integer.toString(mSeedCards.get(i).getCost()), 
+            			(mSeedCards.get(i).getPosition().x 
+            			+ SeedCard.SEED_CARD_WIDTH * 0.5f) * mScaleX, 
+            			80 * mScaleY, textPaint);
             }
             //Log.d("time", "AFTER draw Seed Card");
            
@@ -283,7 +293,8 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         }
         
         /**
-         * Update all valid Objects,including zombies and plants
+         * Update all valid Objects,including zombies, plants, projectile objects
+         * and animations.
          */
         public void update(){
         	int ateBrainNum = 0;

@@ -182,8 +182,6 @@ public class Zombie extends GameObject implements Harmable{
 			break;
 		}
 		++mEventFrame; 
-		
-		
 	}
 	/*
 	 * do something when status change,detail things due to the previous 
