@@ -12,6 +12,7 @@ import chaoslab.PVZ.Particle;
 import chaoslab.PVZ.R;
 import chaoslab.PVZ.SoundManager;
 import chaoslab.PVZ.Plants.Plant;
+import chaoslab.PVZ.ZombieItem.AbstractItem;
 
 public class Zombie extends GameObject implements Harmable{
 	/**@{
@@ -47,6 +48,8 @@ public class Zombie extends GameObject implements Harmable{
 	private int mCharredBitmapIndex = 0;
 	private Bitmap[] mCharredBitmap;
 	 
+
+	protected  AbstractItem mItem;
 	//protected Bitmap	;
 	/**
 	 * Constructor: name, particles, cost
@@ -97,6 +100,7 @@ public class Zombie extends GameObject implements Harmable{
 	public void eating(){
 		if(mTarget.isAlive()){
 			mTarget.onHarmed(mAttackPower);
+			SoundManager.getInstance().play(R.raw.chomp, 0);
 		}else{
 			mTarget.onDie();
 			mStatus = GameConstants.ZOMBIE_MOVE;
@@ -119,6 +123,9 @@ public class Zombie extends GameObject implements Harmable{
 			}
 		}else{
 			super.doDraw(canvas, scaleX, scaleY, paint);
+		}
+		if(mItem != null){
+			mItem.doDraw(canvas,scaleX,scaleY,paint);
 		}
 	}
 	/*
@@ -151,6 +158,7 @@ public class Zombie extends GameObject implements Harmable{
 				mEventFrame = MIN_MOVE - 1;
 			}
 			moving();
+			++mEventFrame; 
 			break;
 		case GameConstants.ZOMBIE_ATTACK:
 			if(MAX_EAT == mEventFrame){
@@ -159,7 +167,7 @@ public class Zombie extends GameObject implements Harmable{
 			int attackFactor = mIsSlowed ? 2 : 1;
 			if(mEatFrmCnt % ( mEatInterval * attackFactor)== 0 || !mTarget.isAlive()){
 				eating();
-				SoundManager.getInstance().play(R.raw.chomp, 0);
+				++mEventFrame; 
 			}
 			mEatFrmCnt ++;
 			break;
@@ -179,9 +187,13 @@ public class Zombie extends GameObject implements Harmable{
 			}
 			break;
 		default:
+			++mEventFrame; 
 			break;
 		}
-		++mEventFrame; 
+		if(mItem != null){
+			mItem.moveTo(mPosition);
+			mItem.update();
+		}
 	}
 	/*
 	 * do something when status change,detail things due to the previous 
@@ -272,4 +284,32 @@ public class Zombie extends GameObject implements Harmable{
 			super.onDie();
 		}
 	}
+	@Override
+	public Object clone() throws CloneNotSupportedException{
+		Zombie obj = (Zombie)super.clone();
+		obj.init();
+		return obj;
+	}
+	public void init()throws CloneNotSupportedException{
+		mIsSlowed = false;
+		mTarget = null;
+		mStatus = GameConstants.ZOMBIE_MOVE;
+		mIsInvincible = false;
+		mIsCharred	=   false;
+		mCharredBitmapIndex = 0;
+		mMoveDirection = -1;
+		mPreviousFrame = 0;
+		mPreStatus = GameConstants.ZOMBIE_MOVE;
+		if(mItem != null){
+			mItem = (AbstractItem)mItem.clone();
+		}
+	}
+	@Override
+	public void setCenterPosition(float posX, float posY){
+		super.setCenterPosition(posX, posY);
+		if(mItem != null){
+			mItem.moveTo(mPosition);
+		}
+	}
+	
 }

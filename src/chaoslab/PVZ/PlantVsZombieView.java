@@ -6,6 +6,7 @@
 package chaoslab.PVZ;
 
 import java.util.ArrayList;
+import chaoslab.PVZ.ZombieItem.AbstractItem;
 import chaoslab.PVZ.Plants.Plant;
 import chaoslab.PVZ.Plants.PlantCells;
 import chaoslab.PVZ.Plants.PlantFactory;
@@ -31,6 +32,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import chaoslab.PVZ.ZombieItem.ItemFactory;
 
 /**
  * View of Plant VS Zombie.Help zombies to EAT all plants!!
@@ -85,6 +87,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         private PlantCells mPlants;
 		private ArrayList<Zombie> mZombies;
 		private ArrayList<ProjectileObject> mProjectileObjects;
+		private ArrayList<AbstractItem> mLostItems;
 		/** the scale ratio equals screen size divides by actual size*/
 		private float mScaleX 		= 1.0f;
 		private float mScaleY 		= 1.0f;
@@ -119,9 +122,11 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         	 mPlants 			= new PlantCells();
              mZombies 			= new ArrayList<Zombie>();
              mProjectileObjects = new ArrayList<ProjectileObject>();
+             mLostItems         = new ArrayList<AbstractItem>();
              
              InitPlants(res);
              InitSeedCards(res);
+             ItemFactory.setView(PlantVsZombieView.this);
              mState				= STATE_RUNNING;
              mSunshines			= 1500;
              
@@ -262,6 +267,13 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             			plant.doDraw(canvas, mScaleX, mScaleY, null);
             	}
             }
+            //draw items
+        	for (int i = 0; i < mLostItems.size(); ++i){
+        		AbstractItem item = mLostItems.get(i);
+        		if (item.isAlive()){
+        			item.doDraw(canvas, mScaleX, mScaleY, null);
+        		}
+        	}
            // Log.d("time", "AFTER draw ALL PLANT");
             for (int i = 0; i < mZombies.size(); ++i){
             	mZombies.get(i).doDraw(canvas, mScaleX, mScaleY, null);
@@ -291,7 +303,9 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         public void addZombie(Zombie zombie){
         	mZombies.add(zombie);
         }
-        
+        public void addItem(AbstractItem item){
+        	mLostItems.add(item);
+        }
         /**
          * Update all valid Objects,including zombies, plants, projectile objects
          * and animations.
@@ -358,7 +372,16 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         			po = null;
         		}
         	}
-        	
+        	//update items
+        	for (int i = 0; i < mLostItems.size(); ++i){
+        		AbstractItem item = mLostItems.get(i);
+        		if (item.isAlive()){
+        			item.update();
+        		}else{
+        			mLostItems.remove(item);
+        			item = null;
+        		}
+        	}
         	 /*
              * check win or loose, and send message
              */
@@ -591,6 +614,9 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 	
 	public void addAnimation(int animationResourceId){
 		mContext.getResources().getAnimation(animationResourceId);
+	}
+	public void addItem(AbstractItem item){
+		thread.addItem(item);
 	}
 
 }

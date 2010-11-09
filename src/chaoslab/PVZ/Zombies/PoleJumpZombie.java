@@ -2,12 +2,15 @@ package chaoslab.PVZ.Zombies;
 
 import android.graphics.Bitmap;
 import chaoslab.PVZ.Plants.Plant;
+import chaoslab.PVZ.ZombieItem.AbstractItem;
 import chaoslab.PVZ.GameConstants;
 import chaoslab.PVZ.Particle;
 
 public class PoleJumpZombie extends Zombie{
 	protected boolean mHasPole = true; //has it gotten a jumping pole or not
-	public PoleJumpZombie(String name, Particle particles[],Bitmap bitmap[],int cost){
+	protected  AbstractItem mItem;
+	
+	public PoleJumpZombie(String name, Particle particles[],Bitmap bitmap[],int cost,AbstractItem item){
 		super(name,particles,bitmap,cost);
 		MIN_ATTACKED = 8;
 		MAX_ATTACKED = 9;
@@ -16,6 +19,7 @@ public class PoleJumpZombie extends Zombie{
 		MIN_MOVE = 0;
 		MAX_MOVE = 9;
 		mMaxBitmap = 10;
+		mItem = item;
 	}
 	@Override
 	public void eat(Plant target){
@@ -34,7 +38,6 @@ public class PoleJumpZombie extends Zombie{
 	public void update(){
 		super.update();
 		if(GameConstants.ZOMBIE_JUMP == mStatus){
-			
 		}
 	}
 }
