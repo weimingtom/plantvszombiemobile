@@ -101,7 +101,7 @@ public class Zombie extends GameObject implements Harmable{
 	public void eating(){
 		if(mTarget.isAlive()){
 			mTarget.onHarmed(mAttackPower);
-			SoundManager.getInstance().play(R.raw.chomp, 0);
+			SoundManager.getInstance().play(R.raw.chomp, 0, 1.0f);
 		}else{
 			mTarget.onDie();
 			mStatus = GameConstants.ZOMBIE_MOVE;

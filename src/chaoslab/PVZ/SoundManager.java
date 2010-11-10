@@ -31,7 +31,7 @@ public class SoundManager {
 	/**
 	 * Initialize the SoundManager.This method must be called before any sound is played.
 	 * 
-	 * @param c: the context, which is needed in loading embedded sound resource.
+	 * @param c : the context, which is needed in loading embedded sound resource.
 	 * 
 	 */
 	public void Initialize(Context c)
@@ -74,26 +74,27 @@ public class SoundManager {
 	/**
 	 * Play the indicated sound.
 	 * 
-	 * @param resid:sound resource id
-	 * @param loop:whether loop play. 
+	 * @param resid :sound resource id
+	 * @param loop :whether loop play. 
      *				-1 means loop forever, 
 	 *				0 means don't loop, 
 	 *				other values indicate the number of repeats, 
 	 *				e.g. a value of 1 plays the audio twice.
+	 * @param volume : 0.0 ~ 1.0
 	 * 
 	 * @return a key is returned. The key can be used to stop play the corresponding stream.
 	 */
-	public int play(int resID, int loop)
+	public int play(int resid, int loop, float volume)
 	{
 		//if the resource is not preloaded, exception will thrown here.
-		int soundID = soundIDResourceIDMap.get(resID); 
-		return soundPool.play(soundID, 1.0f, 1.0f, 5, loop,1.0f);
+		int soundID = soundIDResourceIDMap.get(resid); 
+		return soundPool.play(soundID, volume, volume, 5, loop,1.0f);
 	}
 	
 	/**
 	 * Stop play a specific stream.
 	 * 
-	 * @param key: indicates the stream that should be stopped. 
+	 * @param key : indicates the stream that should be stopped. 
 	 *             Key is returned by play(int resid, boolean loop)
 	 * 
 	 */

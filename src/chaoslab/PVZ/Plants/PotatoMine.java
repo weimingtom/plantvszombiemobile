@@ -54,7 +54,7 @@ public class PotatoMine extends Plant{
 	@Override
 	public void onDie(){
 		super.onDie();
-		SoundManager.getInstance().play(R.raw.explosion, 0);
+		SoundManager.getInstance().play(R.raw.explosion, 0, 1.0f);
 	}
 	
 	@Override
