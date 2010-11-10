@@ -27,10 +27,10 @@ public class Zombie extends GameObject implements Harmable{
 	/**@}*/
 	
 	protected int 		mEventFrame		= 0; 
-	protected int 		mEatInterval 	= 10; //eat once per 10 frames as default
+	protected int 		mEatInterval 	= 3; //eat once per 10 frames as default
 	protected float 	mMoveSpeed		= 5.0f;   //per frame
 	protected boolean 	mIsSlowed 		= false;
-	protected int		mAttackPower	= 25;
+	protected int		mAttackPower	= 8;
 	protected int		mMoveDirection	= -1;  //1:right, -1:left , 0:static
 	
 	//keep the frame number before the break-out event
@@ -63,6 +63,7 @@ public class Zombie extends GameObject implements Harmable{
 		mBitmap = bitmap;
 		mMaxBitmap = 12;
 		mStatus = GameConstants.ZOMBIE_MOVE;
+		mPreStatus = GameConstants.ZOMBIE_MOVE;
 		mEventFrame = MIN_MOVE - 1;
  	}
 	/*

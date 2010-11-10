@@ -12,7 +12,7 @@ import chaoslab.PVZ.Zombies.Zombie;
 
 public class PotatoMine extends Plant{
 
-	public static final int POTATO_MINE_POWER = 250;
+	public static final int POTATO_MINE_POWER = 500;
 	//private static final int ATTACK_RANGE = PlantCells.CELL_WIDTH;
 	
 	public PotatoMine(String name, Particle[] particles, int cost) {
@@ -42,7 +42,8 @@ public class PotatoMine extends Plant{
 		
 		if (isBombed){
 			for (int i = 0; i < zombiesInRange.size(); ++i){
-				if (zombiesInRange.get(i).getHealthPoint() <= POTATO_MINE_POWER)
+				Zombie zombie = zombiesInRange.get(i);
+				if (zombie.getHealthPoint() <= POTATO_MINE_POWER)
 					zombiesInRange.get(i).setIsCharred(true);
 				zombiesInRange.get(i).onHarmed(POTATO_MINE_POWER);
 			}

@@ -94,7 +94,7 @@ abstract public class Plant extends GameObject implements Harmable{
 	}
 	
 	public boolean isDefCreature(){
-		return false;
+		return true;
 	}
 	public boolean isProtected(){
 		return false;

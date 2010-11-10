@@ -8,5 +8,6 @@ public class SoccerZombie extends RoadBlockZombie{
 
 	public SoccerZombie(String name, Particle particles[],Bitmap bitmap[],int cost,AbstractItem item){
 		super(name,particles,bitmap,cost,item);
+		mMoveSpeed = 10.0f;
 	}
 }
