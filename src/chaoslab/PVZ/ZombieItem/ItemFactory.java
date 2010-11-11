@@ -11,7 +11,7 @@ public class ItemFactory {
 	
 	public static BombItem createBombItem(Resources res){
 		Bitmap bitmap[] = new Bitmap[1];
-		for(int i=0;i<1;++i){
+		for(int i=0;i<bitmap.length;++i){
 			bitmap[i] = BitmapFactory.decodeResource(res, R.drawable.zombieimphead);
 		}
 		return new BombItem(bitmap);

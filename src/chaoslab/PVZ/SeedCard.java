@@ -6,7 +6,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 /**
- * SeedCard: Shows in SeedBar,description of its object.Can be dragged to 
+ * SeedCard 
+ * Shown in SeedBar,description of its object.Can be dragged to 
  * generate new object at certain cost
  * @author Liu.zhenxing
  *

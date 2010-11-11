@@ -108,10 +108,13 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             mSeedBarImage		= BitmapFactory.decodeResource(res, R.drawable.seedbar);
             InitSeedCards(res);
             init();
-          /*  Zombie zombie = ZombieFactory.createNormalZombie(res);
+            
+            /*Zombie zombie = ZombieFactory.getInstance(res).createNormalZombie();
             zombie.setPosition(500, (int)(PlantCells.ORIGIN.y + 2 * PlantCells.CELL_HEIGHT - zombie.getHeight()));
             mZombies.add(zombie);
-            */
+            zombie = ZombieFactory.getInstance(res).createNormalZombie();
+            zombie.setPosition(600, (int)(PlantCells.ORIGIN.y + 2 * PlantCells.CELL_HEIGHT - zombie.getHeight()));
+            mZombies.add(zombie);*/
            
         }
         /***
@@ -147,7 +150,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         				break;
         			case 2:
         				if ( i== 2){
-        					plant = PlantFactory.createLeafBunch(res);
+        					plant = PlantFactory.createMagnetShroom(res);
         				}else{
         					plant = PlantFactory.createPotatoMine(res);
         				}
@@ -190,7 +193,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         			BitmapFactory.decodeResource(res, R.drawable.zombie_cone1),
         	};
         	Zombie seedZombies[] = {
-        			ZombieFactory.createNormalZombie(res),
+        			ZombieFactory.getInstance(res).createNormalZombie(),
         			ZombieFactory.createBungeeZombie(res),
         			ZombieFactory.createSoccerZombie(res),
         			ZombieFactory.createPoleVaultZombie(res),

@@ -1,7 +1,6 @@
 package chaoslab.PVZ.ProjectileObjects;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 import chaoslab.PVZ.GameConstants;
 import chaoslab.PVZ.GameObject;
 import chaoslab.PVZ.Plants.Torchwood;
@@ -15,7 +14,7 @@ public class ProjectilePea extends ProjectileObject {
 	public static final int PEA_TYPE_SNOW	= 1;
 	public static final int PEA_TYPE_FIRE   = 2;
 	
-	protected static final int mSlowDurationFrame = 180;
+	protected static final int mSlowDurationFrame = 30;
 	public ProjectilePea(String name, Bitmap[] bitmaps, int type) {
 		super(name, null);
 		mStand	= GameConstants.STAND_PLANT;
@@ -67,8 +66,8 @@ public class ProjectilePea extends ProjectileObject {
 				/*make sure this happens just on leaving the torchwood,
 				* or the pea may be change more than once when passing single torchwood.  
 				**/
-				&& mPosition.x + mMoveSpeedX > target.getPosition().x + target.getWidth()){
-			Log.d("HIT", "hit");
+				&& mPosition.x + mMoveSpeed * mMoveDirection.x > target.getPosition().x + target.getWidth()){
+		
 			switch(mType){
 			case PEA_TYPE_NORMAL:
 				setType(PEA_TYPE_FIRE);

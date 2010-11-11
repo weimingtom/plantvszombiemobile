@@ -1,6 +1,7 @@
 package chaoslab.PVZ;
 /**
- * Used to describe object's position
+ * Position
+ * Describes object's position.
  * Note that it is not based on the screen coordinate system,
  * but on the background bitmap.When objects drawn to the screen, 
  * they are scaled, so are their positions.
@@ -34,5 +35,26 @@ public class Position implements Cloneable{
 		position.x  	  = this.x;
 		position.y 		  = this.y;
 		return position;
+	}
+	
+	/**
+	 * return direction vector from source position to destination postion
+	 * @param src Position, source position
+	 * @param dest Position, dest position
+	 * @return
+	 */
+	public static Position getDirectionVector(Position src, Position dest){
+		double length = getDistance(src, dest);  
+		if (length < 0.0000001){
+			return null;
+		}else{
+			return new Position((float)((dest.x - src.x) / length), 
+					(float)((dest.y - src.y) / length));
+		}
+	}
+	
+	public static double getDistance(Position src, Position dest){
+		return Math.sqrt((dest.x - src.x) * (dest.x - src.x) 
+				+ (dest.y - src.y) * (dest.y - src.y));
 	}
 }

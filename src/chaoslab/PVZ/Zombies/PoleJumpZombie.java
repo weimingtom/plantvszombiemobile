@@ -47,14 +47,14 @@ public class PoleJumpZombie extends Zombie{
 	public void moving(){
 		float moveFactor = mIsSlowed ? 0.5f : 1.0f;
 		if(mHasPole){
-			mPosition.x += 2*mMoveDirection * mMoveSpeed * moveFactor;
+			mPosition.x += 2 * mMoveDirection.x * mMoveSpeed * moveFactor;
 		}else{
-			mPosition.x += mMoveDirection * mMoveSpeed * moveFactor;
+			mPosition.x += mMoveDirection.x * mMoveSpeed * moveFactor;
 		}
 	}
 	//jump along sin arc track
 	public void doJumping(){
-		mPosition.x = mTempPosition.x + mMoveDirection*mJumpRadius*(1.0f - (float)Math.cos(45.0*mJumpCnt*PI/180.0));
+		mPosition.x = mTempPosition.x + mMoveDirection.x *mJumpRadius*(1.0f - (float)Math.cos(45.0*mJumpCnt*PI/180.0));
 		mPosition.y = mTempPosition.y - (float)(mJumpRadius*Math.sin(45.0*mJumpCnt*PI/180.0));
 		if(mJumpCnt == 4){
 			mStatus = GameConstants.ZOMBIE_MOVE;

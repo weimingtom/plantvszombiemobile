@@ -15,10 +15,15 @@ public class AbstractItem extends GameObject{
 	protected boolean bDrop = false;
 	protected boolean bFading = false;
 	protected int     nFadeCnt = 0;
+	protected boolean mIsMagnetting = false;
+	protected Position mDestPosition;
+	private int mMoveFrm;
+	private int mMoveFrmCnt;
 	
 	public AbstractItem(Bitmap[] bitmap){
-		super("",null,0);
+		super("",null, 0);
 		mBitmap = bitmap;
+		setMoveSpeed(40);
 	}
 	public void doAction(){
 		
@@ -77,6 +82,18 @@ public class AbstractItem extends GameObject{
 		if(bFading){
 			nFadeCnt ++;
 		}
+		if (mIsMagnetting){
+			if (mMoveFrmCnt < mMoveFrm){
+				move();
+			}
+			else{
+				mPosition = mDestPosition;
+				mIsMagnetting = false;
+				bFading = true;
+				nFadeCnt = 0;
+			}
+			mMoveFrmCnt ++;
+		}
 	}
 	@Override
 	public Object clone() throws CloneNotSupportedException{
@@ -90,6 +107,20 @@ public class AbstractItem extends GameObject{
 		bFading = false;
 		nFadeCnt = 0;
 		mHealthPoint = 50;
+	}
+	
+	public void setDestPosition(Position destPosition){
+		mDestPosition = destPosition;
+		mMoveFrm	  = (int)(Position.getDistance(mPosition, destPosition) / mMoveSpeed);
+		setMoveDirection(Position.getDirectionVector(mPosition, destPosition));
+	}
+	
+	public void setIsMagnetting(boolean flag){
+		mIsMagnetting = flag;
+		if (flag){
+			mMoveFrmCnt = 0;
+			ItemFactory.addItem(this);
+		}
 	}
 }
 

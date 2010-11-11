@@ -30,6 +30,9 @@ abstract public class GameObject implements Cloneable{
 	protected PlantVsZombieView mView;
 	/** Indicate this object stands by which side(Plant or Zombie or neither?)*/
 	protected	  int		mStand	= GameConstants.STAND_NONE;
+	/** direction angel*/
+	protected Position mMoveDirection = new Position(1, 0);
+	protected double 	mMoveSpeed 	= 0;
 	
 	public GameObject(String name, Particle particles[], int cost){
 		setName(name);
@@ -155,7 +158,35 @@ abstract public class GameObject implements Cloneable{
 		return mCurBitmap;
 	}
 	
-	 /**
+	 public void setMoveAngle(double angle) {
+		mMoveDirection.x = (float)Math.cos(angle);
+		mMoveDirection.y = (float)Math.sin(angle);
+	}
+
+	public void setMoveSpeed(double speed) {
+		mMoveSpeed = speed;
+	}
+	
+	public void setMoveDirection(float x, float y) {
+		mMoveDirection.x = x;
+		mMoveDirection.y = y;
+	}
+	/**
+	 * setMoveDirection
+	 * @param direction: direction vector
+	 */
+	public void setMoveDirection(Position direction) {
+		mMoveDirection = direction;
+	}
+
+
+
+	public void move() {
+		mPosition.x += mMoveSpeed * mMoveDirection.x;
+		mPosition.y += mMoveSpeed * mMoveDirection.y;
+	}
+
+	/**
      * Check collision(assume that both a and b are rectangular area)
      * @param GameObject a
      * @param GameObject b

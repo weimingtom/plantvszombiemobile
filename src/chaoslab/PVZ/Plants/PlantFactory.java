@@ -117,5 +117,12 @@ public class PlantFactory {
 		potatoMine.setWaveBitmaps(bitmaps);
 		return potatoMine;
 	}
-	
+	public static Plant createMagnetShroom(Resources res){
+		Bitmap bitmaps[] = {
+			BitmapFactory.decodeResource(res, R.drawable.magnetshroom_head1),	
+		};
+		MagnetShroom magnet = new MagnetShroom("Magnetshroom", null, 100);
+		magnet.setWaveBitmaps(bitmaps);
+		return magnet;
+	}
 }

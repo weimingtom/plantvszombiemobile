@@ -1,5 +1,9 @@
 package chaoslab.PVZ;
-
+/**
+ * MusicServer
+ * @author Liu.zhenxing
+ * play background music as a service
+ */
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;

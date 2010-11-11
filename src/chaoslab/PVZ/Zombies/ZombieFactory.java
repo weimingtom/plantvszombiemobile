@@ -7,7 +7,26 @@ import android.graphics.Bitmap;
 import chaoslab.PVZ.ZombieItem.*;
 
 public class ZombieFactory {
-	public static Bitmap[] createCommonBitmap(Resources res){
+	private Bitmap commonZombieBitmaps[] = null;
+	private Bitmap charredZombieBitmaps[] = null;
+	
+	private static ZombieFactory mInstance = null;
+	private ZombieFactory(Resources res){
+		init(res);
+	}
+	public static ZombieFactory getInstance(Resources res){
+		if (mInstance == null){
+			return new ZombieFactory(res);
+		}else{
+			return mInstance;
+		}
+	}
+	private void init(Resources res){
+		commonZombieBitmaps  = createCommonBitmap(res);
+		charredZombieBitmaps = createCharredBitmap(res);
+	}
+	
+	private static Bitmap[] createCommonBitmap(Resources res){
 		Bitmap bitmap[] = {
 				BitmapFactory.decodeResource(res, R.drawable.zb_normal_00),
 				BitmapFactory.decodeResource(res, R.drawable.zb_normal_01),
@@ -24,7 +43,7 @@ public class ZombieFactory {
 		};
 		return bitmap;
 	}
-	public static Bitmap[] createCharredBitmap(Resources res){
+	private static Bitmap[] createCharredBitmap(Resources res){
 		Bitmap charredBitmap[] = {
 				BitmapFactory.decodeResource(res, R.drawable.zombie_charred1),
 				BitmapFactory.decodeResource(res, R.drawable.zombie_charred2),
@@ -40,13 +59,12 @@ public class ZombieFactory {
 		};
 		return charredBitmap;
 	}
-	public static Zombie createNormalZombie(Resources res){
-		Bitmap bitmap[] = createCommonBitmap(res);
-		Bitmap charredBitmap[] = createCharredBitmap(res);
-		Zombie zombie =  new Zombie("normal Zombie", null,bitmap, 100);
-		zombie.setCharredBitmap(charredBitmap);
+	public Zombie createNormalZombie(){
+		Zombie zombie =  new Zombie("normal Zombie", null, commonZombieBitmaps, 100);
+		zombie.setCharredBitmap(charredZombieBitmaps);
 		return zombie;
 	}
+	
 	public static Zombie createSoccerZombie(Resources res){
 		Bitmap bitmap[] = createCommonBitmap(res);
 		Bitmap charredBitmap[] = createCharredBitmap(res);
@@ -81,7 +99,7 @@ public class ZombieFactory {
 		Bitmap bitmap[] = createCommonBitmap(res);
 		Bitmap charredBitmap[] = createCharredBitmap(res);
 		DeffensiveItem item = ItemFactory.createConeHelmetItem(res);
-		RoadBlockZombie zombie =  new RoadBlockZombie("cone Zombie", null,bitmap, 125,item);
+		Zombie zombie =  new RoadBlockZombie("cone Zombie", null,bitmap, 125,item);
 		zombie.setCharredBitmap(charredBitmap);
 		return zombie;
 	}

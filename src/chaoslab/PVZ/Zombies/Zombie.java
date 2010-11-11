@@ -28,11 +28,8 @@ public class Zombie extends GameObject implements Harmable{
 	
 	protected int 		mEventFrame		= 0; 
 	protected int 		mEatInterval 	= 3; //eat once per 10 frames as default
-	protected float 	mMoveSpeed		= 5.0f;   //per frame
 	protected boolean 	mIsSlowed 		= false;
 	protected int		mAttackPower	= 8;
-	protected int		mMoveDirection	= -1;  //1:right, -1:left , 0:static
-	
 	//keep the frame number before the break-out event
 	protected int       mPreviousFrame = 0;
 	protected int       mStatus = GameConstants.ZOMBIE_MOVE;
@@ -65,6 +62,8 @@ public class Zombie extends GameObject implements Harmable{
 		mStatus = GameConstants.ZOMBIE_MOVE;
 		mPreStatus = GameConstants.ZOMBIE_MOVE;
 		mEventFrame = MIN_MOVE - 1;
+		mMoveSpeed = 5;
+		setMoveDirection(-1, 0);
  	}
 	/*
 	 * meaningless
@@ -134,7 +133,7 @@ public class Zombie extends GameObject implements Harmable{
 	 */
 	public void moving(){
 		float moveFactor = mIsSlowed ? 0.5f : 1.0f;
-		mPosition.x += mMoveDirection * mMoveSpeed * moveFactor;
+		mPosition.x += mMoveDirection.x * mMoveSpeed * moveFactor;
 	}
 	@Override
 	public void update(){
@@ -298,8 +297,9 @@ public class Zombie extends GameObject implements Harmable{
 		mIsInvincible = false;
 		mIsCharred	=   false;
 		mCharredBitmapIndex = 0;
-		mMoveDirection = -1;
+		setMoveDirection(-1, 0);
 		mPreviousFrame = 0;
+		mMoveSpeed = 5.0f;
 		mPreStatus = GameConstants.ZOMBIE_MOVE;
 		if(mItem != null){
 			mItem = (AbstractItem)mItem.clone();
@@ -318,6 +318,14 @@ public class Zombie extends GameObject implements Harmable{
 			mItem.droped(mPosition);
 		}
 		mItem = null;
+	}
+	
+	public AbstractItem getItem(){
+		return mItem;
+	}
+	
+	public void setItem(AbstractItem item){
+		mItem = item;
 	}
 	
 }
