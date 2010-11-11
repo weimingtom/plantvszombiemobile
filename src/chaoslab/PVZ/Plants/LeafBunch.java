@@ -9,7 +9,6 @@ import chaoslab.PVZ.Zombies.BungeeZombie;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class LeafBunch extends Plant {
-
 	/**
 	 * the leafbunch can protect 3 * 3 cells
 	 */

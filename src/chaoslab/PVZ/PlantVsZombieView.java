@@ -106,6 +106,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             		200, 0, 800, 600);
             mBowlingStripeImage = BitmapFactory.decodeResource(res, R.drawable.bowlingstripe);
             mSeedBarImage		= BitmapFactory.decodeResource(res, R.drawable.seedbar);
+            InitSeedCards(res);
             init();
           /*  Zombie zombie = ZombieFactory.createNormalZombie(res);
             zombie.setPosition(500, (int)(PlantCells.ORIGIN.y + 2 * PlantCells.CELL_HEIGHT - zombie.getHeight()));
@@ -117,15 +118,13 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
          * initilize game state, when needs to restart, call this to restore 
          * the initial state.
          */
-        public void init(){
+        public synchronized void init(){
         	 Resources res		= mContext.getResources();
         	 mPlants 			= new PlantCells();
              mZombies 			= new ArrayList<Zombie>();
              mProjectileObjects = new ArrayList<ProjectileObject>();
              mLostItems         = new ArrayList<AbstractItem>();
-             
              InitPlants(res);
-             InitSeedCards(res);
              ItemFactory.setView(PlantVsZombieView.this);
              mState				= STATE_RUNNING;
              mSunshines			= 1500;
@@ -235,7 +234,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
          * Draws the plants, zombies, etc. to the provided
          * Canvas.
          */
-        public void doDraw(Canvas canvas){
+        public synchronized void doDraw(Canvas canvas){
         	// Draw the background image. Operations on the Canvas accumulate
             // so this is like clearing the screen.
             canvas.drawBitmap(mBackgroundImage, null, new Rect(0, 0, mCanvasWidth, mCanvasHeight), null);
@@ -310,7 +309,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
          * Update all valid Objects,including zombies, plants, projectile objects
          * and animations.
          */
-        public void update(){
+        public synchronized void update(){
         	int ateBrainNum = 0;
         	//update plants
         	for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i){

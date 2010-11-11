@@ -2,7 +2,6 @@ package chaoslab.PVZ.ZombieItem;
 
 import chaoslab.PVZ.Plants.Plant;
 import android.graphics.Bitmap;
-import chaoslab.PVZ.Plants.Plant;
 
 public class LadderItem extends AbstractItem {
 	protected Plant mTarget;

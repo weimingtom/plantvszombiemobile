@@ -17,15 +17,13 @@ import chaoslab.PVZ.Position;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class Chomper extends Plant{
-/*
-	private static final int CHOMPER_STATE_NORMAL 		= 0;
-	private static final int CHOMPER_STATE_ATTACK 		= 1;*/
+
 	private static final int CHOMPER_STATE_DIGEST 		= PLANT_STATE_SPECIAL_ACTION;
 	private static final int CHOMPER_DIGEST_FRAME 		= 100;
 	private static final int ATTACK_FRAME 				= 10;
 	
-	private static final float ATTACK_RANGE	=  PlantCells.CELL_WIDTH * 0.5f;
-	private int     mDigestFrmCount   = 0;
+	private static final float ATTACK_RANGE		=  PlantCells.CELL_WIDTH;
+	private int     mDigestFrmCount   			= 0;
 	private Bitmap	mFoodBitmap;
 	public Chomper(String name, Particle[] particles, int cost) {
 		super(name, null, cost);
@@ -44,7 +42,6 @@ public class Chomper extends Plant{
 						&& PlantCells.getRow(zombiePosition) == PlantCells.getRow(mPosition)
 						&& zombiePosition.x >= mPosition.x + mWidth * 0.5f
 						&& zombiePosition.x <= mPosition.x + mWidth + ATTACK_RANGE
-						//&& PlantCells.getCol(zombiePosition)	== PlantCells.getCol(mPosition)	
 						){
 					mFoodBitmap = Bitmap.createBitmap(zombies.get(i).getBitmap());
 					mState = PLANT_STATE_ATTACK;

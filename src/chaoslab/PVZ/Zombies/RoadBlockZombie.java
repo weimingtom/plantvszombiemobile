@@ -35,6 +35,7 @@ public class RoadBlockZombie extends Zombie{
 			if(mItem.getHealthPoint() <= 0){
 				//item may die after this disaster
 				dropItem();
+				
 			}
 		}else{
 			//else, suffer it yourself

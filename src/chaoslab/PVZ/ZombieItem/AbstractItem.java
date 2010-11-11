@@ -48,7 +48,7 @@ public class AbstractItem extends GameObject{
 		  if(mHealthPoint >= 0){
 			  return 0;
 		  }else{
-			  return mHealthPoint;
+			  return -mHealthPoint;
 		  }
 		}else{
 			return delta;
@@ -71,8 +71,7 @@ public class AbstractItem extends GameObject{
 	@Override
 	public void update(){
 		//TODO: maybe change picture according to health point here
-		if(nFadeCnt >= 10)
-		{
+		if(nFadeCnt >= 10){
 			onDie();
 		}
 		if(bFading){
