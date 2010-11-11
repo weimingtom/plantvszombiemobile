@@ -1,6 +1,7 @@
 package chaoslab.PVZ.Zombies;
 
 import android.graphics.Bitmap;
+
 import java.lang.Math;
 import chaoslab.PVZ.Plants.Plant;
 import chaoslab.PVZ.ZombieItem.AbstractItem;
@@ -10,7 +11,6 @@ import chaoslab.PVZ.Position;
 
 public class PoleJumpZombie extends Zombie{
 	protected boolean mHasPole = true; //has it gotten a jumping pole or not
-	protected  AbstractItem mItem;
 	protected int     MIN_JUMP;
 	protected int     MAX_JUMP;
 	protected int     mJumpCnt = 0;
@@ -85,6 +85,7 @@ public class PoleJumpZombie extends Zombie{
 		switch(mPreStatus){
 		case GameConstants.ZOMBIE_JUMP:
 			mIsInvincible = false;
+			dropItem();
 			break;
 			default:
 				break;
@@ -92,5 +93,10 @@ public class PoleJumpZombie extends Zombie{
 	}
 	public void Jump(){
 		mStatus = GameConstants.ZOMBIE_JUMP;
+	}
+	@Override
+	public void onDie(){
+		super.onDie();
+		dropItem();
 	}
 }

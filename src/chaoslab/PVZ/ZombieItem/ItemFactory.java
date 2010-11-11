@@ -47,7 +47,7 @@ public class ItemFactory {
 	public static PoleItem createPoleItem(Resources res){
 		Bitmap bitmap[] = new Bitmap[1];
 		for(int i=0;i<1;++i){
-			bitmap[i] = BitmapFactory.decodeResource(res, R.drawable.zombie_football_helmet2);
+			bitmap[i] = BitmapFactory.decodeResource(res, R.drawable.zombie_polevaulter_pole);
 		}
 		return new PoleItem(bitmap);
 	}

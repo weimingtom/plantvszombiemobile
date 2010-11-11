@@ -19,6 +19,7 @@ public class GameConstants {
 	public static final int ZOMBIE_TRANSIT = 10;	//fun bungee zombie
 	public static final int ZOMBIE_BACKWARD = 11;
 	public static final int ZOMBIE_CHARRED	= 12;
+	public static final int ZOMBIE_PRE_SEEK = 13;		//fprepare for seek
 	/*
 	 * there are some other statuses so that I need another 10 number 
 	 * to keep as reserved field.

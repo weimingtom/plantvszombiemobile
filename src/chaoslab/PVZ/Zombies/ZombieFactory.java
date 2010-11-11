@@ -56,10 +56,10 @@ public class ZombieFactory {
 		return zombie;
 	}
 	public static Zombie createBungeeZombie(Resources res){
-		Bitmap bitmap[] = new Bitmap[10];
-		for(int i=0;i<10;++i){
-			bitmap[i] = BitmapFactory.decodeResource(res, R.drawable.zombie_bungi_head);
-		}
+		Bitmap bitmap[] = new Bitmap[3];
+		bitmap[0] = BitmapFactory.decodeResource(res, R.drawable.zombie_bungi_head);
+		bitmap[1] = BitmapFactory.decodeResource(res, R.drawable.bungeecord);
+		bitmap[2] = BitmapFactory.decodeResource(res, R.drawable.bungeetarget);
 		return new BungeeZombie("bungee Zombie", null,bitmap, 150);
 	}
 	public static Zombie createMiniZombie(Resources res){

@@ -85,7 +85,7 @@ public class Zombie extends GameObject implements Harmable{
 	 * seek for the target
 	 */
 	public void seek(Plant target){
-		mStatus = GameConstants.ZOMBIE_SEEK;
+		mStatus = GameConstants.ZOMBIE_PRE_SEEK;
 		mTarget = target;
 	}
 	public void eat(Plant target){
@@ -311,6 +311,13 @@ public class Zombie extends GameObject implements Harmable{
 		if(mItem != null){
 			mItem.moveTo(mPosition);
 		}
+	}
+
+	public void dropItem(){
+		if(mItem != null){
+			mItem.droped(mPosition);
+		}
+		mItem = null;
 	}
 	
 }

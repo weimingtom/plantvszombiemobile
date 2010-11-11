@@ -18,15 +18,6 @@ public class RoadBlockZombie extends Zombie{
 		MAX_MOVE = 9;
 		mMaxBitmap = 12;
 	}
-	/*
-	 * only defensive item can be dropped
-	 */
-	public void dropItem(){
-		if(mItem != null){
-			mItem.droped(mPosition);
-		}
-		mItem = null;
-	}
 	@Override
 	public void onHarmed( int harmPoint ){
 		if(mItem != null){
