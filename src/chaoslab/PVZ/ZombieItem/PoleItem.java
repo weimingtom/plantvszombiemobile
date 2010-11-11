@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import chaoslab.PVZ.Position;
 
 public class PoleItem extends AbstractItem{
 	public PoleItem(Bitmap[] bitmap){
@@ -20,9 +21,14 @@ public class PoleItem extends AbstractItem{
 			mCurIndex = 0;
 		}
 		Matrix matrix = new Matrix();
-		matrix.postTranslate((mPosition.x * scaleX), (mPosition.y * scaleY));
-		matrix.postRotate(90);
+		Position pos = new Position(mPosition);
+		if(!bDrop){
+			pos.y = mPosition.y - mBitmap[mCurIndex].getWidth();
+			matrix.postRotate(90);	
+		}else{		
+		}
 		matrix.postScale(scaleX,scaleY);
+		matrix.postTranslate(pos.x* scaleX, pos.y * scaleY);
 		canvas.drawBitmap(mBitmap[mCurIndex],matrix, paint);	
 	}
 }

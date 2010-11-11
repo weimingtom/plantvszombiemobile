@@ -66,6 +66,14 @@ public class PoleJumpZombie extends Zombie{
 		if(GameConstants.ZOMBIE_JUMP == mStatus){
 			mJumpCnt ++;
 			doJumping();
+			if(mItem != null){
+				mItem.moveTo(new Position(mTempPosition.x,mTempPosition.y+mBitmap[0].getHeight()));
+			}
+		}else{
+			if(mItem != null){
+				mItem.moveTo(new Position(mPosition.x,mPosition.y+mBitmap[0].getHeight()));
+				mItem.update();
+			}
 		}
 	}
 	@Override
@@ -98,5 +106,13 @@ public class PoleJumpZombie extends Zombie{
 	public void onDie(){
 		super.onDie();
 		dropItem();
+	}
+	@Override
+	public void dropItem(){
+		if(mItem != null){
+			Position pos = new Position(mPosition.x,mPosition.y + mBitmap[0].getHeight());
+			mItem.droped(pos);
+		}
+		mItem = null;
 	}
 }
