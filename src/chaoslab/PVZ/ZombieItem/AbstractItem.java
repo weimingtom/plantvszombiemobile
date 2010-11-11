@@ -11,7 +11,7 @@ public class AbstractItem extends GameObject{
 	protected boolean bmagnetized = false;
 	protected boolean canDef = false;
 	protected Bitmap  mBitmap[];
-	protected int     mCurBitmap = 0;
+	protected int     mCurIndex = 0;
 	protected boolean bDrop = false;
 	protected boolean bFading = false;
 	protected int     nFadeCnt = 0;
@@ -59,10 +59,10 @@ public class AbstractItem extends GameObject{
 		if(mBitmap ==null){
 			return;
 		}
-		if(mCurBitmap >= mBitmap.length){
-			mCurBitmap = 0;
+		if(mCurIndex >= mBitmap.length){
+			mCurIndex = 0;
 		}
-		canvas.drawBitmap(mBitmap[mCurBitmap], null, 
+		canvas.drawBitmap(mBitmap[mCurIndex], null, 
 				new Rect((int)(mPosition.x * scaleX),
 						(int)(mPosition.y * scaleY),
 						(int)((mPosition.x + mBitmap[0].getWidth()) * scaleX),
@@ -85,7 +85,7 @@ public class AbstractItem extends GameObject{
 		return obj;
 	}
 	public void init(){
-		mCurBitmap = 0;
+		mCurIndex = 0;
 		bDrop = false;
 		bFading = false;
 		nFadeCnt = 0;
