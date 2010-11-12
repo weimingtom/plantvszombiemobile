@@ -7,17 +7,22 @@ package chaoslab.PVZ.Plants;
 
 import java.util.ArrayList;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 
 import chaoslab.PVZ.Particle;
 import chaoslab.PVZ.Position;
+import chaoslab.PVZ.R;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class Chomper extends Plant{
-
+	private static Bitmap[] mWaveBitmaps;
+	private static Bitmap[] mAttackBitmap;
+	
 	private static final int CHOMPER_STATE_DIGEST 		= PLANT_STATE_SPECIAL_ACTION;
 	private static final int CHOMPER_DIGEST_FRAME 		= 100;
 	private static final int ATTACK_FRAME 				= 10;
@@ -25,6 +30,7 @@ public class Chomper extends Plant{
 	private static final float ATTACK_RANGE		=  PlantCells.CELL_WIDTH;
 	private int     mDigestFrmCount   			= 0;
 	private Bitmap	mFoodBitmap;
+
 	public Chomper(String name, Particle[] particles, int cost) {
 		super(name, null, cost);
 		mAttackFrame = ATTACK_FRAME;
@@ -59,7 +65,7 @@ public class Chomper extends Plant{
 		super.update();
 		switch (mState){
 		case PLANT_STATE_WAVE:
-			updateWaveBitmap();
+			updateWaveBitmap(mWaveBitmaps);
 			break;
 		case CHOMPER_STATE_DIGEST:
 			mDigestFrmCount++;
@@ -70,7 +76,7 @@ public class Chomper extends Plant{
 			}
 			break;
 		case PLANT_STATE_ATTACK:
-			updateAttackBitmap();
+			updateAttackBitmap(mAttackBitmap);
 			if (mAttackFrmCount == 0)
 				mState = CHOMPER_STATE_DIGEST;
 			break;
@@ -87,6 +93,12 @@ public class Chomper extends Plant{
 		}
 		super.doDraw(canvas, scaleX, scaleY, paint);
 		
+	}
+	
+	public static void initBitmaps(Resources res){
+		mWaveBitmaps = new Bitmap[]{
+				BitmapFactory.decodeResource(res, R.drawable.chomper_topjaw),
+		};
 	}
 
 }

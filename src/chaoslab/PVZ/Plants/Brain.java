@@ -2,14 +2,17 @@ package chaoslab.PVZ.Plants;
 
 import java.util.ArrayList;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import chaoslab.PVZ.Particle;
+import chaoslab.PVZ.R;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class Brain extends Plant {
-
-	public Brain(Bitmap bitmap, int cost) {
-		super("BRAIN", null, cost);
-		mCurBitmap	 = bitmap;
+	private static Bitmap[] mWaveBitmaps;
+	public Brain(String name,  Particle[] particles, int cost) {
+		super(name, null, cost);
 		mHealthPoint = 100;
 		mWidth 		 = 60;
 		mHeight		 = 80;
@@ -21,4 +24,14 @@ public class Brain extends Plant {
 		
 	}
 	
+	public static void initBitmaps(Resources res){
+		mWaveBitmaps = new Bitmap[]{
+				BitmapFactory.decodeResource(res, R.drawable.brain),
+		};
+	}
+	
+	public void update(){
+		super.update();
+		updateWaveBitmap(mWaveBitmaps);
+	}
 }

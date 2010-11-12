@@ -101,6 +101,8 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             mState	 = STATE_RUNNING;
             //Set Images
             Resources res	 	= context.getResources();
+            PlantFactory.getInstance().init(res);
+            ZombieFactory.getInstance().setResources(res);
             mBackgroundImage 	= Bitmap.createBitmap(
             		BitmapFactory.decodeResource(res, R.drawable.background), 
             		200, 0, 800, 600);
@@ -122,50 +124,48 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
          * the initial state.
          */
         public synchronized void init(){
-        	 Resources res		= mContext.getResources();
         	 mPlants 			= new PlantCells();
              mZombies 			= new ArrayList<Zombie>();
              mProjectileObjects = new ArrayList<ProjectileObject>();
              mLostItems         = new ArrayList<AbstractItem>();
-             InitPlants(res);
+             InitPlants();
              ItemFactory.setView(PlantVsZombieView.this);
              mState				= STATE_RUNNING;
              mSunshines			= 1500;
-             
         }
         
         /**
          * Initialize plants according to current stage.
          */
-        public void InitPlants(Resources res){
+        public void InitPlants(){
         	for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i)
         		for (int j = 0; j < PlantCells.MAX_COL_NUM; ++j){
         			Plant plant = null;
         			switch (j){
         			case 0:
-        				plant = PlantFactory.createBrain(res);
+        				plant = PlantFactory.getInstance().createBrain();
         				break;
         			case 1:
-        				plant = PlantFactory.createSnowPeaShooter(res);
+        				plant = PlantFactory.getInstance().createSnowPeaShooter();
         				break;
         			case 2:
         				if ( i== 2){
-        					plant = PlantFactory.createMagnetShroom(res);
+        					plant = PlantFactory.getInstance().createMagnetShroom();
         				}else{
-        					plant = PlantFactory.createPotatoMine(res);
+        					plant = PlantFactory.getInstance().createPotatoMine();
         				}
         				break;
         			case 4:
         				if (i == 3){
-        					plant = PlantFactory.createTorchwood(res);
+        					plant = PlantFactory.getInstance().createTorchwood();
         				}else{
         					//plant = PlantFactory.createPotatoMine(res);
-        					plant = PlantFactory.createChomper(res);
+        					plant = PlantFactory.getInstance().createChomper();
         				}
         				break;
         			default:
         				//plant = PlantFactory.createPotatoMine(res);
-        				plant = PlantFactory.createSunFlower(res);
+        				plant = PlantFactory.getInstance().createSunFlower();
         			}
         			
         			if (plant != null){
@@ -193,7 +193,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         			BitmapFactory.decodeResource(res, R.drawable.zombie_cone1),
         	};
         	Zombie seedZombies[] = {
-        			ZombieFactory.getInstance(res).createNormalZombie(),
+        			ZombieFactory.getInstance().createNormalZombie(),
         			ZombieFactory.createBungeeZombie(res),
         			ZombieFactory.createSoccerZombie(res),
         			ZombieFactory.createPoleVaultZombie(res),

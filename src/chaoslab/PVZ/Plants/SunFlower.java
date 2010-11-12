@@ -2,11 +2,16 @@ package chaoslab.PVZ.Plants;
 
 import java.util.ArrayList;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import chaoslab.PVZ.Particle;
+import chaoslab.PVZ.R;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class SunFlower extends Plant{
-	
+	private static Bitmap[] 	mWaveBitmaps;
 	public SunFlower(String name, Particle particles[], int cost) {
 		super(name, particles, cost);
 	}
@@ -27,6 +32,20 @@ public class SunFlower extends Plant{
 	
 	public void update(){
 		super.update();
-		updateWaveBitmap();
+		updateWaveBitmap(mWaveBitmaps);
+	}
+
+	public static void initBitmaps(Resources res) {
+		mWaveBitmaps = new Bitmap[] {
+				BitmapFactory.decodeResource(res, R.drawable.sunflower00),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower01),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower02),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower03),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower04),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower05),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower06),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower07),
+				BitmapFactory.decodeResource(res, R.drawable.sunflower08),
+			};
 	}
 }

@@ -2,6 +2,10 @@ package chaoslab.PVZ.Plants;
 
 import java.util.ArrayList;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import chaoslab.PVZ.R;
 
 import chaoslab.PVZ.GameObject;
@@ -11,7 +15,7 @@ import chaoslab.PVZ.SoundManager;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class PotatoMine extends Plant{
-
+	private static Bitmap[] 	mWaveBitmaps;
 	public static final int POTATO_MINE_POWER = 500;
 	//private static final int ATTACK_RANGE = PlantCells.CELL_WIDTH;
 	
@@ -60,7 +64,13 @@ public class PotatoMine extends Plant{
 	@Override
 	public void update(){
 		super.update();
-		updateWaveBitmap();
+		updateWaveBitmap(mWaveBitmaps);
+	}
+	
+	public static void initBitmaps(Resources res){
+		mWaveBitmaps = new Bitmap[]{
+				BitmapFactory.decodeResource(res, R.drawable.potatomine_body),
+		};
 	}
 
 }

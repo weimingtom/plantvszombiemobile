@@ -27,8 +27,8 @@ abstract public class Plant extends GameObject implements Harmable{
 	protected int 	curAttackImgNum			= 0;
 	protected int	mAttackFrmCount	  = 0;
 	
-	protected Bitmap[] 	mWaveBitmaps;
-	protected Bitmap[]	mAttackBitmaps;
+	protected static Bitmap[] 	mWaveBitmaps;
+	//protected static Bitmap[]	mAttackBitmaps;
 
 	protected static final int WAVE_INTERVAL = 2;
 	public Plant(String name, Particle particles[], int cost) {
@@ -52,20 +52,20 @@ abstract public class Plant extends GameObject implements Harmable{
 		}
 	}
 	
-	public void updateWaveBitmap(){
-		if (mWaveBitmaps != null){
+	public void updateWaveBitmap(Bitmap bitmaps[]){
+		if (bitmaps != null){
 			if (mElapsedFrame % WAVE_INTERVAL == 0){
 				curWaveImgNum ++;
-				if (curWaveImgNum >= mWaveBitmaps.length){
+				if (curWaveImgNum >= bitmaps.length){
 					curWaveImgNum = 0;
 				}
 			}
-			mCurBitmap = mWaveBitmaps[curWaveImgNum];
+			mCurBitmap = bitmaps[curWaveImgNum];
 		}
 	}
 	
-	public void updateAttackBitmap(){
-		if (mAttackBitmaps != null){
+	public void updateAttackBitmap(Bitmap bitmaps[]){
+		if (bitmaps != null){
 			mAttackFrmCount++;
 			/*
 			 * update img per frame as default, or here
@@ -77,10 +77,10 @@ abstract public class Plant extends GameObject implements Harmable{
 				mAttackFrmCount = 0;
 				curAttackImgNum = 0;
 			}
-			mCurBitmap = mAttackBitmaps[curAttackImgNum];
+			mCurBitmap = bitmaps[curAttackImgNum];
 		}
 	}
-	
+	/*
 	public void setWaveBitmaps(Bitmap[] bitmaps){
 		mWaveBitmaps = bitmaps;
 	}
@@ -92,7 +92,7 @@ abstract public class Plant extends GameObject implements Harmable{
 		else
 			mAttackFrame = 0;
 	}
-	
+	*/
 	public boolean isDefCreature(){
 		return true;
 	}
@@ -101,12 +101,13 @@ abstract public class Plant extends GameObject implements Harmable{
 	}
 	
 	public Bitmap getBitmap(){
-		if(mWaveBitmaps != null)
+		return mCurBitmap;
+		/*if (mWaveBitmaps != null)
 		{
 			return mWaveBitmaps[0];
 		}else{
 			return null;
-		}
+		}*/
 	}
 	
 	@Override
@@ -125,5 +126,6 @@ abstract public class Plant extends GameObject implements Harmable{
 						(int)((cellPosY + PlantCells.CELL_HEIGHT) * scaleY)), paint);
 		
 	}
+
 }
 

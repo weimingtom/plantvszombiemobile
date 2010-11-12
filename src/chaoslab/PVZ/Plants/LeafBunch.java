@@ -2,17 +2,25 @@ package chaoslab.PVZ.Plants;
 
 import java.util.ArrayList;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import chaoslab.PVZ.GameConstants;
 import chaoslab.PVZ.Particle;
 import chaoslab.PVZ.Position;
+import chaoslab.PVZ.R;
 import chaoslab.PVZ.Zombies.BungeeZombie;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class LeafBunch extends Plant {
+	private static Bitmap[] 	mWaveBitmaps;
+	private static Bitmap[] 	mAttackBitmaps;
 	/**
 	 * the leafbunch can protect 3 * 3 cells
 	 */
 	private static final int PROTECT_RANGE = 1;
+
 	
 	public LeafBunch(String name, Particle[] particles, int cost) {
 		super(name, particles, cost);
@@ -59,14 +67,20 @@ public class LeafBunch extends Plant {
 		switch (mState){
 		case PLANT_STATE_WAVE:
 			if (mWaveBitmaps != null){
-				updateWaveBitmap();
+				updateWaveBitmap(mWaveBitmaps);
 			}
 			break;
 		case PLANT_STATE_ATTACK:
-			updateAttackBitmap();
+			updateAttackBitmap(mAttackBitmaps);
 			if (mAttackFrmCount == 0)
 				mState = PLANT_STATE_WAVE;
 			break;
 		}
+	}
+	
+	public static void initBitmaps(Resources res){
+		mWaveBitmaps = new Bitmap[]{
+				BitmapFactory.decodeResource(res, R.drawable.leafbunch1),
+		};
 	}
 }

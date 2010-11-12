@@ -7,26 +7,30 @@ import android.graphics.Bitmap;
 import chaoslab.PVZ.ZombieItem.*;
 
 public class ZombieFactory {
+	private Resources mRes = null;
 	private Bitmap commonZombieBitmaps[] = null;
 	private Bitmap charredZombieBitmaps[] = null;
 	
-	private static ZombieFactory mInstance = null;
-	private ZombieFactory(Resources res){
-		init(res);
+	private static ZombieFactory mInstance = new ZombieFactory();
+	private ZombieFactory(){
+		init();
 	}
-	public static ZombieFactory getInstance(Resources res){
-		if (mInstance == null){
-			return new ZombieFactory(res);
-		}else{
+	public static synchronized ZombieFactory getInstance(){
 			return mInstance;
-		}
 	}
-	private void init(Resources res){
-		commonZombieBitmaps  = createCommonBitmap(res);
-		charredZombieBitmaps = createCharredBitmap(res);
+	
+	public void setResources(Resources res){
+		mRes = res;
+		init();
+	}
+	private void init(){
+		commonZombieBitmaps  = createCommonBitmap(mRes);
+		charredZombieBitmaps = createCharredBitmap(mRes);
 	}
 	
 	private static Bitmap[] createCommonBitmap(Resources res){
+		if (res == null) 
+			return null;
 		Bitmap bitmap[] = {
 				BitmapFactory.decodeResource(res, R.drawable.zb_normal_00),
 				BitmapFactory.decodeResource(res, R.drawable.zb_normal_01),
@@ -44,6 +48,8 @@ public class ZombieFactory {
 		return bitmap;
 	}
 	private static Bitmap[] createCharredBitmap(Resources res){
+		if (res == null)
+			return null;
 		Bitmap charredBitmap[] = {
 				BitmapFactory.decodeResource(res, R.drawable.zombie_charred1),
 				BitmapFactory.decodeResource(res, R.drawable.zombie_charred2),

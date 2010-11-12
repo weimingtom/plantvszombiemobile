@@ -1,22 +1,18 @@
 package chaoslab.PVZ.Plants;
 
 import chaoslab.PVZ.Particle;
+import chaoslab.PVZ.R;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 public class WavingPeaShooter extends PeaShooter {
+	private static Bitmap[] 	mWaveBitmaps;
+	private static Bitmap[] 	mAttackBitmaps;
 	public WavingPeaShooter(String name, Particle[] particles, int cost, int type) {
 		super(name, particles, cost, type);
 		
 	}
-	
-	public void setWaveBitmaps(Bitmap[] bitmaps){
-		mWaveBitmaps = bitmaps;
-	}
-	
-	public void setAttackBitmaps(Bitmap[] bitmaps){
-		mAttackBitmaps = bitmaps;
-	}
-	
 	/*public void setSpecialAcationBitmaps(Bitmap[] bitmaps){
 		mSpecialActionBitmaps = bitmaps;
 	}*/
@@ -24,7 +20,7 @@ public class WavingPeaShooter extends PeaShooter {
 	@Override
 	public void update(){
 		super.update();
-		updateWaveBitmap();
+		updateWaveBitmap(mWaveBitmaps);
 		if (mState == Plant.PLANT_STATE_WAVE){
 			mCurBitmap = mWaveBitmaps[curWaveImgNum];
 		}else {
@@ -35,5 +31,19 @@ public class WavingPeaShooter extends PeaShooter {
 			}
 		}
 		
+	}
+	
+	public static void initBitmaps(Resources res){
+		mWaveBitmaps = new Bitmap[]{
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_01),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_02),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_03),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_04),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_05),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_06),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_07),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_08),
+				BitmapFactory.decodeResource(res, R.drawable.peashooter_09),
+		};
 	}
 }

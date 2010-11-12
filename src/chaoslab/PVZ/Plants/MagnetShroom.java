@@ -2,13 +2,18 @@ package chaoslab.PVZ.Plants;
 
 import java.util.ArrayList;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import chaoslab.PVZ.Particle;
 import chaoslab.PVZ.Position;
+import chaoslab.PVZ.R;
 import chaoslab.PVZ.ZombieItem.AbstractItem;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class MagnetShroom extends Plant {
-
+	private static Bitmap[] 	mWaveBitmaps;
 	private int ATTACK_RANGE = 3;
 	public MagnetShroom(String name, Particle[] particles, int cost) {
 		super(name, particles, cost);
@@ -45,7 +50,13 @@ public class MagnetShroom extends Plant {
 	@Override
 	public void update(){
 		super.update();
-		updateWaveBitmap();
+		updateWaveBitmap(mWaveBitmaps);
+	}
+
+	public static void initBitmaps(Resources res){
+		mWaveBitmaps = new Bitmap[]{
+				BitmapFactory.decodeResource(res, R.drawable.magnetshroom_head1),
+		};
 	}
 
 }
