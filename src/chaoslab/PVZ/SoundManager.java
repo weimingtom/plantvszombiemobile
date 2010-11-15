@@ -105,23 +105,6 @@ public class SoundManager {
 	
 	
 	/**
-	 * Stop play all streams.
-	 */
-	public void stopAll()
-	{
-		//It's a pity that SoundPool doesn't have a stopAll method.
-		//I'll find a better way to deal with this problem.
-		
-		//One method is to keep a stream id list, then stop them one by one.
-		//But this method has the disadvantage that the list will keep
-		//growing, and you have no way to know which stream has been stopped
-		//playing(stopped by user, or just completed playing).
-		
-		//The best solution is that SoundPool provides an interface to 
-		//query all active streams. But no such method is found.
-	}
-	
-	/**
 	 * Pause all currently active streams.
 	 */
 	public void pauseAll()
