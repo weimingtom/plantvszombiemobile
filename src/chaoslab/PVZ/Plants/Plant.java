@@ -27,7 +27,7 @@ abstract public class Plant extends GameObject implements Harmable{
 	protected int 	curAttackImgNum			= 0;
 	protected int	mAttackFrmCount	  = 0;
 	
-	protected static Bitmap[] 	mWaveBitmaps;
+	//protected static Bitmap[] 	mWaveBitmaps;
 	//protected static Bitmap[]	mAttackBitmaps;
 
 	protected static final int WAVE_INTERVAL = 2;
@@ -112,6 +112,7 @@ abstract public class Plant extends GameObject implements Harmable{
 	
 	@Override
 	public void doDraw(Canvas canvas, float scaleX, float scaleY, Paint paint){
+		
 		if (mCurBitmap == null)
 			return;
 		/*

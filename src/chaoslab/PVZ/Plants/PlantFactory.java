@@ -31,13 +31,6 @@ public class PlantFactory {
 		WavingPeaShooter.initBitmaps(res);
 	}
 	
-	public Bitmap[] createChomperBitmaps(Resources res){
-		Bitmap bitmaps[] = {
-				BitmapFactory.decodeResource(res, R.drawable.chomper_topjaw),
-			};
-		return bitmaps;
-	} 
-	
 	public Plant createSunFlower(){
 		return new SunFlower("SUNFLOWER", null, 50);
 	}

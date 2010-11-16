@@ -41,8 +41,8 @@ public class PeaShooter extends Plant {
 				isAttacked = true;
 				mAttackFrame = 0;
 				
-				if (mView != null){
-					ProjectilePea projectilePea = (ProjectilePea)ProjectileFactory.createProjectilePea(mView.getResources());
+				if (mGameEventListener != null){
+					ProjectilePea projectilePea = (ProjectilePea)ProjectileFactory.getInstance().createProjectilePea();
 					if (mType == PEA_SHOOTER_TYPE_SNOW){
 						projectilePea.setType(ProjectilePea.PEA_TYPE_SNOW);
 					}
@@ -52,7 +52,7 @@ public class PeaShooter extends Plant {
 					}else{
 						projectilePea.setMoveAngle(Math.PI);
 					}
-					mView.addProjectileObject(projectilePea);
+					mGameEventListener.onProjectileObjectCreated(projectilePea);
 					
 				}
 			}

@@ -42,7 +42,7 @@ public class ItemFactory {
 		for(int i=0;i<1;++i){
 			bitmap[i] = BitmapFactory.decodeResource(res, R.drawable.zombie_football_helmet2);
 		}
-		return new DeffensiveItem(bitmap,10,true);
+		return new DeffensiveItem(bitmap,100,true);
 	}
 	public static PoleItem createPoleItem(Resources res){
 		Bitmap bitmap[] = new Bitmap[1];

@@ -10,6 +10,7 @@ import chaoslab.PVZ.ZombieItem.AbstractItem;
 import chaoslab.PVZ.Plants.Plant;
 import chaoslab.PVZ.Plants.PlantCells;
 import chaoslab.PVZ.Plants.PlantFactory;
+import chaoslab.PVZ.ProjectileObjects.ProjectileFactory;
 import chaoslab.PVZ.ProjectileObjects.ProjectileObject;
 import chaoslab.PVZ.Zombies.Zombie;
 import chaoslab.PVZ.Zombies.ZombieFactory;
@@ -37,9 +38,10 @@ import chaoslab.PVZ.ZombieItem.ItemFactory;
 /**
  * View of Plant VS Zombie.Help zombies to EAT all plants!!
  */
-public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Callback{
+public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Callback, GameEventListener{
 	
-	class PlantVsZombieThread extends Thread{
+	class PlantVsZombieThread extends Thread implements GameEventListener{
+		
 		 /*
          * State-tracking constants
          */
@@ -50,11 +52,15 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 		
     	/** equals to the last column of the plant cell*/
      	public static final int STRIP_COLUMN = 6;
+     	public static final int MAX_SUN_SHINE = 9999;
+    	public static final int MIN_SUN_SHINE = 0;
 		/*
          * Member (state) fields
          */
 		private int mState;
 		private Handler mHandler;
+		 /** Current sunshine number*/
+		private int mSunshines;
         /** The drawable to use as the background of the animation canvas */
         private Bitmap mBackgroundImage;
         private Bitmap mBowlingStripeImage;
@@ -102,6 +108,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             //Set Images
             Resources res	 	= context.getResources();
             PlantFactory.getInstance().init(res);
+            ProjectileFactory.getInstance().init(res);
             ZombieFactory.getInstance().setResources(res);
             mBackgroundImage 	= Bitmap.createBitmap(
             		BitmapFactory.decodeResource(res, R.drawable.background), 
@@ -169,7 +176,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         			}
         			
         			if (plant != null){
-	        			plant.setView(PlantVsZombieView.this);
+	        			plant.setGameEventListener(PlantVsZombieView.this);
 	        			mPlants.setPlant(i, j, plant);
         			}
         			
@@ -294,12 +301,6 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             	mSelectedSeedObject.doDraw(canvas, mScaleX, mScaleY, paint);
             }
             
-        }
-
-       
-        
-        public void addProjectileObject(ProjectileObject object){
-        	mProjectileObjects.add(object);
         }
         
         public void addZombie(Zombie zombie){
@@ -507,15 +508,25 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 		//	animation.draw(mCanvas);
 			animation.start();
 		}
+		@Override
+		public void onSunshineAdded(int delta) {
+			mSunshines += delta;
+	    	if (mSunshines > MAX_SUN_SHINE)
+	    		mSunshines = MAX_SUN_SHINE;
+	    	else 
+	    		if (mSunshines < MIN_SUN_SHINE)
+	    			mSunshines = MIN_SUN_SHINE;
+		}
+		@Override
+		public void onProjectileObjectCreated(GameObject object) {
+			mProjectileObjects.add((ProjectileObject)object);
+		}
 	}
-	public static final int MAX_SUN_SHINE = 9999;
-	public static final int MIN_SUN_SHINE = 0;
+	
 	/** Handle to the application context, used to e.g. fetch Drawables. */
 	private Context mContext;
 	private PlantVsZombieThread thread;
-    /** Current sunshine number*/
-	private int mSunshines = 1500;
-	
+   
 	
 	public PlantVsZombieView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -600,25 +611,24 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 	public PlantVsZombieThread getThread(){
 		return thread;
 	}
-
-	public void addSunshines(int delta) {
-		mSunshines += delta;
-    	if (mSunshines > MAX_SUN_SHINE)
-    		mSunshines = MAX_SUN_SHINE;
-    	else 
-    		if (mSunshines < MIN_SUN_SHINE)
-    			mSunshines = MIN_SUN_SHINE;
-	}
-	
-	public void addProjectileObject(ProjectileObject object){
-		thread.addProjectileObject(object);
-	}
 	
 	public void addAnimation(int animationResourceId){
 		mContext.getResources().getAnimation(animationResourceId);
 	}
 	public void addItem(AbstractItem item){
 		thread.addItem(item);
+	}
+
+	@Override
+	public void onSunshineAdded(int delta) {
+		thread.onSunshineAdded(delta);// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onProjectileObjectCreated(GameObject object) {
+		// TODO Auto-generated method stub
+		thread.onProjectileObjectCreated(object);
 	}
 
 }

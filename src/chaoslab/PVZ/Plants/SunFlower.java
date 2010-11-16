@@ -11,6 +11,7 @@ import chaoslab.PVZ.R;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class SunFlower extends Plant{
+	public static final int SINGLE_SUNSHINE_NUM = 25;
 	private static Bitmap[] 	mWaveBitmaps;
 	public SunFlower(String name, Particle particles[], int cost) {
 		super(name, particles, cost);
@@ -19,8 +20,8 @@ public class SunFlower extends Plant{
 	@Override
 	public void onHarmed(int harmPoint){
 		super.onHarmed(harmPoint);
-		if (mView != null){
-			mView.addSunshines(50);
+		if (mGameEventListener != null){
+			mGameEventListener.onSunshineAdded(SINGLE_SUNSHINE_NUM);
 		}
 	}
 

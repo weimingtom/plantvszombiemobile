@@ -27,7 +27,7 @@ abstract public class GameObject implements Cloneable{
 	/** Actual size of this object*/
 	protected int		mWidth 	= 0;
 	protected int		mHeight = 0;
-	protected PlantVsZombieView mView;
+	protected GameEventListener mGameEventListener;
 	/** Indicate this object stands by which side(Plant or Zombie or neither?)*/
 	protected	  int		mStand	= GameConstants.STAND_NONE;
 	/** direction angel*/
@@ -42,11 +42,11 @@ abstract public class GameObject implements Cloneable{
 				mParticles[i]	= particles[i];
 			}
 		}
-		mCost			= cost;
-		mElapsedFrame	= 0;
-		mIsAlive		= true;
-		mPosition		= new Position(0, 0);
-		mView			= null;
+		mCost				= cost;
+		mElapsedFrame		= 0;
+		mIsAlive			= true;
+		mPosition			= new Position(0, 0);
+		mGameEventListener	= null;
 		
 	}
 	
@@ -150,8 +150,8 @@ abstract public class GameObject implements Cloneable{
 		return object;
 	}
 
-	public void setView(PlantVsZombieView view) {
-		mView = view;
+	public void setGameEventListener(GameEventListener listener) {
+		mGameEventListener = listener;
 	}
 	
 	public Bitmap getBitmap(){
