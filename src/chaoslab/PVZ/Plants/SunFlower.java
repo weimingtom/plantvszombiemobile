@@ -19,10 +19,12 @@ public class SunFlower extends Plant{
 	
 	@Override
 	public void onHarmed(int harmPoint){
-		super.onHarmed(harmPoint);
 		if (mGameEventListener != null){
+		//	int sunshineDelta = mHealthPoint > harmPoint ? harmPoint : mHealthPoint;
 			mGameEventListener.onSunshineAdded(SINGLE_SUNSHINE_NUM);
 		}
+		super.onHarmed(harmPoint);
+		
 	}
 
 	@Override
@@ -34,6 +36,13 @@ public class SunFlower extends Plant{
 	public void update(){
 		super.update();
 		updateWaveBitmap(mWaveBitmaps);
+	}
+	
+	public void onDie(){
+		super.onDie();
+		if (mHealthPoint > 0 && mGameEventListener != null){
+			mGameEventListener.onSunshineAdded(mHealthPoint);
+		}
 	}
 
 	public static void initBitmaps(Resources res) {

@@ -1,11 +1,5 @@
 package chaoslab.PVZ.Plants;
-
-import chaoslab.PVZ.Particle;
-import chaoslab.PVZ.Position;
-import chaoslab.PVZ.R;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 public class PlantFactory {
 	private static PlantFactory mInstance = new PlantFactory();
@@ -33,21 +27,6 @@ public class PlantFactory {
 	
 	public Plant createSunFlower(){
 		return new SunFlower("SUNFLOWER", null, 50);
-	}
-	
-	public static Plant createPeaShooter(Resources res){
-		/*
-		Particle particles[] = {
-				new Particle(new Position(0, 0), 
-						BitmapFactory.decodeResource(res, R.drawable.peashooter_head)),
-				new Particle(new Position(65, 0), 
-						BitmapFactory.decodeResource(res, R.drawable.peashooter_mouth))
-			};*/
-		Particle particles[] = {
-				new Particle(new Position(0, 0), 
-						BitmapFactory.decodeResource(res, R.drawable.peashooter_01)),
-			};
-		return new PeaShooter("PEASHOOTER", particles, 50, PeaShooter.PEA_SHOOTER_TYPE_NORMAL);
 	}
 	
 	public Plant createWavingPeaShooter(){
