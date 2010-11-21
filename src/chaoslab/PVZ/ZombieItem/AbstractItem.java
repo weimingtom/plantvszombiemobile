@@ -107,6 +107,7 @@ public class AbstractItem extends GameObject{
 		bFading = false;
 		nFadeCnt = 0;
 		mHealthPoint = 50;
+		mPosition = new Position(0,0);
 	}
 	
 	public void setDestPosition(Position destPosition){
@@ -119,6 +120,7 @@ public class AbstractItem extends GameObject{
 		mIsMagnetting = flag;
 		if (flag){
 			mMoveFrmCnt = 0;
+			bFading = false;
 			ItemFactory.addItem(this);
 		}
 	}

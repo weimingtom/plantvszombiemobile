@@ -9,9 +9,11 @@ import chaoslab.PVZ.GameConstants;
 import chaoslab.PVZ.GameObject;
 import chaoslab.PVZ.Harmable;
 import chaoslab.PVZ.Particle;
+import chaoslab.PVZ.Position;
 import chaoslab.PVZ.R;
 import chaoslab.PVZ.SoundManager;
 import chaoslab.PVZ.Plants.Plant;
+import chaoslab.PVZ.Plants.PlantCells;
 import chaoslab.PVZ.ZombieItem.AbstractItem;
 
 public class Zombie extends GameObject implements Harmable{
@@ -45,8 +47,9 @@ public class Zombie extends GameObject implements Harmable{
 	private int mCharredBitmapIndex = 0;
 	private Bitmap[] mCharredBitmap;
 	 
-
+	protected Position mTempPosition;
 	protected  AbstractItem mItem;
+	protected int mClimbCnt;
 	//protected Bitmap	;
 	/**
 	 * Constructor: name, particles, cost
@@ -61,9 +64,12 @@ public class Zombie extends GameObject implements Harmable{
 		mMaxBitmap = 12;
 		mStatus = GameConstants.ZOMBIE_MOVE;
 		mPreStatus = GameConstants.ZOMBIE_MOVE;
-		mEventFrame = MIN_MOVE - 1;
+		mEventFrame = MIN_MOVE;
 		mMoveSpeed = 5;
+		mClimbCnt = 0;
 		setMoveDirection(-1, 0);
+		mTempPosition = new Position(0,0);
+		mClimbCnt = 0;
  	}
 	/*
 	 * meaningless
@@ -88,10 +94,14 @@ public class Zombie extends GameObject implements Harmable{
 		mTarget = target;
 	}
 	public void eat(Plant target){
-		if(mStatus != GameConstants.ZOMBIE_ATTACK){
-			mStatus = GameConstants.ZOMBIE_ATTACK;
-			mTarget = target;
-			mEatFrmCnt = 0;
+		if(target.hasLadder()){
+			mStatus = GameConstants.ZOMBIE_CLIMB;
+		}else{
+			if(mStatus != GameConstants.ZOMBIE_ATTACK){
+				mStatus = GameConstants.ZOMBIE_ATTACK;
+				mTarget = target;
+				mEatFrmCnt = 0;
+			}
 		}
 	}
 	/*
@@ -109,6 +119,7 @@ public class Zombie extends GameObject implements Harmable{
 	}
 	@Override
 	public void doDraw(Canvas canvas, float scaleX, float scaleY, Paint paint){
+		if(mBitmap==null)return;
 		if (mStatus != GameConstants.ZOMBIE_CHARRED){
 			if(mEventFrame < 0 || mEventFrame >= mMaxBitmap){
 				canvas.drawBitmap(mBitmap[0], null, 
@@ -154,25 +165,25 @@ public class Zombie extends GameObject implements Harmable{
 		//do action
 		switch(mStatus){
 		case GameConstants.ZOMBIE_MOVE:
-			if(MAX_MOVE == mEventFrame){
-				mEventFrame = MIN_MOVE - 1;
-			}
 			moving();
 			++mEventFrame; 
+			if(MAX_MOVE < mEventFrame){
+				mEventFrame = MIN_MOVE;
+			}
 			break;
 		case GameConstants.ZOMBIE_ATTACK:
-			if(MAX_EAT == mEventFrame){
-				mEventFrame = MIN_EAT - 1;
-			}
 			int attackFactor = mIsSlowed ? 2 : 1;
 			if(mEatFrmCnt % ( mEatInterval * attackFactor)== 0 || !mTarget.isAlive()){
 				eating();
 				++mEventFrame; 
 			}
 			mEatFrmCnt ++;
+			if(MAX_EAT < mEventFrame){
+				mEventFrame = MIN_EAT;
+			}
 			break;
 		case GameConstants.ZOMBIE_ATTACKED:
-			if(MAX_ATTACKED == mEventFrame){
+			if(MAX_ATTACKED <= mEventFrame){
 				//mEventFrame = mPreviousFrame;
 				//mStatus = GameConstants.ZOMBIE_MOVE - 1;
 			}
@@ -185,6 +196,10 @@ public class Zombie extends GameObject implements Harmable{
 				mCharredBitmapIndex = 0;
 				mIsAlive = false;
 			}
+			break;
+		case GameConstants.ZOMBIE_CLIMB:
+			mClimbCnt ++;
+			doClimb();
 			break;
 		default:
 			++mEventFrame; 
@@ -205,16 +220,30 @@ public class Zombie extends GameObject implements Harmable{
 	public void updateStatus(){
 		switch(mStatus){
 		case GameConstants.ZOMBIE_MOVE:
-			mEventFrame = MIN_MOVE - 1;
+			mEventFrame = MIN_MOVE;
 			break;
 		case GameConstants.ZOMBIE_ATTACK:
-			mEventFrame = MIN_EAT - 1;
+			mEventFrame = MIN_EAT;
 			break;
 		case GameConstants.ZOMBIE_ATTACKED:
 			//mEventFrame = MIN_ATTACKED - 1;
 			break;
+		case GameConstants.ZOMBIE_CLIMB:
+			mTempPosition.x = mPosition.x;
+			mTempPosition.y = mPosition.y;
+			mIsInvincible = true;
+			break;
 		default:
 			break;
+		}
+		switch(mPreStatus){
+		case GameConstants.ZOMBIE_CLIMB:
+			mTempPosition.x = 0;
+			mTempPosition.y = 0;
+			mIsInvincible = false;
+			break;
+			default:
+				break;
 		}
 	}
 	/*
@@ -297,13 +326,16 @@ public class Zombie extends GameObject implements Harmable{
 		mIsInvincible = false;
 		mIsCharred	=   false;
 		mCharredBitmapIndex = 0;
-		setMoveDirection(-1, 0);
+		mMoveDirection = new Position(-1,0);
+		mPosition = new Position(0,0);
 		mPreviousFrame = 0;
 		mMoveSpeed = 5.0f;
 		mPreStatus = GameConstants.ZOMBIE_MOVE;
 		if(mItem != null){
 			mItem = (AbstractItem)mItem.clone();
 		}
+		mTempPosition = new Position(0,0);
+		mClimbCnt = 0;
 	}
 	@Override
 	public void setCenterPosition(float posX, float posY){
@@ -326,6 +358,14 @@ public class Zombie extends GameObject implements Harmable{
 	
 	public void setItem(AbstractItem item){
 		mItem = item;
+	}
+	public void doClimb(){
+		mPosition.x = mTempPosition.x + mMoveDirection.x *PlantCells.CELL_HEIGHT/2*(
+				1.0f - (float)Math.cos(22.5f*mClimbCnt*Math.PI/180.0));
+		mPosition.y = mTempPosition.y - (float)(PlantCells.CELL_HEIGHT/2*Math.sin(22.5f*mClimbCnt*Math.PI/180.0));
+		if(mClimbCnt == 8){
+			mStatus = GameConstants.ZOMBIE_MOVE;
+		}
 	}
 	
 }

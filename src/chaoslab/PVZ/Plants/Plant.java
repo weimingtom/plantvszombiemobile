@@ -1,10 +1,12 @@
 package chaoslab.PVZ.Plants;
 
 import java.util.ArrayList;
+import chaoslab.PVZ.ZombieItem.AbstractItem;
 import chaoslab.PVZ.GameConstants;
 import chaoslab.PVZ.GameObject;
 import chaoslab.PVZ.Harmable;
 import chaoslab.PVZ.Particle;
+import chaoslab.PVZ.ZombieItem.ItemFactory;
 import chaoslab.PVZ.Zombies.Zombie;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -26,7 +28,8 @@ abstract public class Plant extends GameObject implements Harmable{
 	protected int	curWaveImgNum 			= 0;
 	protected int 	curAttackImgNum			= 0;
 	protected int	mAttackFrmCount	  = 0;
-	
+	protected boolean hasLadder = false;
+	protected AbstractItem mItem;
 	//protected static Bitmap[] 	mWaveBitmaps;
 	//protected static Bitmap[]	mAttackBitmaps;
 
@@ -40,6 +43,7 @@ abstract public class Plant extends GameObject implements Harmable{
 		mWidth = 60;
 		mHeight = 80;
 		mHealthPoint = 100;
+		mItem = null;
 	}
 	
 	public abstract void attack(ArrayList<Zombie> zombies);
@@ -127,6 +131,27 @@ abstract public class Plant extends GameObject implements Harmable{
 						(int)((cellPosY + PlantCells.CELL_HEIGHT) * scaleY)), paint);
 		
 	}
-
+	public void setLadder(AbstractItem item){
+		if(mItem != null){
+			mItem.onDie();
+		}
+		mItem = item;
+		if(item != null){
+			hasLadder = true;
+			ItemFactory.addItem(item);
+		}else{
+			hasLadder = false;
+		}
+	}
+	public boolean hasLadder(){
+		return hasLadder;
+	}
+	@Override
+	public void onDie(){
+		super.onDie();
+		if(mItem != null){
+			mItem.onDie();
+		}
+	}
 }
 

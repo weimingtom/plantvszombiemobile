@@ -40,7 +40,8 @@ public class MagnetShroom extends Plant {
 				continue;
 			AbstractItem item = zombies.get(i).getItem();
 			if (item != null && item.canBeMagnetized()){
-				zombies.get(i).setItem(null);
+				zombies.get(i).dropItem();
+				//zombies.get(i).setItem(null);
 				item.setIsMagnetting(true);
 				item.setDestPosition(mPosition);
 				

@@ -19,10 +19,6 @@ public class LadderItem extends AbstractItem {
 		mTarget = target;
 	}
 	@Override
-	public void update(){
-		
-	}
-	@Override
 	public void init(){
 		super.init();
 		mTarget = null;

@@ -198,6 +198,9 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         			BitmapFactory.decodeResource(res, R.drawable.zombiepolevaulterhead),
         			BitmapFactory.decodeResource(res, R.drawable.zombieimphead),
         			BitmapFactory.decodeResource(res, R.drawable.zombie_cone1),
+        			BitmapFactory.decodeResource(res, R.drawable.zombie_bucket1),
+        			BitmapFactory.decodeResource(res, R.drawable.zombie_ladder_1),
+        			BitmapFactory.decodeResource(res, R.drawable.zombie_digger_rise2),
         	};
         	Zombie seedZombies[] = {
         			ZombieFactory.getInstance().createNormalZombie(),
@@ -206,6 +209,9 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         			ZombieFactory.createPoleVaultZombie(res),
         			ZombieFactory.createMiniZombie(res),
         			ZombieFactory.createRoadBlockZombie(res),
+        			ZombieFactory.createIronHatZombie(res),
+        			ZombieFactory.createLadderZombie(res),
+        			ZombieFactory.createDiggerZombie(res),
         	};
         	Position startPosition = new Position(70, 10);
         	for (int i = 0; i < seedPackets.length; ++i){
@@ -252,7 +258,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
             //Log.d("time", "AFTER BACKGROUND");
             //Draw SeedBar
             Matrix matrix = new Matrix();
-        	matrix.setScale(mScaleX, mScaleY);
+        	matrix.setScale(mScaleX*9/7, mScaleY);
             canvas.drawBitmap(mSeedBarImage, matrix, null);
             //Draw current sunshines and costs
             Paint textPaint = new Paint();
@@ -508,7 +514,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 		//	animation.draw(mCanvas);
 			animation.start();
 		}
-		@Override
+		//@Override
 		public void onSunshineAdded(int delta) {
 			mSunshines += delta;
 	    	if (mSunshines > MAX_SUN_SHINE)
@@ -517,7 +523,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 	    		if (mSunshines < MIN_SUN_SHINE)
 	    			mSunshines = MIN_SUN_SHINE;
 		}
-		@Override
+		//@Override
 		public void onProjectileObjectCreated(GameObject object) {
 			mProjectileObjects.add((ProjectileObject)object);
 		}
@@ -619,13 +625,13 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 		thread.addItem(item);
 	}
 
-	@Override
+	//@Override
 	public void onSunshineAdded(int delta) {
 		thread.onSunshineAdded(delta);// TODO Auto-generated method stub
 		
 	}
 
-	@Override
+	//@Override
 	public void onProjectileObjectCreated(GameObject object) {
 		// TODO Auto-generated method stub
 		thread.onProjectileObjectCreated(object);

@@ -23,6 +23,8 @@ public class GameConstants {
 	public static final int ZOMBIE_BACKWARD = 11;
 	public static final int ZOMBIE_CHARRED	= 12;
 	public static final int ZOMBIE_PRE_SEEK = 13;		//fprepare for seek
+	public static final int ZOMBIE_COME_OUT = 14;
+	public static final int ZOMBIE_CLIMB = 15;
 	/*
 	 * there are some other statuses so that I need another 10 number 
 	 * to keep as reserved field.

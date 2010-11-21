@@ -109,4 +109,33 @@ public class ZombieFactory {
 		zombie.setCharredBitmap(charredBitmap);
 		return zombie;
 	}
+	public static Zombie createLadderZombie(Resources res){
+		Bitmap bitmap[] = createCommonBitmap(res);
+		Bitmap charredBitmap[] = createCharredBitmap(res);
+		LadderItem item = ItemFactory.createLadderItem(res);
+		Zombie zombie = new LadderZombie("ladder zombie",null,bitmap,175,item);
+		zombie.setCharredBitmap(charredBitmap);
+		return zombie;
+	}
+	public static Zombie createDiggerZombie(Resources res){
+		Bitmap bitmap[] = new Bitmap[6];
+		bitmap[0] = BitmapFactory.decodeResource(res, R.drawable.zombie_digger_rise2);
+		bitmap[1] = BitmapFactory.decodeResource(res, R.drawable.zombie_digger_rise3);
+		bitmap[2] = BitmapFactory.decodeResource(res, R.drawable.zombie_digger_rise4);
+		bitmap[3] = BitmapFactory.decodeResource(res, R.drawable.zombie_digger_rise5);
+		bitmap[4] = BitmapFactory.decodeResource(res, R.drawable.zombie_digger_rise6);
+		bitmap[5] = BitmapFactory.decodeResource(res, R.drawable.zombie_digger_rise_ground);
+		Bitmap charredBitmap[] = createCharredBitmap(res);
+		Zombie zombie = new UndermineZombie("digger zombie",null,bitmap,150);
+		zombie.setCharredBitmap(charredBitmap);
+		return zombie;
+	}
+	public static Zombie createIronHatZombie(Resources res){
+		Bitmap bitmap[] = createCommonBitmap(res);
+		Bitmap charredBitmap[] = createCharredBitmap(res);
+		DeffensiveItem item = ItemFactory.createIronHelmetItem(res);
+		Zombie zombie =  new IronHatZombie("bucket Zombie", null,bitmap, 175,item);
+		zombie.setCharredBitmap(charredBitmap);
+		return zombie;
+	}
 }
