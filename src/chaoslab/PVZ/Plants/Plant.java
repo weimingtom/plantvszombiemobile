@@ -27,7 +27,7 @@ abstract public class Plant extends GameObject implements Harmable{
 	protected int 	mAttackFrame			= 0;
 	protected int	curWaveImgNum 			= 0;
 	protected int 	curAttackImgNum			= 0;
-	protected int	mAttackFrmCount	  = 0;
+	protected int	mAttackFrmCnt	  = 0;
 	protected boolean hasLadder = false;
 	protected AbstractItem mItem;
 	//protected static Bitmap[] 	mWaveBitmaps;
@@ -70,15 +70,18 @@ abstract public class Plant extends GameObject implements Harmable{
 	
 	public void updateAttackBitmap(Bitmap bitmaps[]){
 		if (bitmaps != null){
-			mAttackFrmCount++;
+			mAttackFrmCnt++;
 			/*
 			 * update img per frame as default, or here
 			 * should check update interval.Consider it 
 			 * in future.
 			*/
-			curAttackImgNum++;
-			if (mAttackFrmCount > mAttackFrame){
-				mAttackFrmCount = 0;
+			if (mAttackFrmCnt % WAVE_INTERVAL == 0){
+				curAttackImgNum++;
+			}
+			if (mAttackFrmCnt > mAttackFrame 
+					|| curAttackImgNum >= bitmaps.length){
+				mAttackFrmCnt = 0;
 				curAttackImgNum = 0;
 			}
 			mCurBitmap = bitmaps[curAttackImgNum];

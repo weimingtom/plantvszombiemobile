@@ -22,7 +22,7 @@ public class PlantFactory {
 		//PeaShooter.initBitmaps(res);
 		PotatoMine.initBitmaps(res);
 		Torchwood.initBitmaps(res);
-		WavingPeaShooter.initBitmaps(res);
+		PeaShooter.initBitmaps(res);
 	}
 	
 	public Plant createSunFlower(){
@@ -30,13 +30,13 @@ public class PlantFactory {
 	}
 	
 	public Plant createWavingPeaShooter(){
-		return new WavingPeaShooter("WavingPeaShooter", 
+		return new PeaShooter("WavingPeaShooter", 
 				null, 50, PeaShooter.PEA_SHOOTER_TYPE_NORMAL);
 		
 	}
 	
 	public Plant createSnowPeaShooter(){
-		return new WavingPeaShooter("WavingPeaShooter", 
+		return new PeaShooter("WavingPeaShooter", 
 				null, 50, PeaShooter.PEA_SHOOTER_TYPE_SNOW);
 	}
 	

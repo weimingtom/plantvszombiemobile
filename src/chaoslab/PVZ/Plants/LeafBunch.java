@@ -72,7 +72,7 @@ public class LeafBunch extends Plant {
 			break;
 		case PLANT_STATE_ATTACK:
 			updateAttackBitmap(mAttackBitmaps);
-			if (mAttackFrmCount == 0)
+			if (mAttackFrmCnt == 0)
 				mState = PLANT_STATE_WAVE;
 			break;
 		}

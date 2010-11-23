@@ -77,7 +77,7 @@ public class Chomper extends Plant{
 			break;
 		case PLANT_STATE_ATTACK:
 			updateAttackBitmap(mAttackBitmap);
-			if (mAttackFrmCount == 0)
+			if (mAttackFrmCnt == 0)
 				mState = CHOMPER_STATE_DIGEST;
 			break;
 		}
