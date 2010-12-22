@@ -125,13 +125,13 @@ abstract public class Plant extends GameObject implements Harmable{
 		/*
 		 * scale bitmap to proper width and height
 		 */
-		int width 	= PlantCells.CELL_WIDTH > mCurBitmap.getWidth() ?  mCurBitmap.getWidth() :PlantCells.CELL_WIDTH;
-		int height 	= PlantCells.CELL_HEIGHT > mCurBitmap.getHeight() ? mCurBitmap.getHeight():PlantCells.CELL_HEIGHT;
-		int cellPosY = (int)(PlantCells.getRow(mPosition) * PlantCells.CELL_HEIGHT + PlantCells.ORIGIN.y);
+		//int width 	= PlantCells.CELL_WIDTH > mCurBitmap.getWidth() ?  mCurBitmap.getWidth() :PlantCells.CELL_WIDTH;
+		//int height 	= PlantCells.CELL_HEIGHT > mCurBitmap.getHeight() ? mCurBitmap.getHeight():PlantCells.CELL_HEIGHT;
+		int cellPosY = (int)((PlantCells.getRow(mPosition) + 1)* PlantCells.CELL_HEIGHT + PlantCells.ORIGIN.y - mCurBitmap.getHeight());
 		canvas.drawBitmap(mCurBitmap, null, 
-				new Rect((int)(mPosition.x * scaleX), (int)((cellPosY + PlantCells.CELL_HEIGHT - height) * scaleY),
-						(int)((mPosition.x + width) * scaleX),
-						(int)((cellPosY + PlantCells.CELL_HEIGHT) * scaleY)), paint);
+				new Rect((int)(mPosition.x * scaleX), (int)(cellPosY * scaleY),
+						(int)((mPosition.x + mCurBitmap.getWidth()) * scaleX),
+						(int)((cellPosY + mCurBitmap.getHeight()) * scaleY)), paint);
 		
 	}
 	public void setLadder(AbstractItem item){

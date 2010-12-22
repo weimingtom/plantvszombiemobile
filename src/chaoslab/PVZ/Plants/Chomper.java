@@ -21,7 +21,7 @@ import chaoslab.PVZ.Zombies.Zombie;
 
 public class Chomper extends Plant{
 	private static Bitmap[] mWaveBitmaps;
-	private static Bitmap[] mAttackBitmap;
+	private static Bitmap[] mAttackBitmaps;
 	
 	private static final int CHOMPER_STATE_DIGEST 		= PLANT_STATE_SPECIAL_ACTION;
 	private static final int CHOMPER_DIGEST_FRAME 		= 100;
@@ -30,7 +30,7 @@ public class Chomper extends Plant{
 	private static final float ATTACK_RANGE		=  PlantCells.CELL_WIDTH;
 	private int     mDigestFrmCount   			= 0;
 	private Bitmap	mFoodBitmap;
-
+	private Zombie mTarget;
 	public Chomper(String name, Particle[] particles, int cost) {
 		super(name, null, cost);
 		mAttackFrame = ATTACK_FRAME;
@@ -51,7 +51,7 @@ public class Chomper extends Plant{
 						){
 					mFoodBitmap = Bitmap.createBitmap(zombies.get(i).getBitmap());
 					mState = PLANT_STATE_ATTACK;
-					zombies.get(i).onDie();
+					mTarget = zombies.get(i);
 					break;
 				}
 			}
@@ -76,15 +76,22 @@ public class Chomper extends Plant{
 			}
 			break;
 		case PLANT_STATE_ATTACK:
-			updateAttackBitmap(mAttackBitmap);
-			if (mAttackFrmCnt == 0)
+			updateAttackBitmap(mAttackBitmaps);
+			if (mAttackFrmCnt == 0){
 				mState = CHOMPER_STATE_DIGEST;
+				if (mTarget == null || !mTarget.isAlive()){
+					mFoodBitmap = null;
+				}else{
+					mTarget.onDie();
+				}
+			}
+				
 			break;
 		}
 	}
 	@Override
 	public void doDraw(Canvas canvas, float scaleX, float scaleY, Paint paint){
-		if (mState == CHOMPER_STATE_DIGEST && mFoodBitmap != null){
+		if (mState == CHOMPER_STATE_DIGEST &&  mFoodBitmap != null){
 			Matrix matrix = new Matrix();
 			matrix.postScale(scaleX, scaleY);
 			matrix.postRotate(90);
@@ -98,6 +105,17 @@ public class Chomper extends Plant{
 	public static void initBitmaps(Resources res){
 		mWaveBitmaps = new Bitmap[]{
 				BitmapFactory.decodeResource(res, R.drawable.chomper_topjaw),
+		};
+		mAttackBitmaps = new Bitmap[]{
+				BitmapFactory.decodeResource(res, R.drawable.chomper_eat_00),
+				BitmapFactory.decodeResource(res, R.drawable.chomper_eat_01),
+				BitmapFactory.decodeResource(res, R.drawable.chomper_eat_02),
+				BitmapFactory.decodeResource(res, R.drawable.chomper_eat_03),
+				BitmapFactory.decodeResource(res, R.drawable.chomper_eat_04),
+				BitmapFactory.decodeResource(res, R.drawable.chomper_eat_05),
+				BitmapFactory.decodeResource(res, R.drawable.chomper_eat_06),
+				BitmapFactory.decodeResource(res, R.drawable.chomper_eat_07),
+				BitmapFactory.decodeResource(res, R.drawable.chomper_eat_08),
 		};
 	}
 
