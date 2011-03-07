@@ -30,8 +30,8 @@ public class MusicServer extends Service {
 	}
 	@Override
 	public void onDestroy(){
-		mediaPlayer.release();
 		super.onDestroy();
+		mediaPlayer.release();
 	}
 	
 	

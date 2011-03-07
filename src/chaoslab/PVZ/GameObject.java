@@ -3,6 +3,8 @@ package chaoslab.PVZ;
  * GameObject
  * Base class of Plants and Zombies.
  */
+import java.io.Serializable;
+
 import chaoslab.PVZ.Particle;
 import chaoslab.PVZ.GameConstants;
 import android.graphics.Bitmap;
@@ -10,7 +12,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-abstract public class GameObject implements Cloneable{
+abstract public class GameObject implements Cloneable, Serializable{
 
 	public static final int MAX_POSITION_X = 800;
 	public static final int MAX_POSITION_Y = 600;

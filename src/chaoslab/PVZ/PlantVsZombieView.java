@@ -5,6 +5,11 @@
  */
 package chaoslab.PVZ;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import chaoslab.PVZ.ZombieItem.AbstractItem;
 import chaoslab.PVZ.Plants.Plant;
@@ -54,6 +59,8 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
      	public static final int STRIP_COLUMN = 6;
      	public static final int MAX_SUN_SHINE = 9999;
     	public static final int MIN_SUN_SHINE = 0;
+    	
+    	public static final String SAVE_FILE_NAME = "pvz_save";
 		/*
          * Member (state) fields
          */
@@ -90,6 +97,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 		/** Indicate whether the surface has been created & is ready to draw */
         private boolean mRun = false;
         /** the thread holds several kinds of objects*/
+        /** all plants in cells*/
         private PlantCells mPlants;
 		private ArrayList<Zombie> mZombies;
 		private ArrayList<ProjectileObject> mProjectileObjects;
@@ -224,7 +232,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
         }
         @Override
         public void run(){
-        	while (mRun ){
+        	while (mRun){
         		Canvas c = null;
         		try {
                     c = mSurfaceHolder.lockCanvas(null);
@@ -527,7 +535,98 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 		public void onProjectileObjectCreated(GameObject object) {
 			mProjectileObjects.add((ProjectileObject)object);
 		}
-	}
+		public Bundle saveState(Bundle outState) {
+            synchronized (mSurfaceHolder) {
+                if (outState != null) {
+					//save plants
+					for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i){
+		        		for (int j = 0; j < PlantCells.MAX_COL_NUM; ++j){
+		        			Plant plant = mPlants.getPlant(i,j);
+		        			if (plant != null && plant.isAlive()){
+		        				outState.putSerializable("PLANT" + i + j, plant);
+		        			}
+		        		}
+					}
+					//save zombies
+					outState.putInt("ZOMBIE_NUM" ,mZombies.size());
+					for (int i = 0; i < mZombies.size(); ++i){
+						Zombie zombie = mZombies.get(i);
+						if (zombie != null && zombie.isAlive()){
+							outState.putSerializable("ZOMBIE" + i, zombie);
+						}
+					}
+					outState.putInt("PROJECTILE_OBJECTS_NUM" ,mProjectileObjects.size());
+					//save projectile objs
+					for (int i = 0; i < mProjectileObjects.size(); ++ i){
+						ProjectileObject po = mProjectileObjects.get(i);
+						if (po != null && po.isAlive()){
+							outState.putSerializable("PROJECTILEOBJECTS" + i, po);
+						}
+					}
+					outState.putInt("GAME_STATE", mState);
+				} //end of if outState != null
+                	
+                return outState;
+            }
+            
+		        
+			
+		}
+		/**
+		 * restore game state
+		 * read game data from last savedInstanceState.
+		 * @param savedInstanceState
+		 */
+		public void restoreState(Bundle savedInstanceState) {
+			 synchronized (mSurfaceHolder) {
+				int num = 0;
+				mState = STATE_PAUSED;
+				//restore plants
+				if (mPlants == null){
+					mPlants = new PlantCells();
+				}
+				for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i){
+	        		for (int j = 0; j < PlantCells.MAX_COL_NUM; ++j){
+	        			Serializable plant = savedInstanceState.getSerializable("PLANT" + i + j);
+	        			if (plant != null){
+	        				mPlants.setPlant(i, j, (Plant)plant);
+	        			}
+	        		}
+				}
+				//restore zombies
+				num = savedInstanceState.getInt("ZOMBIE_NUM");
+				if (mZombies != null){
+					mZombies.clear();
+				}else{
+					mZombies = new ArrayList<Zombie>();
+				}
+				for (int i = 0; i < num; ++i){
+					Serializable zombie = savedInstanceState.getSerializable("ZOMBIE" + i);
+        			if (zombie != null){
+        				mZombies.add((Zombie)zombie);
+        			}
+				}
+				num = savedInstanceState.getInt("PROJECTILE_OBJECTS_NUM");
+				if (mProjectileObjects != null){
+					mProjectileObjects.clear();
+				}else{
+					mProjectileObjects = new ArrayList<ProjectileObject>();
+				}
+				//restore projectile objs
+				for (int i = 0; i < num; ++ i){
+					Serializable po = savedInstanceState.getSerializable("PROJECTILEOBJECTS" + i);
+					if (po != null){
+						mProjectileObjects.add((ProjectileObject) po);
+					}
+				}
+				
+				//restore state
+				mState = savedInstanceState.getInt("GAME_STATE");
+			 }
+		}
+		
+		
+	}//end of thread
 	
 	/** Handle to the application context, used to e.g. fetch Drawables. */
 	private Context mContext;
