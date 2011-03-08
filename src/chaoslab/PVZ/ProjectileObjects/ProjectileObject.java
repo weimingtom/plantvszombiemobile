@@ -7,6 +7,10 @@ import chaoslab.PVZ.Particle;
 
 abstract public class ProjectileObject extends GameObject {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4613522014822427077L;
 	protected int mPower = 0;
 	public ProjectileObject(String name, Particle[] particles) {
 		super(name, particles, 0);

@@ -4,6 +4,10 @@ import chaoslab.PVZ.Position;
 import android.graphics.Bitmap;
 
 public class DeffensiveItem extends AbstractItem{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1055640659596450347L;
 	protected int mMaxHealth = 0;
 	public DeffensiveItem(Bitmap[] bitmap,int hP,boolean bMag){
 		super(bitmap);

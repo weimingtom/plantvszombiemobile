@@ -2,7 +2,6 @@ package chaoslab.PVZ;
 
 import chaoslab.PVZ.PlantVsZombieView.PlantVsZombieThread;
 import android.app.Activity;
-import android.app.Service;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
@@ -14,33 +13,37 @@ public class PlantVsZombie extends Activity {
     private PlantVsZombieView mView;
     private PlantVsZombieThread mThread;
     private Intent mIntent = new Intent("chaoslab.PVZ.MUSIC");
-    private ServiceConnection mConnc;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      
         setContentView(R.layout.main);
         mView = (PlantVsZombieView) findViewById(R.id.PVZView);
         mThread = mView.getThread();
-        
+       
         if (savedInstanceState == null){
+        	
 	        SoundManager.getInstance().Initialize(getApplicationContext());
 	        SoundManager.getInstance().loadSound(R.raw.explosion);
 	        SoundManager.getInstance().loadSound(R.raw.chomp);  
 	        startService(mIntent);
-	       // if (!bindService(mIntent, mConnc, Service.BIND_AUTO_CREATE)){
-	        	//Log.d("FAILED!", "FAILED!");
-	       // }
+	       //if (!bindService(mIntent, mConnc, Service.BIND_AUTO_CREATE)){
+	        //	Log.d("BIND", "FAILED!");
+	        //}
         }else{
-        	mThread.restoreState(savedInstanceState);
+        	Log.d("WARNING", "on Restore!");
+        	mThread.restoreGameState(savedInstanceState);
         }
+        //mThread.setRunning(true);
     }
     @Override
     public void onPause(){
+    	Log.d("WARNING", "on Pause");
     	super.onPause();
     	mView.getThread().pause();
     }
+    
+  
     /**
      * Notification that something is about to happen, to give the Activity a
      * chance to save state.
@@ -50,9 +53,9 @@ public class PlantVsZombie extends Activity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         // just have the View's thread save its state into our Bundle
-    	Log.d("WARNING:", "on SAVE");
+    	Log.d("WARNING", "on SAVE");
         super.onSaveInstanceState(outState);
-        mView.getThread().saveState(outState);
+        mView.getThread().saveGameState(outState);
         
     }
     @Override
@@ -66,6 +69,8 @@ public class PlantVsZombie extends Activity {
     	SoundManager.getInstance().Uninitialize();
     	mView.getThread().setRunning(false);
     	stopService(mIntent);
+    	//After this is called, your app process is no longer available in DDMS 
+    	android.os.Process.killProcess(android.os.Process.myPid()); 
     	
     }
     

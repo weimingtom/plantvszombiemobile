@@ -18,6 +18,10 @@ import android.graphics.Rect;
  * define Plant class
  */
 abstract public class Plant extends GameObject implements Harmable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5238581403566991779L;
 	public static final int PLANT_STATE_WAVE 			= 0;
 	public static final int PLANT_STATE_ATTACK 			= 1;
 	public static final int PLANT_STATE_SPECIAL_ACTION	= 2;

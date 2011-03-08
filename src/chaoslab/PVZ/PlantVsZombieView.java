@@ -5,10 +5,6 @@
  */
 package chaoslab.PVZ;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import chaoslab.PVZ.ZombieItem.AbstractItem;
@@ -35,6 +31,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -403,21 +400,10 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
              * check win or loose, and send message
              */
         	if (mCurBrainNum == ateBrainNum){
-        		 mState = STATE_WIN;
-        		 Message msg = mHandler.obtainMessage();
-                 Bundle b = new Bundle();
-                 b.putString("STATE_WIN", "" + STATE_WIN);
-                 msg.setData(b);
-                 mHandler.sendMessage(msg);
-
+        		setGameState(STATE_WIN);
         	} else{
         		if (mSunshines < 50 && mZombies.size() == 0){
-        			mState = STATE_LOSE;
-        			Message msg = mHandler.obtainMessage();
-                    Bundle b = new Bundle();
-                    b.putString("STATE_LOSE", "" + STATE_LOSE);
-                    msg.setData(b);
-                    mHandler.sendMessage(msg);
+        			setGameState(STATE_LOSE);
         		}
             }
         }
@@ -508,15 +494,30 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 
 		public void pause() {
 			synchronized(mSurfaceHolder){
-				mState = STATE_PAUSED;
+				if (mState == STATE_RUNNING) 
+					setGameState(STATE_PAUSED);
 			}
 		}
 
+		public void setGameState(int state){
+			synchronized(mSurfaceHolder){
+				if (state != mState && mState == STATE_RUNNING){
+					Message msg = mHandler.obtainMessage();
+	                Bundle b = new Bundle();
+	                b.putInt("GAME_STATE", state);
+	                msg.setData(b);
+	                mHandler.sendMessage(msg);
+				}
+				mState = state;
+			}
+		}
 		public void setRunning(boolean isRunning) {
 			mRun = isRunning;
-			
 		}
 
+		public boolean isRunning(){
+			return mRun;
+		}
 		public void playAnimation(AnimationDrawable animation) {
 			// TODO Auto-generated method stub
 		//	animation.draw(mCanvas);
@@ -535,9 +536,11 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 		public void onProjectileObjectCreated(GameObject object) {
 			mProjectileObjects.add((ProjectileObject)object);
 		}
-		public Bundle saveState(Bundle outState) {
+		public Bundle saveGameState(Bundle outState) {
             synchronized (mSurfaceHolder) {
                 if (outState != null) {
+                	//save sunshine
+                	outState.putInt("SUNSHINE", mSunshines);
 					//save plants
 					for (int i = 0; i < PlantCells.MAX_ROW_NUM; ++i){
 		        		for (int j = 0; j < PlantCells.MAX_COL_NUM; ++j){
@@ -567,9 +570,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 				} //end of if outState != null
                 	
                 return outState;
-            }
-            
-		        
+            } 
 			
 		}
 		/**
@@ -577,10 +578,11 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 		 * read game data from last savedInstanceState.
 		 * @param savedInstanceState
 		 */
-		public void restoreState(Bundle savedInstanceState) {
+		public void restoreGameState(Bundle savedInstanceState) {
 			 synchronized (mSurfaceHolder) {
 				int num = 0;
-				mState = STATE_PAUSED;
+				mState = savedInstanceState.getInt("GAME_STATE");
+				mSunshines = savedInstanceState.getInt("SUNSHINE");
 				//restore plants
 				if (mPlants == null){
 					mPlants = new PlantCells();
@@ -589,6 +591,7 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 	        		for (int j = 0; j < PlantCells.MAX_COL_NUM; ++j){
 	        			Serializable plant = savedInstanceState.getSerializable("PLANT" + i + j);
 	        			if (plant != null){
+	        				((Plant)plant).setGameEventListener(PlantVsZombieView.this);
 	        				mPlants.setPlant(i, j, (Plant)plant);
 	        			}
 	        		}
@@ -619,15 +622,72 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 						mProjectileObjects.add((ProjectileObject) po);
 					}
 				}
-				
-				//restore state
-				mState = savedInstanceState.getInt("GAME_STATE");
 			 }
+		}
+		public void restore() {
+			// TODO Auto-generated method stub
+			Bundle bundle = new Bundle();
+			thread.saveGameState(bundle);
+			thread = new PlantVsZombieThread(getHolder(), getContext(), new PlantVsZombieHandler());
+			thread.restoreGameState(bundle); 
+			thread.setRunning(true);
+			thread.start();
+			
 		}
 		
 		
 	}//end of thread
 	
+	/**handler of change of game state.*/
+	class PlantVsZombieHandler extends Handler{
+		@Override
+        public void handleMessage(Message m) {
+			String message = null;
+			int state = m.getData().getInt("GAME_STATE");
+			switch (state){
+				case PlantVsZombieThread.STATE_PAUSED:
+				
+					message = "PAUSED";
+					new AlertDialog.Builder(PlantVsZombieView.this.mContext)
+					.setMessage(message)
+					.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+		                  public void onClick(DialogInterface dialog, int whichButton) {
+		                      /* User clicked Yes so do some stuff */
+		                	  thread.setGameState(PlantVsZombieThread.STATE_RUNNING);
+		                	 // thread.notify();
+		                  }
+		              }).show();
+					break;
+				case PlantVsZombieThread.STATE_LOSE:
+					message = "You Failed";
+					showRetryDialog(message);
+					break;
+				case PlantVsZombieThread.STATE_WIN:
+					message = "Congratulations!You have eaten all Brains!";
+					showRetryDialog(message);
+					break;
+				default:
+					
+			}
+        }
+		
+		public void showRetryDialog(String message){
+			new AlertDialog.Builder(PlantVsZombieView.this.mContext)
+	        .setMessage(message)
+	        .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int whichButton) {
+	                /* User clicked Yes so do some stuff */
+	          	  thread.init();
+	            }
+	        })
+	        .setNegativeButton("Leave", new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int whichButton) {
+	                /* User clicked No so do some stuff */
+	          	  System.exit(0);
+	            }
+	        }).show();
+		}
+	}
 	/** Handle to the application context, used to e.g. fetch Drawables. */
 	private Context mContext;
 	private PlantVsZombieThread thread;
@@ -637,37 +697,8 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 		super(context, attrs);
 		SurfaceHolder holder = getHolder();
         holder.addCallback(this);
-        thread = new PlantVsZombieThread(holder, context, new Handler() {
-            @Override
-            public void handleMessage(Message m) {
-            	  if (m.getData().getString("STATE_LOSE") != null
-            			  || m.getData().getString("STATE_WIN") != null){
-            		String message = null;
-        			if (m.getData().getString("STATE_LOSE") != null){
-        				message = "You Failed!";
-        			}else{
-        				message = "Congratulations!You have eaten all Brains!";
-        			}
-            	  
-	            	  new AlertDialog.Builder(PlantVsZombieView.this.mContext)
-	                  .setMessage(message)
-	                  .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
-	                      public void onClick(DialogInterface dialog, int whichButton) {
-	                          /* User clicked Yes so do some stuff */
-	                    	  thread.init();
-	                      }
-	                  })
-	                  .setNegativeButton("Leave", new DialogInterface.OnClickListener() {
-	                      public void onClick(DialogInterface dialog, int whichButton) {
-	                          /* User clicked No so do some stuff */
-	                    	  System.exit(0);
-	                      }
-	                  }).show();
-            	  }
-            
-            }
-        });
-       
+        thread = new PlantVsZombieThread(holder, context, new PlantVsZombieHandler());
+        
         setFocusable(true); // make sure we get key events
 	}
 	
@@ -694,8 +725,15 @@ public class PlantVsZombieView extends SurfaceView implements SurfaceHolder.Call
 	}
 
 	public void surfaceCreated(SurfaceHolder holder) {
+		Log.d("WARNING", "surfaceCreated");
+		Log.d("WARNING", thread.getState().name());
+		Log.d("WARNING", Boolean.toString(thread.isRunning()));
 		thread.setRunning(true);
-        thread.start();
+        if (thread.getState() == Thread.State.NEW || thread.getState() == Thread.State.WAITING)
+        	thread.start();
+        else{
+        	thread.restore();
+        }
 	}
 
 	public void surfaceDestroyed(SurfaceHolder holder) {

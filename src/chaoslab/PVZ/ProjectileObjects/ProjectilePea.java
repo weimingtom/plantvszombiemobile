@@ -10,6 +10,10 @@ import chaoslab.PVZ.Plants.Torchwood;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class ProjectilePea extends ProjectileObject {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8092948866841201375L;
 	protected static Bitmap[] mBitmaps;
 	/** indicates the type of pea.*/
 	protected int	   mType;

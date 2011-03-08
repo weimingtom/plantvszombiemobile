@@ -20,6 +20,10 @@ import chaoslab.PVZ.R;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class Chomper extends Plant{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2772482567235627357L;
 	private static Bitmap[] mWaveBitmaps;
 	private static Bitmap[] mAttackBitmaps;
 	
@@ -29,7 +33,7 @@ public class Chomper extends Plant{
 	
 	private static final float ATTACK_RANGE		=  PlantCells.CELL_WIDTH;
 	private int     mDigestFrmCount   			= 0;
-	private Bitmap	mFoodBitmap;
+	private transient Bitmap	mFoodBitmap;
 	private Zombie mTarget;
 	public Chomper(String name, Particle[] particles, int cost) {
 		super(name, null, cost);

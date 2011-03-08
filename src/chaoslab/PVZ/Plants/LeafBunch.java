@@ -14,6 +14,10 @@ import chaoslab.PVZ.Zombies.BungeeZombie;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class LeafBunch extends Plant {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5564902067744716002L;
 	private static Bitmap[] 	mWaveBitmaps;
 	private static Bitmap[] 	mAttackBitmaps;
 	/**

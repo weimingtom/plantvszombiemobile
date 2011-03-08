@@ -4,6 +4,10 @@ import android.graphics.Bitmap;
 import chaoslab.PVZ.Plants.Plant;
 
 public class BombItem extends AbstractItem{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6906542162469482123L;
 	protected Plant mTarget;
 	public BombItem(Bitmap[] bitmap){
 		super(bitmap);

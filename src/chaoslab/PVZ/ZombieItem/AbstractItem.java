@@ -8,9 +8,13 @@ import android.graphics.Bitmap;
 import chaoslab.PVZ.Position;
 
 public class AbstractItem extends GameObject{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7886035731874533962L;
 	protected boolean bmagnetized = false;
 	protected boolean canDef = false;
-	protected Bitmap  mBitmap[];
+	protected transient Bitmap  mBitmap[];
 	protected int     mCurIndex = 0;
 	protected boolean bDrop = false;
 	protected boolean bFading = false;

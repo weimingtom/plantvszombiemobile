@@ -10,6 +10,10 @@ import chaoslab.PVZ.R;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class Brain extends Plant {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4343019466100268654L;
 	private static Bitmap[] mWaveBitmaps;
 	public Brain(String name,  Particle[] particles, int cost) {
 		super(name, null, cost);

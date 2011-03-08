@@ -13,7 +13,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 abstract public class GameObject implements Cloneable, Serializable{
-
+	private static final long serialVersionUID = -2955835092359749769L;
 	public static final int MAX_POSITION_X = 800;
 	public static final int MAX_POSITION_Y = 600;
 	
@@ -25,11 +25,11 @@ abstract public class GameObject implements Cloneable, Serializable{
 	protected Position	mPosition;
 	/** TODO: change this to ArrayList to support animation*/
 	protected Particle  mParticles[];
-	protected Bitmap    mCurBitmap;
+	protected transient Bitmap    mCurBitmap;
 	/** Actual size of this object*/
 	protected int		mWidth 	= 0;
 	protected int		mHeight = 0;
-	protected GameEventListener mGameEventListener;
+	protected transient GameEventListener mGameEventListener;
 	/** Indicate this object stands by which side(Plant or Zombie or neither?)*/
 	protected	  int		mStand	= GameConstants.STAND_NONE;
 	/** direction angel*/

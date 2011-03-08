@@ -15,6 +15,10 @@ import chaoslab.PVZ.SoundManager;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class PotatoMine extends Plant{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1324844649203669094L;
 	private static Bitmap[] 	mWaveBitmaps;
 	public static final int POTATO_MINE_POWER = 500;
 	//private static final int ATTACK_RANGE = PlantCells.CELL_WIDTH;

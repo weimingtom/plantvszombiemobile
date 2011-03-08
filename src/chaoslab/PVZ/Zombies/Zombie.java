@@ -17,6 +17,10 @@ import chaoslab.PVZ.Plants.PlantCells;
 import chaoslab.PVZ.ZombieItem.AbstractItem;
 
 public class Zombie extends GameObject implements Harmable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6290192405500653434L;
 	/**@{
 	 * keep the bitmap indices of each action
 	 */
@@ -37,7 +41,7 @@ public class Zombie extends GameObject implements Harmable{
 	protected int       mStatus = GameConstants.ZOMBIE_MOVE;
 	protected Plant     mTarget = null;
 	protected int       mPreStatus = GameConstants.ZOMBIE_MOVE;
-	protected Bitmap	mBitmap[];  
+	protected transient Bitmap	mBitmap[];  
 	protected int       mMaxBitmap = 12;
 	protected int 		mEatFrmCnt = 0;
 	protected int       mSlowFrmCnt = 0;
@@ -45,7 +49,7 @@ public class Zombie extends GameObject implements Harmable{
 	protected boolean	mIsInvincible = false;
 	protected boolean	mIsCharred	=   false;
 	private int mCharredBitmapIndex = 0;
-	private Bitmap[] mCharredBitmap;
+	private transient Bitmap[] mCharredBitmap;
 	 
 	protected Position mTempPosition;
 	protected  AbstractItem mItem;

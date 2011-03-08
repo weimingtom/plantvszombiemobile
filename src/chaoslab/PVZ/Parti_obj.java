@@ -5,9 +5,15 @@ package chaoslab.PVZ;
  * special effect
  */
 
+import java.io.Serializable;
+
 import android.graphics.Bitmap;
 
-public class Parti_obj {
+public class Parti_obj implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 776739617420502961L;
 	//position
 	public double x = 0.0f;
 	public double y = 0.0f;
@@ -20,7 +26,7 @@ public class Parti_obj {
 	//display
 	public boolean color_bitmap = true; //true:color false:bitmap
 	public int color = 0;
-	public Bitmap bitmap = null;
+	public transient Bitmap bitmap = null;
 	public int alpha = 0;
 	//life period
 	public int life = 0;

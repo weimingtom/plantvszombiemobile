@@ -11,6 +11,10 @@ import chaoslab.PVZ.R;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class SunFlower extends Plant{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5983376969708976281L;
 	public static final int SINGLE_SUNSHINE_NUM = 25;
 	private static Bitmap[] 	mWaveBitmaps;
 	public SunFlower(String name, Particle particles[], int cost) {

@@ -13,6 +13,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 public class PeaShooter extends Plant{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5296749349783403790L;
 	private static Bitmap[] 	mWaveBitmaps;
 	private static Bitmap[] 	mAttackBitmaps;
 	/** indicates a minimum attack interval between two attacks*/

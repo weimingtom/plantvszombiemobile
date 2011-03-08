@@ -13,6 +13,10 @@ import chaoslab.PVZ.ZombieItem.AbstractItem;
 import chaoslab.PVZ.Zombies.Zombie;
 
 public class MagnetShroom extends Plant {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2825132971781479147L;
 	private static Bitmap[] 	mWaveBitmaps;
 	private int ATTACK_RANGE = 3;
 	public MagnetShroom(String name, Particle[] particles, int cost) {

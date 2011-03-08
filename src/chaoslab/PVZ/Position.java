@@ -1,4 +1,7 @@
 package chaoslab.PVZ;
+
+import java.io.Serializable;
+
 /**
  * Position
  * Describes object's position.
@@ -8,7 +11,8 @@ package chaoslab.PVZ;
  * @author Liu.zhenxing
  *
  */
-public class Position implements Cloneable{
+public class Position implements Cloneable, Serializable{
+	private static final long serialVersionUID = 2794815527556986996L;
 	public float x;
 	public float y;
 	public Position(float x, float y){
