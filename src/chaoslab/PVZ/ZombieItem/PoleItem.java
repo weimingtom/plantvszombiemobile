@@ -7,6 +7,10 @@ import android.graphics.Paint;
 import chaoslab.PVZ.Position;
 
 public class PoleItem extends AbstractItem{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7663313814603295801L;
 	public PoleItem(Bitmap[] bitmap){
 		super(bitmap);
 		canDef = false;

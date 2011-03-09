@@ -10,6 +10,10 @@ import chaoslab.PVZ.Plants.Plant;
 import android.graphics.Matrix;
 
 public class BungeeZombie extends Zombie{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6759620223439773753L;
 	protected Bitmap capturePlant = null;
 	protected int   mPrepareCnt = 0;
 	protected final int LINE = 1;

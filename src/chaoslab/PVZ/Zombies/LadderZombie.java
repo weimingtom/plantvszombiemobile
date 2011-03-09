@@ -9,6 +9,10 @@ import chaoslab.PVZ.Zombies.Zombie;;
 
 public class LadderZombie extends Zombie {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7611273629846897982L;
 	public LadderZombie(String name, Particle particles[],Bitmap bitmap[],int cost,AbstractItem item){
 		super(name,particles,bitmap,cost);
 		mHealthPoint = 80;

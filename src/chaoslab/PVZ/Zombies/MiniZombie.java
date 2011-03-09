@@ -5,6 +5,11 @@ import chaoslab.PVZ.Particle;
 
 public class MiniZombie extends Zombie{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7990657649246583163L;
+
 	public MiniZombie(String name, Particle particles[],Bitmap bitmap[],int cost){
 		super(name,particles,bitmap,cost);
 		mHealthPoint = 10;

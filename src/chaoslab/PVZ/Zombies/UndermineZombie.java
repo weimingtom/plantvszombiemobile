@@ -13,6 +13,10 @@ import chaoslab.PVZ.Position;
 import chaoslab.PVZ.ZombieItem.DeffensiveItem;
 
 public class UndermineZombie extends Zombie{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7685331770678234577L;
 	protected int mRisingCnt = 0;
 	protected Position mTempPos;
 	protected int MIN_RISING = 1;

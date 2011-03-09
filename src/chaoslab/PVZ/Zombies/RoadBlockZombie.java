@@ -6,6 +6,11 @@ import chaoslab.PVZ.Particle;
 
 public class RoadBlockZombie extends Zombie{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6498007903367337884L;
+
 	public RoadBlockZombie(String name, Particle particles[],Bitmap bitmap[],int cost,AbstractItem item){
 		super(name,particles,bitmap,cost);
 		mHealthPoint = 50;

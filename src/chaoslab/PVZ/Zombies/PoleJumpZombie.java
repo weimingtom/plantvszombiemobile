@@ -10,6 +10,10 @@ import chaoslab.PVZ.Particle;
 import chaoslab.PVZ.Position;
 
 public class PoleJumpZombie extends Zombie{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8088981297257128102L;
 	protected boolean mHasPole = true; //has it gotten a jumping pole or not
 	protected int     MIN_JUMP;
 	protected int     MAX_JUMP;
